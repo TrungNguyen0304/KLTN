@@ -11,6 +11,7 @@ const Register = () => {
     password: "",
   });
   const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -30,20 +31,21 @@ const Register = () => {
       !formData.phoneNumber ||
       !formData.password
     ) {
-      alert("Vui lòng nhập đầy đủ thông tin.");
+      showCustomAlert("Vui lòng nhập đầy đủ thông tin.", 'error');
       return;
     }
 
     // Kiểm tra định dạng email
     if (!formData.email.endsWith("@gmail.com")) {
-      alert("Email phải kết thúc bằng @gmail.com.");
+      showCustomAlert("Email phải kết thúc bằng @gmail.com.", 'error');
       return;
     }
 
     // Kiểm tra mật khẩu
     if (formData.password.length < 8 || !/[A-Z]/.test(formData.password)) {
-      alert(
-        "Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất một chữ cái viết hoa."
+      showCustomAlert(
+        "Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất một chữ cái viết hoa.",
+        'error'
       );
       return;
     }
@@ -58,19 +60,49 @@ const Register = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        alert(data.message);
-        navigate("/login");
+        showCustomAlert(data.message, 'success');
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
       } else {
-        alert(data.message);
+        showCustomAlert(data.message, 'error');
       }
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Có lỗi xảy ra.");
+      showCustomAlert("Có lỗi xảy ra.", 'error');
     }
+  };
+
+  // Hàm hiển thị thông báo tùy chỉnh
+  const showCustomAlert = (message, type) => {
+    const alertBox = document.getElementById("customAlert");
+    const alertMessage = document.getElementById("alertMessage");
+
+    alertMessage.textContent = message;
+    alertBox.style.display = "block";
+
+    // Thay đổi màu sắc dựa trên loại thông báo
+    if (type === 'success') {
+      alertBox.style.backgroundColor = "#28a745"; // màu xanh cho thành công
+    } else {
+      alertBox.style.backgroundColor = "#dc3545"; // màu đỏ cho lỗi
+    }
+
+    // Tự động ẩn sau 3 giây
+    setTimeout(() => {
+      alertBox.style.display = "none";
+    }, 3000);
   };
 
   return (
     <div className="register-container">
+      <div id="customAlert" className="custom-alert" style={{ display: "none" }}>
+        <span id="alertMessage"></span>
+        <button onClick={() => document.getElementById('customAlert').style.display = 'none'}>
+          Đóng
+        </button>
+      </div>
+
       <h1 className="register-title">Đăng Ký</h1>
       <form onSubmit={handleSubmit}>
         <div className="register-input-group">
