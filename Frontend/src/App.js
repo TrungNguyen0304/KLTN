@@ -9,8 +9,8 @@ import TourDetails from "./pages/Home/Tours/TourDetails";
 import Booking from "./pages/Home/Booking/Booking";
 import Destinations from "./pages/Home/Destinations/Destinations";
 import PhotoGallery from "./pages/Home/PhotoGallery/PhotoGallery";
-import Login from "./pages/Auth/Login/login";
-import Register from "./pages/Auth/Register/register";
+import Login from "./pages/Auth/Login/Login";
+import Register from "./pages/Auth/Register/Register";
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -49,7 +49,7 @@ function App() {
           <Route path="admin" element={<Dashboard />} />
           <Route path="user" element={<IndexUser />} />
           <Route path="user/create" element={<CreateUser />} />
-          <Route path="user/update" element={<EditUser />} />
+          <Route path="user/update/:id" element={<EditUser />} />
           <Route path="destination" element={<IndexDestination />} />
           <Route path="destination/create" element={<CreateDestination />} />
           <Route path="destination/update" element={<UpdateDestination />} />
