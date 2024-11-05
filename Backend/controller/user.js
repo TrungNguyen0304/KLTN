@@ -42,11 +42,7 @@ const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
-      });
-
-      return res.status(200).json({ message: "Đăng nhập thành công!", token });
+      return res.status(200).json({ message: "Đăng nhập thành công!" });
     } else {
       return res.status(401).json({ message: "Mật khẩu không hợp lệ." });
     }
@@ -55,7 +51,6 @@ const login = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
-
 // API Delete user by ID
 const deleteUser = async (req, res) => {
   const { id } = req.params;

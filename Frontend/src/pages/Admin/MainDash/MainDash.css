@@ -1,0 +1,22 @@
+.MainDash{
+    /* padding-top: 1rem; */
+ 
+    
+    display: flex;
+    flex-direction: column;
+    gap: 3rem; /* Thay đổi giá trị này để điều chỉnh khoảng cách */
+}
+
+@media screen and (max-width: 1200px) {
+    .MainDash{
+        justify-content:flex-start;
+        margin-top: 2rem;
+    }
+}
+
+@media screen and (max-width: 768px)
+{
+    .MainDash{
+        align-items: center;
+    }
+}

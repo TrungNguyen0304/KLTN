@@ -1,0 +1,97 @@
+.form-container {
+    max-width: 100%; 
+    padding: 40px;  /* Giữ nguyên padding */
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background-color: #fdfdfd;
+    transition: box-shadow 0.3s ease;
+
+
+
+}
+
+
+
+
+.form-container:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+    font-family: 'Arial', sans-serif;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.error {
+    color: red;
+    font-size: 0.9em;
+}
+
+.buttonCreate {
+    width: 100%;
+    padding: 12px;
+    background-color:#007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.buttonCreate button:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.buttonCreate button:active {
+    transform: translateY(0);
+}
+
+/* Additional styles for the file input for better UI */
+input[type="file"] {
+    padding: 5px;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.file-input-label:hover {
+    background-color: #0056b3;
+}

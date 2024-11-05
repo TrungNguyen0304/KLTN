@@ -1,0 +1,42 @@
+.navbaradmin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+   
+}
+
+
+
+.logo span span {
+    color: #ffcc00; /* Highlight "MIN" in a different color */
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Push search container to the right */
+  
+}
+
+.search-container input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    width: 700px; /* Adjust width as needed */
+    border-radius: 20px;
+    border: 1px solid black;
+}
+
+.user-icon1 {
+    display: flex;
+    align-items: center;
+    color: black;
+    font-size: 30px; /* Adjust icon size */
+    cursor: pointer;
+    margin-left: 30px; /* Space between search and user icon */
+}
+
+.user-icon1:hover {
+    color: #ffcc00; /* Change color on hover */
+}

@@ -8,7 +8,11 @@ const Footer = () => {
 
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
-    setVisible(scrolled > 300);
+    if (scrolled > 300) {
+      setVisible(true);
+    } else if (scrolled <= 300) {
+      setVisible(false);
+    }
   };
 
   const scrollTop = () => {
@@ -21,9 +25,8 @@ const Footer = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", toggleVisible);
-      return () => {
-        window.removeEventListener("scroll", toggleVisible);
-      };
+      // Cleanup the event listener on component unmount
+      return () => window.removeEventListener("scroll", toggleVisible);
     }
   }, []);
 
@@ -50,13 +53,13 @@ const Footer = () => {
               <h4 className="mt-lg-0 mt-sm-3">Explore</h4>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <NavLink to="/">Faq</NavLink>
+                  <NavLink to="/"> Faq</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <NavLink to="/">Tour Listings</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">Destination</NavLink>
+                  <NavLink to="/"> Destination</NavLink>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -64,40 +67,32 @@ const Footer = () => {
               <h4 className="mt-lg-0 mt-sm-3">Quick Link</h4>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <NavLink to="/">Home</NavLink>
+                  <NavLink to="/"> Home</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <NavLink to="/">About Us</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">Contact Us</NavLink>
+                  <NavLink to="/"> Contact Us</NavLink>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col md="3" sm="12" className="location mt-3 mt-md-0 ">
               <h4 className="mt-lg-0 mt-sm-3">Contact Info</h4>
+
               <div className="d-flex align-items-center">
                 <p className="pb-2">Dehradun, Uttarakhand, India</p>
               </div>
+
               <div className="d-flex align-items-top my-2">
                 <i className="bi bi-geo-alt me-3"></i>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href="mailto:rawatcoder@gmail.com"
-                  className="d-block"
-                >
+                <a target="_blank" rel="noopener noreferrer" href="mailto:rawatcoder@gmail.com" className="d-block">
                   rawatcoder@gmail.com
                 </a>
               </div>
               <div className="d-flex align-items-top ">
                 <i className="bi bi-telephone me-3"></i>
-                <a
-                  target="_blank"
-                  rel="noreferrer"
-                  href="tel:9876543210"
-                  className="d-block"
-                >
+                <a target="_blank" rel="noopener noreferrer" href="tel:9876543210" className="d-block">
                   9876543210
                 </a>
               </div>
@@ -105,7 +100,7 @@ const Footer = () => {
           </Row>
           <Row className="py-2 bdr mt-3">
             <Col className="col copyright">
-              <p className="text-light"> @ 2024. rawatcoder All rights reserved </p>
+              <p className="text-light">@ 2024. rawatcoder All rights reserved</p>
             </Col>
           </Row>
         </Container>

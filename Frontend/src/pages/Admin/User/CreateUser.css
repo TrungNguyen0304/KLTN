@@ -1,0 +1,19 @@
+
+  
+
+  .form-group-inline {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .form-group {
+    flex: 1;
+    margin-right: 10px; /* Adjust spacing */
+  }
+  
+
+  
+  .buttonCreate {
+    margin-top: 20px; /* Adjust as needed */
+  }
+  

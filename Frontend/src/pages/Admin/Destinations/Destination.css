@@ -1,0 +1,83 @@
+.destination-card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+  position: relative;
+}
+
+.destination-card:hover {
+  transform: scale(1.05);
+}
+
+.destination-image {
+  height: 300px;
+  object-fit: cover;
+}
+
+.destination-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.destination-title {
+
+  font-weight: bold;
+}
+
+
+
+
+.createDestination {
+  font-size: 1.2rem;
+  color: #007bff;
+  /* Bootstrap primary color */
+  padding: 20px;
+  width: 200x;
+  height: 60px;
+  text-align: right;
+
+}
+
+.createDestination a {
+  text-decoration: none;
+}
+
+.destination-body {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  /* Nền trắng trong suốt */
+  border-radius: 5px;
+  /* Bo tròn góc */
+  padding: 10px;
+  /* Thêm khoảng cách cho nội dung */
+}
+
+.destination-location {
+  font-size: 16px;
+  /* Điều chỉnh kích thước font */
+  font-weight: bold;
+  /* Làm cho văn bản đậm */
+  color: #333;
+  /* Màu sắc rõ hơn */
+}
+
+.destination-location p {
+  margin: 0;
+  /* Xóa margin mặc định của thẻ p */
+  font-size: 14px;
+  /* Kích thước chữ nhỏ hơn cho từ "Location" */
+  color: #007bff;
+  /* Màu xanh cho "Location" */
+}
+
+.location-container {
+  display: flex;
+  /* Sử dụng flex để căn chỉnh */
+  align-items: center;
+  /* Căn giữa theo chiều dọc */
+}
