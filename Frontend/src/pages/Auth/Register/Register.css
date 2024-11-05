@@ -1,0 +1,100 @@
+.register-container {
+    width: 450px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 150px;
+    border: 2px solid rgb(255, 255, 255);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+                0 6px 20px rgba(0, 0, 0, 0.19);
+  }
+  
+  .register-title {
+    text-align: center;
+    color: #00458a;
+    font-size: 25px;
+    padding: 20px;
+  }
+  
+  .register-input-group {
+    margin-bottom: 10px;
+    display: flex; /* Use flexbox for alignment */
+    flex-wrap: wrap; /* Allow wrapping */
+  }
+  
+  .register-input-field {
+    flex: 1; /* Equal width */
+    margin-right: 10px; /* Spacing between inputs */
+  }
+  
+  .register-input-field:last-child {
+    margin-right: 0; /* Remove margin from the last child */
+  }
+  
+  .register-input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .register-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .register-error {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .register-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .register-link {
+    font-size: 14px;
+    color: #00458a;
+    text-decoration: none;
+  }
+  
+  .register-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .register-divider {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .register-social-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .social-button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .social-button.facebook {
+    background-color: #4267B2;
+  }
+  
+  .social-button.google {
+    background-color: #DB4437;
+  }

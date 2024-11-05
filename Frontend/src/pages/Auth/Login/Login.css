@@ -1,0 +1,89 @@
+.login-container {
+    width: 350px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 150px;
+    border: 2px solid rgb(255, 255, 255);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2),
+      0 6px 20px rgba(0, 0, 0, 0.19);
+  }
+  
+  .login-title {
+    text-align: center;
+    color: #00458a;
+    font-size: 25px;
+    padding: 20px;
+  }
+  
+  .login-input-group {
+    margin-bottom: 10px;
+  }
+  
+  .login-input-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .login-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-error {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .login-links {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .login-link {
+    font-size: 14px;
+    color: #00458a;
+    text-decoration: none;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff9800;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .login-divider {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .login-social-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .social-button {
+    width: 48%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .social-button.facebook {
+    background-color: #4267B2;
+  }
+  
+  .social-button.google {
+    background-color: #DB4437;
+  }
