@@ -4,32 +4,34 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
-<<<<<<< HEAD
-    const { DestinationName, Description, locationId } = req.body; // Include locationId
-=======
-    const { DestinationName, Description } = req.body;
->>>>>>> bf0632b95dedb3264002e1f626cba0e0fc9bd649
+    const { DestinationName, Description, locationId } = req.body;
     const Images = req.file ? req.file.path : "";
+
+    // Xóa khoảng trắng ở đầu và cuối DestinationName
+    const trimmedDestinationName = DestinationName.trim();
+
+    const existingDestination = await Destination.findOne({ DestinationName: trimmedDestinationName });
+    if (existingDestination) {
+      return res.status(400).json({ message: "Địa danh đã tồn tại!" });
+    }
+
     const newDestination = new Destination({
-      DestinationName,
+      DestinationName: trimmedDestinationName,
       Images,
       Description,
-<<<<<<< HEAD
-      locationId, // Set the locationId
-=======
->>>>>>> bf0632b95dedb3264002e1f626cba0e0fc9bd649
+      locationId,
     });
+
     await newDestination.save();
     res.status(201).json({
       message: "Đã thêm địa danh thành công!",
       destination: newDestination,
     });
   } catch (error) {
-    console.error("Lỗi khi thêm đích:", error);
-    res.status(500).json({ message: "Lỗi khi thêm địa danh", error });
+    console.error("Lỗi khi thêm đích:", error.message);
+    res.status(500).json({ message: "Lỗi khi thêm địa danh", error: error.message });
   }
 };
-
 // Api delete destination
 const deleteDestination = async (req, res) => {
   const { id } = req.params;
@@ -82,6 +84,8 @@ const getAllDestination = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
+
 
 module.exports = {
   createDestination,
