@@ -16,3 +16,4 @@ router.put("/update/:id", updateLocation);
 router.get("/location/:id", getLocationById);
 
 module.exports = router;
+
