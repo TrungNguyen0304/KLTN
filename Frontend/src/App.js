@@ -49,7 +49,7 @@ function App() {
           <Route path="admin" element={<Dashboard />} />
           <Route path="user" element={<IndexUser />} />
           <Route path="user/create" element={<CreateUser />} />
-          <Route path="user/update" element={<EditUser />} />
+          <Route path="user/update/:id" element={<EditUser />} />
           <Route path="destination" element={<IndexDestination />} />
           <Route path="destination/create" element={<CreateDestination />} />
           <Route path="destination/update" element={<UpdateDestination />} />

@@ -10,7 +10,7 @@ router.get("/location", getAll);
 
 router.delete("/delete/:id", deleteLocation);
 
-router.put("/update/:id", updateLocation); // New route for updating
+router.put("/update/:id", updateLocation); 
 
 
 router.get("/location/:id", getLocationById);

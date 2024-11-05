@@ -92,42 +92,11 @@ const updateUser = async (req, res) => {
       .json({ message: "Lỗi máy chủ nội bộ.", error: error.message });
   }
 };
-// API Edit user by ID
-const editUser = async (req, res) => {
-  const { id } = req.params;
-  const { email, firstname, lastname, phoneNumber, role } = req.body;
 
-  try {
-    if (!email && !firstname && !lastname && !phoneNumber && !role) {
-      return res
-        .status(400)
-        .json({ message: "Không có dữ liệu nào để cập nhật." });
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { email, firstname, lastname, phoneNumber, role },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Người dùng không tồn tại." });
-    }
-
-    res.status(200).json({
-      message: "Người dùng đã được cập nhật thành công.",
-      user: updatedUser,
-    });
-  } catch (error) {
-    console.error("Lỗi khi cập nhật người dùng:", error);
-    res
-      .status(500)
-      .json({ message: "Lỗi máy chủ nội bộ.", error: error.message });
-  }
-};
 // API get all user
 const getAllUser = async (req, res) => {
   try {
+    
     const users = await User.find({});
     res.status(200).json(users);
   } catch (error) {
@@ -135,12 +104,23 @@ const getAllUser = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
-
+const getUserById = async (req, res) => {
+  try {
+      const users = await User.findById(req.params.id);
+      if (!users) {
+          return res.status(404).json({ message: 'users not found' });
+      }
+      res.status(200).json(users);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
 module.exports = {
   register,
   login,
   deleteUser,
   updateUser,
-  editUser,
+  getUserById,
+  // editUser,
   getAllUser
 };

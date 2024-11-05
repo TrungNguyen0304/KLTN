@@ -1,99 +1,73 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./IndexUser.css";
 import { Link } from "react-router-dom";
 
 const IndexUser = () => {
+  const [users, setusers] = useState([]);
 
-  const customers = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      email: "john@example.com",
-      password: "password123",
-      phoneNumber: "123-456-7890",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      password: "password456",
-      phoneNumber: "987-654-3210",
-    },
-    {
-      id: 3,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      password: "password456",
-      phoneNumber: "987-654-3210",
-    },
-    {
-      id: 4,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      password: "password456",
-      phoneNumber: "987-654-3210",
-    },
-    {
-      id: 5,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      password: "password456",
-      phoneNumber: "987-654-3210",
-    },
-    {
-      id: 6,
-      firstName: "Jane",
-      lastName: "Smith",
-      email: "jane@example.com",
-      password: "password456",
-      phoneNumber: "987-654-3210",
-    },
-  ];
+  useEffect(() => {
+    const fetchusers = async () => {
+      try {
+        const response = await axios.get("http://localhost:8001/api/user");
+        console.log(response.data);
+        setusers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchusers();
+  }, []);
+
+  // Delete user by id
+  const deleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8001/api/user/${id}`);
+      setusers(users.filter((user) => user.id !== id));
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
 
   return (
-
     <div className="HeaderCustomers">
       <div className="TableCustomers">
-        <div className="SpanCustomer">
-      User
-        </div>
+        <div className="SpanCustomer">User</div>
 
-        <div className='createDestination'>
-          <Link className="btn btn-primary" to="create">Thêm người dùng </Link>
+        <div className="createDestination">
+          <Link className="btn btn-primary" to="create">
+            Thêm người dùng{" "}
+          </Link>
         </div>
       </div>
 
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+            <th>STT</th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Password</th>
+            {/* <th>Password</th> */}
             <th>Phone Number</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {customers.map((customer) => (
-            <tr key={customer.id}>
-              <td>{customer.id}</td>
-              <td>{customer.firstName}</td>
-              <td>{customer.lastName}</td>
-              <td>{customer.email}</td>
-              <td>{customer.password}</td>
-              <td>{customer.phoneNumber}</td>
+          {users.map((user, index) => (
+            <tr key={user.id}>
+              <td>{index + 1}</td>
+              <td>{user.firstname}</td>
+              <td>{user.lastname}</td>
+              <td>{user.email}</td>
+              {/* <td>{user.password}</td> */}
+              <td>{user.phoneNumber}</td>
 
               <td>
                 <div className="edit2">
-                  <Link to="update" className="edit-button">
+                  <Link to={`update/${user._id}`} className="edit-button">
                     Edit
                   </Link>
                 </div>
@@ -102,11 +76,11 @@ const IndexUser = () => {
                 <div className="delete2">
                   <button
                     className="delete-button"
+                    onClick={() => deleteUser(user.id)}
                   >
                     Delete
                   </button>
                 </div>
-
               </td>
             </tr>
           ))}
