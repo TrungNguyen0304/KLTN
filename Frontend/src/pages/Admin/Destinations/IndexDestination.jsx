@@ -1,44 +1,81 @@
-import React from 'react';
-import { Col, Container, Row, Card } from 'react-bootstrap';
-import './Destination.css'; // Create a separate CSS file for custom styles
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
-const destinations = [
-  { name: "Bali", location: "Indonesia", image: "https://hotelnikkohanoi.com.vn/wp-content/uploads/2023/05/ho-thuy-tien-hue-dia-diem-chup-anh-dep-o-hue.jpg" },
-  { name: "Tokyo", location: "Japan", image: "https://static.vinwonders.com/production/check-in-hue-1.jpg" },
-  { name: "Bangkok", location: "Thailand", image: "https://baogiaothong.mediacdn.vn/files/thao.nt/2017/03/07/hue-1548.jpg" },
-  { name: "Cancun", location: "Mexico", image: "https://file.baothuathienhue.vn/data2/image/fckeditor/upload/2016/20160424/images/hue.jpg" },
-  { name: "Huế", location: "Vietnam", image: "https://file.baothuathienhue.vn/data2/image/fckeditor/upload/2016/20160424/images/hue.jpg" },
-];
+import { FaTrash } from 'react-icons/fa'; // Import Font Awesome icon for delete
+import './Destination.css';
 
 const IndexDestination = () => {
+  const [destinations, setDestinations] = useState([]);
+  
+  // Fetch destinations and locations from backend
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const response = await fetch("http://localhost:8001/api/destination");
+        const data = await response.json();
+        setDestinations(data);
+      } catch (error) {
+        console.error("Lỗi khi lấy địa danh:", error);
+      }
+    };
+
+    fetchDestinations();
+  }, []);
+
+  // Handle deleting a destination
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:8001/api/destination/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setDestinations(destinations.filter(destination => destination._id !== id));
+        alert("Địa danh đã được xóa thành công!");
+      } else {
+        alert("Không thể xóa địa danh. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi xóa địa danh:", error);
+      alert("Lỗi khi xóa địa danh.");
+    }
+  };
+
   return (
     <Container className="ContainerDestination">
       <Row className="align-items-center mb-3">
         <Col md={6}>
-          <div className='Destination'>Destination</div>
+          <div className="Destination">Destination</div>
         </Col>
         <Col md={6} className="text-end">
-          <div className='createDestination'>
+          <div className="createDestination">
             <Link className="btn btn-primary" to="create">Thêm địa danh</Link>
           </div>
         </Col>
       </Row>
+
       <Row className="d-flex">
         {destinations.map((destination) => (
-          <Col md={3} key={destination.id} className="mb-4">
+          <Col md={3} key={destination._id} className="mb-4">
             <Card className="destination-card">
-              <Link to="update">
-                <Card.Img src={destination.image} alt={destination.name} className="destination-image" />
+              <div className="delete-icon" onClick={() => handleDelete(destination._id)}>
+                <FaTrash />
+              </div>
+              <Link to={`update/${destination._id}`}>
+                <Card.Img src={destination.Images} alt={destination.DestinationName} className="destination-image" />
                 <Card.ImgOverlay className="destination-overlay">
-                  <Card.Title className="destination-title">{destination.name}</Card.Title>
+                  <Card.Title className="destination-title">{destination.DestinationName}</Card.Title>
                 </Card.ImgOverlay>
               </Link>
               <Card.Body className="destination-body">
                 <div className="location-container">
                   <p>Location:</p>
-                  <Card.Text className="destination-location ms-2">{destination.location}</Card.Text>
+                  <Card.Text className="destination-location ms-2">
+                    {/* Display the name of the location instead of the ID */}
+                    {destination.locationId ? destination.locationId.firstname : "Unknown"}
+                  </Card.Text>
                 </div>
+                <p>{destination.Description}</p>
               </Card.Body>
             </Card>
           </Col>
@@ -47,4 +84,5 @@ const IndexDestination = () => {
     </Container>
   );
 };
+
 export default IndexDestination;

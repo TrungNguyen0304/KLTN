@@ -4,12 +4,13 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
-    const { DestinationName, Tours } = req.body;
+    const { DestinationName, Description, locationId } = req.body; // Include locationId
     const Images = req.file ? req.file.path : "";
     const newDestination = new Destination({
       DestinationName,
       Images,
-      Tours,
+      Description,
+      locationId, // Set the locationId
     });
     await newDestination.save();
     res.status(201).json({
@@ -40,13 +41,13 @@ const deleteDestination = async (req, res) => {
 // Api edit destination
 const editDestination = async (req, res) => {
   const { id } = req.params;
-  const { DestinationName, Tours } = req.body;
+  const { DestinationName, Description } = req.body;
   const Images = req.file ? req.file.path : "";
 
   try {
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
-      { DestinationName, Images, Tours, updatedAt: Date.now() },
+      { DestinationName, Images, Description, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
     if (!updatedDestination) {
@@ -65,10 +66,12 @@ const editDestination = async (req, res) => {
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
-    const destinations = await Destination.find({});
+    const destinations = await Destination.find({})
+      .populate('locationId', 'firstname') // Populate with the firstname field of Location
+      .exec();
     res.status(200).json(destinations);
   } catch (error) {
-    console.error("Lỗi lấy danh sách đia danh", error);
+    console.error("Lỗi lấy danh sách địa danh", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
