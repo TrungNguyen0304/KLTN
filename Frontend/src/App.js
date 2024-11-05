@@ -9,8 +9,8 @@ import TourDetails from "./pages/Home/Tours/TourDetails";
 import Booking from "./pages/Home/Booking/Booking";
 import Destinations from "./pages/Home/Destinations/Destinations";
 import PhotoGallery from "./pages/Home/PhotoGallery/PhotoGallery";
-import Login from "./pages/Auth/Login/login";
-import Register from "./pages/Auth/Register/register";
+import Login from "./pages/Auth/Login/Login";
+import Register from "./pages/Auth/Register/Register";
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";

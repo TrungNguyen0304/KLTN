@@ -4,13 +4,20 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { DestinationName, Description, locationId } = req.body; // Include locationId
+=======
+    const { DestinationName, Description } = req.body;
+>>>>>>> bf0632b95dedb3264002e1f626cba0e0fc9bd649
     const Images = req.file ? req.file.path : "";
     const newDestination = new Destination({
       DestinationName,
       Images,
       Description,
+<<<<<<< HEAD
       locationId, // Set the locationId
+=======
+>>>>>>> bf0632b95dedb3264002e1f626cba0e0fc9bd649
     });
     await newDestination.save();
     res.status(201).json({
