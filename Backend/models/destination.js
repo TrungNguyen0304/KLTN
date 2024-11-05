@@ -2,9 +2,9 @@ const mongoose = require("mongoose");
 
 const destinationSchema = new mongoose.Schema(
   {
-    DestinationName: { type: String, require: true,unique: true },
+    DestinationName: { type: String, require: true, unique: true },
     Images: { type: String, require: true },
-    Tours: { type: String, require: true },
+    Description: { type: String, require: true },
   },
   {
     timestamps: true,

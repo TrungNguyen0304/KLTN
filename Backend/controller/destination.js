@@ -4,12 +4,12 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
-    const { DestinationName, Tours } = req.body;
+    const { DestinationName, Description } = req.body;
     const Images = req.file ? req.file.path : "";
     const newDestination = new Destination({
       DestinationName,
       Images,
-      Tours,
+      Description,
     });
     await newDestination.save();
     res.status(201).json({
@@ -40,13 +40,13 @@ const deleteDestination = async (req, res) => {
 // Api edit destination
 const editDestination = async (req, res) => {
   const { id } = req.params;
-  const { DestinationName, Tours } = req.body;
+  const { DestinationName, Description } = req.body;
   const Images = req.file ? req.file.path : "";
 
   try {
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
-      { DestinationName, Images, Tours, updatedAt: Date.now() },
+      { DestinationName, Images, Description, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
     if (!updatedDestination) {
