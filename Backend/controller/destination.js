@@ -4,24 +4,34 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
-    const { DestinationName, Tours } = req.body;
+    const { DestinationName, Description, locationId } = req.body;
     const Images = req.file ? req.file.path : "";
+
+    // Xóa khoảng trắng ở đầu và cuối DestinationName
+    const trimmedDestinationName = DestinationName.trim();
+
+    const existingDestination = await Destination.findOne({ DestinationName: trimmedDestinationName });
+    if (existingDestination) {
+      return res.status(400).json({ message: "Địa danh đã tồn tại!" });
+    }
+
     const newDestination = new Destination({
-      DestinationName,
+      DestinationName: trimmedDestinationName,
       Images,
-      Tours,
+      Description,
+      locationId,
     });
+
     await newDestination.save();
     res.status(201).json({
       message: "Đã thêm địa danh thành công!",
       destination: newDestination,
     });
   } catch (error) {
-    console.error("Lỗi khi thêm đích:", error);
-    res.status(500).json({ message: "Lỗi khi thêm địa danh", error });
+    console.error("Lỗi khi thêm đích:", error.message);
+    res.status(500).json({ message: "Lỗi khi thêm địa danh", error: error.message });
   }
 };
-
 // Api delete destination
 const deleteDestination = async (req, res) => {
   const { id } = req.params;
@@ -40,13 +50,13 @@ const deleteDestination = async (req, res) => {
 // Api edit destination
 const editDestination = async (req, res) => {
   const { id } = req.params;
-  const { DestinationName, Tours } = req.body;
+  const { DestinationName, Description } = req.body;
   const Images = req.file ? req.file.path : "";
 
   try {
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
-      { DestinationName, Images, Tours, updatedAt: Date.now() },
+      { DestinationName, Images, Description, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
     if (!updatedDestination) {
@@ -65,13 +75,17 @@ const editDestination = async (req, res) => {
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
-    const destinations = await Destination.find({});
+    const destinations = await Destination.find({})
+      .populate('locationId', 'firstname') // Populate with the firstname field of Location
+      .exec();
     res.status(200).json(destinations);
   } catch (error) {
-    console.error("Lỗi lấy danh sách đia danh", error);
+    console.error("Lỗi lấy danh sách địa danh", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
+
 
 module.exports = {
   createDestination,
