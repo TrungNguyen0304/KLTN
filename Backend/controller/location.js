@@ -3,21 +3,30 @@ const Location = require('../models/location'); // Import model
 const create = async (req, res) => {
     try {
         const { firstname } = req.body;
+        console.log('Dữ liệu nhận được:', req.body);  // Ghi log dữ liệu trong body của yêu cầu
+
+        // Kiểm tra dữ liệu
+        if (!firstname) {
+            return res.status(400).json({ message: 'Firstname là bắt buộc' });
+        }
+
+        // Tạo vị trí mới
         const newLocation = new Location({ firstname });
         await newLocation.save();
+
+        // Trả lại vị trí mới được tạo
         res.status(201).json(newLocation);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        console.error('Lỗi khi tạo vị trí:', error);
+        res.status(400).json({ message: 'Tạo vị trí không thành công', error: error.message });
     }
 };
-
 const getAll = async (req, res) => {
-
     try {
         const locations = await Location.find();
         res.status(200).json(locations);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: 'Error fetching locations', error: error.message });
     }
 };
 

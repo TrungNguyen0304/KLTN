@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row, Card, Button } from 'react-bootstrap';
+import { Col, Container, Row, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaTrash } from 'react-icons/fa'; // Import Font Awesome icon for delete
 import './Destination.css';
@@ -28,7 +28,6 @@ const IndexDestination = () => {
       const response = await fetch(`http://localhost:8001/api/destination/${id}`, {
         method: "DELETE",
       });
-
       if (response.ok) {
         setDestinations(destinations.filter(destination => destination._id !== id));
         alert("Địa danh đã được xóa thành công!");
@@ -75,7 +74,7 @@ const IndexDestination = () => {
                     {destination.locationId ? destination.locationId.firstname : "Unknown"}
                   </Card.Text>
                 </div>
-                <p>{destination.Description}</p>
+               
               </Card.Body>
             </Card>
           </Col>
