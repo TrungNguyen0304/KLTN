@@ -66,7 +66,7 @@ header .navbar .offcanvas-body a:hover {
 
 header .navbar .offcanvas-body .dropdown-menu {
   min-width: 12rem;
-  background-color: #003C71;
+  
 }
 
 header .navbar .offcanvas-body .dropdown-menu .dropdown-item {
@@ -112,17 +112,20 @@ header .navbar .offcanvas-body .dropdown-menu .dropdown-item {
 }
 
 
+.dropdown-item:hover {
+  color: #fe4e37;
+}
+
 
 /* In your header.css or a new CSS file */
-.user-icon {
+.user-icon-header {
   font-size: 24px; /* Adjust the size of the icon */
   color: white; /* Bootstrap primary color */
   transition: color 0.3s; /* Smooth transition on hover */
 }
 
-.user-icon:hover {
-  color: #fe4e37; /* Darker shade on hover */
-}
+
+
 
 .user-dropdown {
   padding: 10px 15px; /* Add some padding */
@@ -137,10 +140,6 @@ header .navbar .offcanvas-body .dropdown-menu .dropdown-item {
   background-color: #f8f9fa; /* Light background on hover */
 }
 
-.user-dropdown-item.active {
-  background-color: #007bff; /* Active item background */
-  color: #fff; /* Active item text color */
-}
 
 .user-dropdown-item:hover {
   

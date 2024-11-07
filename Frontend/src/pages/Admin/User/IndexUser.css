@@ -33,9 +33,7 @@ table {
     cursor: pointer;
 }
 
-.add-button:hover {
-    background-color: #218838;
-}
+
 
 th,
 td {
