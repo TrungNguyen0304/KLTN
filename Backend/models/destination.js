@@ -4,8 +4,9 @@ const destinationSchema = new mongoose.Schema(
   {
     DestinationName: { type: String, required: true},
     Images: { type: String, required: true },
+    groudImages: [{ type: String, required: true }],
     Description: { type: String, required: true },
-    locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' } // Ensure 'Location' model exists
+    locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' } 
   },
   {
     timestamps: true,

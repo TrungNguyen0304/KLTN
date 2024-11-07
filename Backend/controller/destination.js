@@ -5,9 +5,9 @@ const bcrypt = require("bcrypt");
 const createDestination = async (req, res) => {
   try {
     const { DestinationName, Description, locationId } = req.body;
-    const Images = req.file ? req.file.path : "";
+    const Images = req.files['image'] ? req.files['image'][0].path : "";
+    const groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : [];
 
-    // Xóa khoảng trắng ở đầu và cuối DestinationName
     const trimmedDestinationName = DestinationName.trim();
 
     const existingDestination = await Destination.findOne({ DestinationName: trimmedDestinationName });
@@ -19,6 +19,7 @@ const createDestination = async (req, res) => {
       DestinationName: trimmedDestinationName,
       Images,
       Description,
+      groudImages,
       locationId,
     });
 
@@ -51,12 +52,13 @@ const deleteDestination = async (req, res) => {
 const editDestination = async (req, res) => {
   const { id } = req.params;
   const { DestinationName, Description } = req.body;
-  const Images = req.file ? req.file.path : "";
+  const Images = req.files['image'] ? req.files['image'][0].path : "";
+  const groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : [];
 
   try {
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
-      { DestinationName, Images, Description, updatedAt: Date.now() },
+      { DestinationName, Images,groudImages, Description, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
     if (!updatedDestination) {
@@ -76,7 +78,7 @@ const editDestination = async (req, res) => {
 const getAllDestination = async (req, res) => {
   try {
     const destinations = await Destination.find({})
-      .populate('locationId', 'firstname') // Populate with the firstname field of Location
+      .populate('locationId', 'firstname') 
       .exec();
     res.status(200).json(destinations);
   } catch (error) {

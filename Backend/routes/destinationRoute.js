@@ -8,9 +8,10 @@ const {
   getAllDestination,
 } = require("../controller/destination");
 
-router.post("/create", upload.single("image"), createDestination);
+
+router.post("/create", upload, createDestination);
 router.delete("/:id", deleteDestination);
-router.put("/:id", upload.single("image"), editDestination);
+router.put("/:id", upload, editDestination);
 router.get("/", getAllDestination);
 
 module.exports = router;
