@@ -117,7 +117,7 @@ const CreateDestination = () => {
                                     src={preview} // Hiển thị ảnh preview
                                     alt="Current"
                                     className="current-image"
-                                    style={{ maxWidth: "100%", maxHeight: "300px", marginBottom: "10px" }}
+                                    style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
                                 />
                             </div>
                         )}
@@ -151,7 +151,7 @@ const CreateDestination = () => {
                                     src={image} // Hiển thị ảnh preview
                                     alt={`Preview ${index}`}
                                     className="current-image"
-                                    style={{ maxWidth: "100%", maxHeight: "300px", marginBottom: "10px" }}
+                                    style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
                                 />
                             ))}
                         </div>
