@@ -95,3 +95,13 @@ input[type="file"] {
 .file-input-label:hover {
     background-color: #0056b3;
 }
+
+
+
+.current-image {
+   
+    max-width: 300px;  /* Giới hạn kích thước ảnh */
+    max-height: 300px;  /* Giới hạn kích thước ảnh */
+ 
+    margin-top: 10px;
+}

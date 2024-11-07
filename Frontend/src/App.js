@@ -52,7 +52,7 @@ function App() {
           <Route path="user/update/:id" element={<EditUser />} />
           <Route path="destination" element={<IndexDestination />} />
           <Route path="destination/create" element={<CreateDestination />} />
-          <Route path="destination/update" element={<UpdateDestination />} />
+          <Route path="/destination/update/:id" element={<UpdateDestination />} />
           <Route path="location" element={<IndexLocation />} />
           <Route path="location/create" element={<CreateLocation />} />
           <Route path="/location/update/:id" element={<EditLocation />} />
