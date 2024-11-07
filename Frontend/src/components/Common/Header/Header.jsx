@@ -118,14 +118,14 @@ const Header = () => {
           <Nav>
             {isLoggedIn ? (
               <NavDropdown
-                title={<FaUserCircle className="user-icon" />}
+                title={<FaUserCircle className="user-icon-header" />}
                 id="user-dropdown"
               >
                 <NavDropdown.Item onClick={() => navigate("/profile")}>
                   <FaUserCircle className="user-icon" /> Hồ sơ của tôi
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("/my-bookings")}>
-                  <FaHistory className="user-icon" /> Hồ sơ của tôi
+                  <FaHistory className="user-icon" /> Đơn hang của tôi
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>
                   <FaSignOutAlt className="user-icon" /> Đăng xuất
