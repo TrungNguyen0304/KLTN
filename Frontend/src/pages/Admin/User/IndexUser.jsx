@@ -51,7 +51,7 @@ const IndexUser = () => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            {/* <th>Password</th> */}
+            <th>Role</th>
             <th>Phone Number</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -64,7 +64,7 @@ const IndexUser = () => {
               <td>{user.firstname}</td>
               <td>{user.lastname}</td>
               <td>{user.email}</td>
-              {/* <td>{user.password}</td> */}
+              <td>{user.role}</td>
               <td>{user.phoneNumber}</td>
 
               <td>
