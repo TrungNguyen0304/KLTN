@@ -53,54 +53,57 @@ const deleteDestination = async (req, res) => {
 const editDestination = async (req, res) => {
   const { id } = req.params;
   const { DestinationName, Description, locationId } = req.body;
-  let Images = req.file ? req.file.path : ""; // If there's a new image, use the new one
-  let groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : []; // Handle multiple new images
+
+  // Lấy ảnh chính và ảnh nhóm mới (nếu có)
+  let Images = req.files['image'] ? req.files['image'][0].path : ""; // Dùng ảnh mới nếu có
+  let GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : []; // Dùng ảnh nhóm mới nếu có
 
   try {
-    // Fetch the destination to update
+    // Lấy thông tin địa danh hiện tại từ DB
     const destination = await Destination.findById(id);
     if (!destination) {
-      return res.status(404).json({ message: "Destination not found." });
+      return res.status(404).json({ message: "Không tìm thấy địa danh." });
     }
 
-    // If no new image is uploaded, keep the old one
+    // Giữ lại ảnh chính cũ nếu không có ảnh mới
     if (!Images) {
-      Images = destination.Images;  // Keep the current image if no new image is uploaded
+      Images = destination.Images;
     }
 
-    // If no new group images are uploaded, keep the old ones
-    if (groudImages.length === 0) {
-      groudImages = destination.groudImages; // Keep the current group images
+    // Giữ lại các ảnh nhóm cũ nếu không có ảnh nhóm mới
+    if (GroupImages.length === 0) {
+      GroupImages = destination.GroupImages;
     }
 
-    // Update the destination in the database
+    // Cập nhật thông tin địa danh
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
       {
         DestinationName: DestinationName.trim(),
         Images,
         Description,
-        groudImages,
+        GroupImages,
         locationId,
         updatedAt: Date.now(),
       },
       { new: true, runValidators: true }
     );
 
-    // If destination update fails
     if (!updatedDestination) {
-      return res.status(404).json({ message: "Failed to update destination." });
+      return res.status(404).json({ message: "Không thể cập nhật địa danh." });
     }
 
     res.status(200).json({
-      message: "Destination updated successfully!",
+      message: "Cập nhật địa danh thành công!",
       destination: updatedDestination,
     });
   } catch (error) {
-    console.error("Error updating destination:", error.message);
-    res.status(500).json({ message: "Internal server error." });
+    console.error("Lỗi khi cập nhật địa danh:", error.message);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
+
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
@@ -129,10 +132,23 @@ const getDestinationById = async (req, res) => {
 };
 
 
+
+const getDestinationsCountByLocation = async (locationId) => {
+  try {
+      // Đếm số lượng Destination có locationId tương ứng
+      const count = await Destination.countDocuments({ locationId });
+      return count;
+  } catch (error) {
+      throw new Error('Lỗi khi đếm các Destination: ' + error.message);
+  }
+};
+
+
 module.exports = {
   createDestination,
   deleteDestination,
   editDestination,
   getAllDestination,
   getDestinationById,
+  getDestinationsCountByLocation
 };

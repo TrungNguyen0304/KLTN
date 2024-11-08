@@ -4,73 +4,94 @@ import './create.css';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const UpdateDestination = () => {
-    const { id } = useParams(); // Lấy ID từ route params
+    const { id } = useParams();
     const [destinationName, setDestinationName] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     const [currentImage, setCurrentImage] = useState(''); // Lưu URL ảnh hiện tại
     const [state, setState] = useState('');
     const [locationId, setLocationId] = useState('');
-    const [locations, setLocations] = useState([]); // Lưu danh sách location
-    const [groudImages, setGroudImages] = useState([]); // Lưu nhiều ảnh nhóm
-    const [groudPreviews, setGroudPreviews] = useState([]); // Lưu ảnh preview nhóm
-    const navigate = useNavigate(); // Khởi tạo useNavigate
+    const [locations, setLocations] = useState([]);
+    const [groupImages, setGroupImages] = useState([]); // Mảng chứa ảnh nhóm
+    const [groupPreviews, setGroupPreviews] = useState([]); // Mảng chứa ảnh preview nhóm
+    const navigate = useNavigate();
 
     // Fetch data for the destination and locations
-    useEffect(() => {
-        const fetchDestination = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8001/api/destination/${id}`);
-                const data = response.data;
-                setDestinationName(data.DestinationName);
-                setDescription(data.Description);
-                setState(data.state || ''); // Nếu state có
-                setCurrentImage(data.Images); // Set ảnh hiện tại
-                setLocationId(data.locationId || ''); // Set locationId từ dữ liệu
-                setGroudImages(data.groudImages || []); // Lưu ảnh nhóm nếu có
-                setGroudPreviews(data.groudImages ? data.groudImages.map(img => img) : []); // Hiển thị preview ảnh nhóm
-            } catch (error) {
-                console.error("Lỗi khi lấy dữ liệu địa danh:", error);
-                alert("Không thể tải dữ liệu địa danh.");
+ useEffect(() => {
+    const fetchDestination = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8001/api/destination/${id}`);
+            const data = response.data;
+
+            // Cập nhật các trường thông tin
+            setDestinationName(data.DestinationName);
+            setDescription(data.Description);
+            setState(data.state || '');
+            setCurrentImage(data.Images); // URL ảnh hiện tại
+            setLocationId(data.locationId || '');
+
+            // Cập nhật ảnh nhóm cũ (groupImages)
+            if (data.groupImages && data.groupImages.length > 0) {
+                setGroupImages(data.groupImages);  // Dữ liệu ảnh nhóm từ API
+                setGroupPreviews(data.groupImages.map(img => URL.createObjectURL(img)));  // Tạo URL từ ảnh cũ và lưu vào groupPreviews
+            } else {
+                setGroupPreviews([]); // Nếu không có ảnh nhóm
             }
-        };
 
-        const fetchLocations = async () => {
-            try {
-                const response = await axios.get("http://localhost:8001/api/location");
-                setLocations(response.data);
-            } catch (error) {
-                console.error("Lỗi khi lấy danh sách location:", error);
-                alert("Không thể tải danh sách tỉnh/thành phố.");
-            }
-        };
+        } catch (error) {
+            console.error("Lỗi khi lấy dữ liệu địa danh:", error);
+            alert("Không thể tải dữ liệu địa danh.");
+        }
+    };
 
-        fetchDestination();
-        fetchLocations();
-    }, [id]);
+    const fetchLocations = async () => {
+        try {
+            const response = await axios.get("http://localhost:8001/api/location");
+            setLocations(response.data);
+        } catch (error) {
+            console.error("Lỗi khi lấy danh sách location:", error);
+            alert("Không thể tải danh sách tỉnh/thành phố.");
+        }
+    };
 
+    fetchDestination();
+    fetchLocations();
+}, [id]);
+
+    // Xử lý thay đổi ảnh chính
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
 
-        // Hiển thị ảnh đã upload lên ngay lập tức nếu có
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setCurrentImage(reader.result); // Lưu URL của ảnh vào state
+                setCurrentImage(reader.result);
             };
-            reader.readAsDataURL(file); // Đọc ảnh và chuyển thành Data URL
+            reader.readAsDataURL(file);
         }
     };
 
-    const handleGroudImagesChange = (e) => {
+    // Xử lý thay đổi ảnh nhóm
+    const handleGroupImagesChange = (e) => {
         const files = Array.from(e.target.files);
-        setGroudImages(files); // Cập nhật ảnh nhóm mới
 
-        const imagePreviews = files.map(file => URL.createObjectURL(file));
-        setGroudPreviews(imagePreviews); // Cập nhật ảnh preview
+        if (files.length > 0) {
+            // Nếu có ảnh mới, cập nhật groupImages và groupPreviews
+            setGroupImages(files); // Cập nhật ảnh nhóm mới
+            const imagePreviews = files.map(file => URL.createObjectURL(file)); // Tạo ảnh preview mới
+            setGroupPreviews(imagePreviews); // Hiển thị ảnh mới
+        } else {
+            // Nếu không có ảnh mới, giữ lại các ảnh nhóm cũ
+            const currentPreviews = groupImages.map((file) => {
+                // Sử dụng URL.createObjectURL để tạo preview từ ảnh cũ
+                return URL.createObjectURL(file);
+            });
+            setGroupPreviews(currentPreviews); // Hiển thị ảnh cũ
+        }
     };
 
+    // Xử lý gửi form
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -80,22 +101,17 @@ const UpdateDestination = () => {
         formData.append("state", state);
         formData.append("locationId", locationId);
 
-        // Kiểm tra nếu có ảnh mới cho địa danh
+        // Thêm ảnh chính nếu có ảnh mới
         if (image) {
-            formData.append("image", image);  // Thêm ảnh mới cho địa danh nếu có
-        } else if (currentImage) {
-            formData.append("image", currentImage);  // Giữ ảnh cũ nếu không có ảnh mới
+            formData.append("image", image);
+        } else if (currentImage && !currentImage.startsWith("data:image")) {
+            formData.append("currentImageURL", currentImage); // Thêm URL ảnh hiện tại nếu không phải base64
         }
 
-        // Kiểm tra nếu có ảnh nhóm mới thì thêm, nếu không có thì giữ ảnh nhóm cũ
-        if (groudImages.length > 0) {
-            groudImages.forEach((img) => {
-                formData.append('groudImages', img); // Thêm ảnh nhóm vào form data
-            });
-        } else if (groudPreviews.length > 0) {
-            // Giữ ảnh nhóm cũ nếu không có ảnh nhóm mới
-            groudPreviews.forEach((img) => {
-                formData.append('groudImages', img); // Giữ ảnh nhóm cũ nếu không có ảnh mới
+        // Thêm các ảnh nhóm
+        if (groupImages.length > 0) {
+            groupImages.forEach((file) => {
+                formData.append("groupImages", file); // Thêm từng ảnh nhóm vào FormData
             });
         }
 
@@ -106,11 +122,11 @@ const UpdateDestination = () => {
 
             if (response.status === 200) {
                 alert("Đã cập nhật địa danh thành công!");
-                navigate("/destination"); // Điều hướng về trang danh sách địa danh
+                navigate("/destination");
             }
         } catch (error) {
-            console.error("Lỗi khi cập nhật địa danh:", error);
-            alert("Đã xảy ra lỗi khi cập nhật địa danh");
+            console.error("Lỗi khi cập nhật địa danh:", error.response?.data || error.message);
+            alert("Đã xảy ra lỗi khi cập nhật địa danh.");
         }
     };
 
@@ -137,10 +153,10 @@ const UpdateDestination = () => {
                             <div>
                                 <p>Ảnh hiện tại:</p>
                                 <img
-                                    src={currentImage} // Hiển thị ảnh hiện tại nếu có
+                                    src={currentImage}
                                     alt="Current"
                                     className="current-image"
-                                    style={{ maxWidth: "100%", maxHeight: "300px", marginBottom: "10px" }}
+                                    style={{ Width: "200px", Height: "200px", marginBottom: "10px" }}
                                 />
                             </div>
                         )}
@@ -148,39 +164,40 @@ const UpdateDestination = () => {
                             id="imageUpload"
                             type="file"
                             accept="image/*"
-                            onChange={handleImageChange} // Xử lý sự kiện thay đổi ảnh
+                            onChange={handleImageChange}
                         />
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới (nếu có)</label>
                     </div>
 
                     <div className="form-group">
-                        <label htmlFor="groudImagesUpload">Chọn nhiều ảnh</label>
+                        <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
+                        {groupPreviews.length > 0 && (
+                            <div>
+                                <p>Ảnh nhóm hiện tại:</p>
+                                <div className="image-previews">
+                                    {groupPreviews.map((preview, index) => (
+                                        <img
+                                            key={index}
+                                            src={preview} // Hiển thị preview của ảnh nhóm cũ hoặc mới
+                                            alt={`Preview ${index}`}
+                                            style={{ maxWidth: "100px", marginRight: "10px" }}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <input
-                            id="groudImagesUpload"
+                            id="groupImagesUpload"
                             type="file"
                             accept="image/*"
                             multiple
-                            onChange={handleGroudImagesChange} // Xử lý nhiều ảnh
+                            onChange={handleGroupImagesChange}
                         />
-                        <label htmlFor="groudImagesUpload" className="file-input-label">Chọn nhiều ảnh</label>
+                        <label htmlFor="groupImagesUpload" className="file-input-label">Chọn nhiều ảnh</label>
                     </div>
 
-                    {/* Hiển thị preview các ảnh nhóm đã chọn */}
-                    {groudPreviews.length > 0 && (
-                        <div className="preview-images">
-                            <h4>Ảnh nhóm đã chọn:</h4>
-                            <div className="image-previews">
-                                {groudPreviews.map((preview, index) => (
-                                    <img
-                                        key={index}
-                                        src={preview}
-                                        alt={`Preview ${index}`}
-                                        style={{ width: '100px', height: '100px', marginRight: '10px', marginBottom: '10px' }}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    )}
+
+
 
                     <div className="form-group">
                         <label htmlFor="description" className="form-label">Mô tả</label>
