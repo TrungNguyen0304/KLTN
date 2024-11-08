@@ -37,7 +37,7 @@ label {
     color: #555;
 }
 
-input, select {
+.anh input, select {
     width: 100%;
     padding: 12px;
     border: 1px solid #ccc;
@@ -90,6 +90,7 @@ input[type="file"] {
     border-radius: 5px;
     cursor: pointer;
     margin-top: 10px;
+    width: 150px;
 }
 
 .file-input-label:hover {

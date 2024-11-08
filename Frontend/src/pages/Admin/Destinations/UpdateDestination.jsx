@@ -147,7 +147,7 @@ const UpdateDestination = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group anh">
                         <label htmlFor="imageUpload">Ảnh</label>
                         {currentImage && (
                             <div>
@@ -166,10 +166,10 @@ const UpdateDestination = () => {
                             accept="image/*"
                             onChange={handleImageChange}
                         />
-                        <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới (nếu có)</label>
+                        <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới</label>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group anh">
                         <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
                         {groupPreviews.length > 0 && (
                             <div>

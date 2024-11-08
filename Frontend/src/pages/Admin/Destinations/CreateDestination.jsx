@@ -108,7 +108,7 @@ const CreateDestination = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group  anh">
                         <label htmlFor="imageUpload">Ảnh</label>
                         {image && (
                             <div>
@@ -130,7 +130,7 @@ const CreateDestination = () => {
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới </label>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group anh">
                         <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
                         <input
                             id="groupImagesUpload"

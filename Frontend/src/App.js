@@ -22,7 +22,7 @@ import IndexLocation from "./pages/Admin/Location/IndexLocation"
 import CreateLocation from "./pages/Admin/Location/CreateLocation";
 import EditLocation from "./pages/Admin/Location/EditLocation";
 import IndexTour from "./pages/Admin/Tour/IndexTour";
-
+import CreateTour from "./pages/Admin/Tour/CreateTour";
 
 // </>
 import MainLayout from "./layouts/MainLayout"; // Import MainLayout
@@ -58,6 +58,7 @@ function App() {
           <Route path="location/create" element={<CreateLocation />} />
           <Route path="/location/update/:id" element={<EditLocation />} />
           <Route path="tour" element={<IndexTour />} />
+          <Route path="tour/create" element={<CreateTour />} />
          
           {/* Thêm các route admin khác nếu cần */}
         </Route>
