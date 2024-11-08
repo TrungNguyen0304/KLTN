@@ -17,16 +17,17 @@ const EditUser = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:8001/api/user/user/${id}`);
-        setUserData(response.data); 
+        const response = await axios.get(
+          `http://localhost:8001/api/user/user/${id}`
+        );
+        setUserData(response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-  
+
     fetchUser();
   }, [id]);
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,12 +38,11 @@ const EditUser = () => {
     e.preventDefault();
     try {
       await axios.put(`http://localhost:8001/api/user/update/${id}`, userData);
-      navigate("/user"); 
+      navigate("/user");
     } catch (error) {
       console.error("Error updating user:", error);
     }
   };
-  
 
   return (
     <div className="parent-container">
@@ -121,8 +121,8 @@ const EditUser = () => {
               onChange={handleChange}
               required
             >
+              <option value="user">User</option>
               <option value="admin">Admin</option>
-              <option value="user">Người dùng</option>
             </select>
           </div>
           <button className="buttonCreate" type="submit">

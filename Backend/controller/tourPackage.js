@@ -6,6 +6,7 @@ const createTour = async (req, res) => {
     const { package_name, description, price, duration, destination_id } =
       req.body;
     const images = req.file ? req.file.path : "";
+    const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
     if (!package_name || !price || !destination_id) {
       return res.status(400).json({ message: "Thiếu các trường bắt buộc." });
     }
@@ -13,6 +14,7 @@ const createTour = async (req, res) => {
       package_name,
       description,
       images,
+      GroupImages,
       price,
       duration,
       destination_id,
@@ -48,7 +50,7 @@ const editTour = async (req, res) => {
   const { package_name, description, price, duration, destination_id } =
     req.body;
   const images = req.file ? req.file.path : "";
-
+  const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
   try {
     const updatedTour = await TourPackage.findByIdAndUpdate(
       id,
@@ -56,6 +58,7 @@ const editTour = async (req, res) => {
         package_name,
         description,
         images,
+        GroupImages,
         price,
         duration,
         destination_id,
