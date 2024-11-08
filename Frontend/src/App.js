@@ -21,6 +21,7 @@ import EditUser from "./pages/Admin/User/EditUser";
 import IndexLocation from "./pages/Admin/Location/IndexLocation"
 import CreateLocation from "./pages/Admin/Location/CreateLocation";
 import EditLocation from "./pages/Admin/Location/EditLocation";
+import IndexTour from "./pages/Admin/Tour/IndexTour";
 
 
 // </>
@@ -56,6 +57,7 @@ function App() {
           <Route path="location" element={<IndexLocation />} />
           <Route path="location/create" element={<CreateLocation />} />
           <Route path="/location/update/:id" element={<EditLocation />} />
+          <Route path="tour" element={<IndexTour />} />
          
           {/* Thêm các route admin khác nếu cần */}
         </Route>

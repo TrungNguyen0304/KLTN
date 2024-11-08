@@ -41,7 +41,8 @@ export const SidebarData = [
   },
   {
     icon: UilPackage,
-    heading: 'Products'
+    heading: 'Tour',
+    Link: "/tour",
   },
   {
     icon: UilChart,
