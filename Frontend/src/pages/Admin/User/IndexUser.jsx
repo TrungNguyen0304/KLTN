@@ -23,7 +23,7 @@ const IndexUser = () => {
   // Delete user by id
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:8001/api/user/${id}`);
+      await axios.delete(`http://localhost:8001/api/user/delete/${id}`);
       setusers(users.filter((user) => user.id !== id));
       window.location.reload();
     } catch (error) {
@@ -50,7 +50,7 @@ const IndexUser = () => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            {/* <th>Password</th> */}
+            <th>Role</th>
             <th>Phone Number</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -63,7 +63,7 @@ const IndexUser = () => {
               <td>{user.firstname}</td>
               <td>{user.lastname}</td>
               <td>{user.email}</td>
-              {/* <td>{user.password}</td> */}
+              <td>{user.role}</td>
               <td>{user.phoneNumber}</td>
 
               <td>

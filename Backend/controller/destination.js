@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
-    console.log(req.files);
     const { DestinationName, Description, locationId } = req.body;
     const Images = req.files['image'] ? req.files['image'][0].path : "";
     const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
@@ -108,7 +107,7 @@ const editDestination = async (req, res) => {
 const getAllDestination = async (req, res) => {
   try {
     const destinations = await Destination.find({})
-      .populate('locationId', 'firstname') // Populate with the firstname field of Location
+      .populate('locationId', 'firstname') 
       .exec();
     res.status(200).json(destinations);
   } catch (error) {
