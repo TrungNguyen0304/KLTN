@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaTrash } from 'react-icons/fa'; // Import Font Awesome icon for delete
+import { FaTrash } from 'react-icons/fa'; 
 import './Destination.css';
 
 const IndexDestination = () => {
   const [destinations, setDestinations] = useState([]);
   
-  // Fetch destinations and locations from backend
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
@@ -22,7 +21,6 @@ const IndexDestination = () => {
     fetchDestinations();
   }, []);
 
-  // Handle deleting a destination
   const handleDelete = async (id) => {
     try {
       const response = await fetch(`http://localhost:8001/api/destination/${id}`, {
