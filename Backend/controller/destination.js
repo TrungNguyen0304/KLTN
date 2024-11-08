@@ -108,7 +108,7 @@ const editDestination = async (req, res) => {
 const getAllDestination = async (req, res) => {
   try {
     const destinations = await Destination.find({})
-      .populate('locationId', 'firstname') // Populate with the firstname field of Location
+      .populate('locationId', 'firstname') 
       .exec();
     res.status(200).json(destinations);
   } catch (error) {

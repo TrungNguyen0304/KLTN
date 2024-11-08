@@ -23,7 +23,7 @@ const IndexUser = () => {
   // Delete user by id
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:8001/api/user/${id}`);
+      await axios.delete(`http://localhost:8001/api/user/delete/${id}`);
       setusers(users.filter((user) => user.id !== id));
       window.location.reload();
 
@@ -80,7 +80,6 @@ const IndexUser = () => {
                     className="delete-button"
                     onClick={() => deleteUser(user._id)}
 
-                    onClick={() => deleteUser(user.id)}
                   >
                     Delete
                   </button>
