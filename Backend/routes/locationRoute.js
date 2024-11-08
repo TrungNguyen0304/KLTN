@@ -6,7 +6,7 @@ const { create, getAll, deleteLocation, updateLocation, getLocationById } = requ
 router.post("/create", create);
 
 // Lấy tất cả vị trí
-router.get("/location", getAll);
+router.get("/", getAll);
 
 router.delete("/delete/:id", deleteLocation);
 

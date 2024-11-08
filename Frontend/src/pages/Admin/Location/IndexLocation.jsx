@@ -10,7 +10,7 @@ const IndexLocation = () => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8001/api/location/location"
+          "http://localhost:8001/api/location"
         );
         setLocations(response.data);
       } catch (error) {

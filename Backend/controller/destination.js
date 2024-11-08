@@ -4,10 +4,11 @@ const bcrypt = require("bcrypt");
 // API to add a new destination
 const createDestination = async (req, res) => {
   try {
+    console.log(req.files);
     const { DestinationName, Description, locationId } = req.body;
     const Images = req.files['image'] ? req.files['image'][0].path : "";
-    const groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : [];
-
+    const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
+    // Xóa khoảng trắng ở đầu và cuối DestinationName
     const trimmedDestinationName = DestinationName.trim();
 
     const existingDestination = await Destination.findOne({ DestinationName: trimmedDestinationName });
@@ -19,7 +20,7 @@ const createDestination = async (req, res) => {
       DestinationName: trimmedDestinationName,
       Images,
       Description,
-      groudImages,
+      GroupImages,
       locationId,
     });
 
@@ -51,29 +52,55 @@ const deleteDestination = async (req, res) => {
 // Api edit destination
 const editDestination = async (req, res) => {
   const { id } = req.params;
-  const { DestinationName, Description } = req.body;
-  const Images = req.files['image'] ? req.files['image'][0].path : "";
-  const groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : [];
+  const { DestinationName, Description, locationId } = req.body;
+  let Images = req.file ? req.file.path : ""; // If there's a new image, use the new one
+  let groudImages = req.files['groudImages'] ? req.files['groudImages'].map(file => file.path) : []; // Handle multiple new images
 
   try {
+    // Fetch the destination to update
+    const destination = await Destination.findById(id);
+    if (!destination) {
+      return res.status(404).json({ message: "Destination not found." });
+    }
+
+    // If no new image is uploaded, keep the old one
+    if (!Images) {
+      Images = destination.Images;  // Keep the current image if no new image is uploaded
+    }
+
+    // If no new group images are uploaded, keep the old ones
+    if (groudImages.length === 0) {
+      groudImages = destination.groudImages; // Keep the current group images
+    }
+
+    // Update the destination in the database
     const updatedDestination = await Destination.findByIdAndUpdate(
       id,
-      { DestinationName, Images,groudImages, Description, updatedAt: Date.now() },
+      {
+        DestinationName: DestinationName.trim(),
+        Images,
+        Description,
+        groudImages,
+        locationId,
+        updatedAt: Date.now(),
+      },
       { new: true, runValidators: true }
     );
+
+    // If destination update fails
     if (!updatedDestination) {
-      return res.status(404).json({ message: "Địa danh không tồn tại." });
+      return res.status(404).json({ message: "Failed to update destination." });
     }
+
     res.status(200).json({
-      message: "Đã cập nhật địa danh thành công!",
+      message: "Destination updated successfully!",
       destination: updatedDestination,
     });
   } catch (error) {
-    console.error("Lỗi khi chỉnh sửa điạ danh:", error);
-    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
+    console.error("Error updating destination:", error.message);
+    res.status(500).json({ message: "Internal server error." });
   }
 };
-
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
@@ -88,10 +115,24 @@ const getAllDestination = async (req, res) => {
 };
 
 
+const getDestinationById = async (req, res) => {
+  try {
+    const destination = await Destination.findById(req.params.id);
+    if (!destination) {
+      return res.status(404).json({ message: "Không tìm thấy địa danh." });
+    }
+    res.status(200).json(destination);
+  } catch (error) {
+    console.error("Lỗi khi lấy địa danh:", error);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
+  }
+};
+
 
 module.exports = {
   createDestination,
   deleteDestination,
   editDestination,
   getAllDestination,
+  getDestinationById,
 };

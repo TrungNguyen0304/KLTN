@@ -79,6 +79,8 @@ const IndexUser = () => {
                   <button
                     className="delete-button"
                     onClick={() => deleteUser(user._id)}
+
+                    onClick={() => deleteUser(user.id)}
                   >
                     Delete
                   </button>

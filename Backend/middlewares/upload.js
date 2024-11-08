@@ -12,7 +12,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage }).fields([
   { name: 'image', maxCount: 1 },
-  { name: 'groudImages', maxCount: 10 },
+  { name: 'groupImages', maxCount: 10 },
 ]);
 
 module.exports = upload;
