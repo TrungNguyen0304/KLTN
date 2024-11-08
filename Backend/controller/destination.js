@@ -132,10 +132,23 @@ const getDestinationById = async (req, res) => {
 };
 
 
+
+const getDestinationsCountByLocation = async (locationId) => {
+  try {
+      // Đếm số lượng Destination có locationId tương ứng
+      const count = await Destination.countDocuments({ locationId });
+      return count;
+  } catch (error) {
+      throw new Error('Lỗi khi đếm các Destination: ' + error.message);
+  }
+};
+
+
 module.exports = {
   createDestination,
   deleteDestination,
   editDestination,
   getAllDestination,
   getDestinationById,
+  getDestinationsCountByLocation
 };
