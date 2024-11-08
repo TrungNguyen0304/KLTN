@@ -1,5 +1,5 @@
 const Location = require('../models/location'); // Import model
-
+const Destination = require('../models/destination'); 
 const create = async (req, res) => {
     try {
         const { firstname } = req.body;
@@ -23,13 +23,31 @@ const create = async (req, res) => {
 };
 const getAll = async (req, res) => {
     try {
-        const locations = await Location.find();
-        res.status(200).json(locations);
+      // Lấy tất cả Location
+      const locations = await Location.find();
+  
+      // Đếm số lượng Destination cho mỗi Location
+      const locationsWithDestinationsCount = await Promise.all(
+        locations.map(async (location) => {
+          // Đếm số lượng Destination liên kết với Location
+          const destinationsCount = await Destination.countDocuments({
+            locationId: location._id, // locationId của Destination phải khớp với _id của Location
+          });
+  
+          return {
+            ...location.toObject(), // Chuyển đổi Location thành object
+            destinationsCount, // Thêm trường destinationsCount
+          };
+        })
+      );
+  
+      // Trả về danh sách Locations kèm số lượng Destination
+      res.status(200).json(locationsWithDestinationsCount);
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching locations', error: error.message });
+      console.error(error);
+      res.status(500).json({ message: "Lỗi khi lấy danh sách Locations", error: error.message });
     }
-};
-
+  };
 const deleteLocation = async (req, res) => {
     try {
         const { id } = req.params; // Get the ID from the request parameters
