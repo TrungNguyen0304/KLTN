@@ -90,7 +90,7 @@ const CreateDestination = () => {
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group  anh">
                         <label htmlFor="imageUpload">Ảnh</label>
                         {image && (
                             <div>
@@ -111,6 +111,35 @@ const CreateDestination = () => {
                         />
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới </label>
                     </div>
+
+
+                    <div className="form-group anh">
+                        <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
+                        <input
+                            id="groupImagesUpload"
+                            type="file"
+                            accept="image/*"
+                            multiple // Cho phép chọn nhiều ảnh
+                            onChange={handleGroupImagesChange}
+                        />
+                        <label htmlFor="groupImagesUpload" className="file-input-label">Chọn nhiều ảnh </label>
+                    </div>
+
+                    {groupPreviews.length > 0 && (
+                        <div className="image-preview">
+                            <p>Ảnh đã chọn:</p>
+                            {groupPreviews.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={image} // Hiển thị ảnh preview
+                                    alt={`Preview ${index}`}
+                                    className="current-image"
+                                    style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
+                                />
+                            ))}
+                        </div>
+                    )}
+
 
                     <div className="form-group">
                         <label htmlFor="description" className="form-label">Mô tả</label>

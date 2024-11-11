@@ -23,9 +23,11 @@ import CreateLocation from "./pages/Admin/Location/CreateLocation";
 import EditLocation from "./pages/Admin/Location/EditLocation";
 import IndexTour from "./pages/Admin/Tour/IndexTour";
 import CreateTour from "./pages/Admin/Tour/CreateTour";
+
 import CreateTourGuide from "./pages/Admin/TourGuide/CreateTourGuide";
 import IndexTourGuide from "./pages/Admin/TourGuide/IndexTourGuide";
 import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
+
 
 
 // </>
@@ -63,9 +65,11 @@ function App() {
           <Route path="/location/update/:id" element={<EditLocation />} />
           <Route path="tour" element={<IndexTour />} />
           <Route path="tour/create" element={<CreateTour />} />
+
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />
           <Route path="tourGuide/update/:id" element={<EditTourGuide />} />
+
          
           {/* Thêm các route admin khác nếu cần */}
         </Route>
