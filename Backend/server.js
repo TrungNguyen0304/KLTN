@@ -8,6 +8,7 @@ const BookingRoutes = require("./routes/bookingRoute");
 const TourPackageRoutes = require("./routes/tourPackageRoute");
 const locationRoutes = require("./routes/locationRoute");
 const tourGuideRoutes = require("./routes/tourGuideRoute");
+const durationRoutes = require("./routes/durationRoute");
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/booking", BookingRoutes);
 app.use("/api/tourPackage", TourPackageRoutes);
 app.use("/api/location", locationRoutes);
 app.use("/api/tourGuide",tourGuideRoutes );
+app.use("/api/duration",durationRoutes );
 
 // Start server
 app.listen(PORT, () => {

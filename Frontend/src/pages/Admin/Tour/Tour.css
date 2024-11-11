@@ -1,6 +1,6 @@
 /* Container Styling */
 .ContainerTour {
-    padding: 50px 15px;
+    padding: 70px 15px;
     background-color: #f8f9fa;
   }
   
@@ -12,10 +12,7 @@
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   
-  .tour-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
-  }
+
   
   .tour-image {
     border-top-left-radius: 15px;

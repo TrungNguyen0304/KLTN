@@ -2,7 +2,7 @@
     width: 100%;
    
     /* Adjusted padding for better spacing */
-
+    padding: 50px 15px
 }
 
 .HeaderCustomers .no-grid {
@@ -13,7 +13,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    
 }
 
 table {

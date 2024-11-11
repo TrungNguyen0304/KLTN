@@ -10,16 +10,13 @@ const CreateTour = () => {
 
     const handleAddDateRange = () => {
         if (startDate && endDate && numPeople && new Date(startDate) <= new Date(endDate)) {
-            // Calculate days and nights
             const { days, nights } = calculateDaysAndNights(startDate, endDate);
 
-            // Add date range with days, nights, and number of people to the state
             setDateRanges([
                 ...dateRanges,
                 { startDate, endDate, days, nights, numPeople }
             ]);
 
-            // Reset the input fields
             setStartDate('');
             setEndDate('');
             setNumPeople('');
@@ -43,7 +40,6 @@ const CreateTour = () => {
         };
     };
 
-    // Helper function to format date as dd/mm/yyyy
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -55,53 +51,52 @@ const CreateTour = () => {
             <div className="form-container">
                 <h2>Thêm Tour du lịch</h2>
                 <form>
-                    <div className="form-columns">
-                        {/* Column 1 */}
-                        <div className="form-column">
-                            <div className="form-group">
-                                <label htmlFor="destinationName">Tên Địa Danh</label>
-                                <input
-                                    id="destinationName"
-                                    type="text"
-                                    placeholder="Nhập tên địa danh"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="description">Mô tả</label>
-                                <textarea
-                                    id="description"
-                                    rows="3"
-                                    placeholder="Nhập mô tả"
-                                    required
-                                />
-                            </div>
+                    {/* Row for Destination Name and Price */}
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="package_name">Tên Tour</label>
+                            <input
+                                id="package_name"
+                                type="text"
+                                placeholder="Nhập tên Tour"
+                                required
+                            />
                         </div>
-
-                        {/* Column 2 */}
-                        <div className="form-column">
-                            <div className="form-group">
-                                <label htmlFor="price">Giá</label>
-                                <input
-                                    id="price"
-                                    type="text"
-                                    placeholder="Giá"
-                                    required
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="itinerary">Hành trình</label>
-                                <textarea
-                                    id="itinerary"
-                                    rows="3"
-                                    placeholder="Nhập hành trình"
-                                    required
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label htmlFor="price">Giá</label>
+                            <input
+                                id="price"
+                                type="text"
+                                placeholder="Giá"
+                                required
+                            />
                         </div>
                     </div>
-                    
-                    {/* Row for Price and Guide */}
+
+                    {/* Row for Description, Itinerary, Inclusions, and Exclusions */}
+                    <div className="form-row">
+                        <div className="form-group">
+                            <label htmlFor="description">Mô tả</label>
+                            <textarea
+                                id="description"
+                                rows="2"
+                                placeholder="Nhập mô tả"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="IncAndExcl">Bao gồm/Không bao gồm</label>
+                            <textarea
+                                id="IncAndExcl"
+                                rows="2"
+                                placeholder="Nhập mục bao gồm"
+                                required
+                            />
+                        </div>
+                        
+                    </div>
+
+                    {/* Other Form Fields */}
                     <div className="row-two-items">
                         <div className="form-group">
                             <label htmlFor="guide">Hướng dẫn viên</label>
@@ -123,7 +118,6 @@ const CreateTour = () => {
                         </div>
                     </div>
 
-                    {/* Row for Available Date Ranges */}
                     <div className="form-group">
                         <label>Khoảng thời gian có sẵn</label>
                         <div className="date-picker-row">
@@ -142,29 +136,25 @@ const CreateTour = () => {
                                 required
                             />
                             <input
-                           
                                 type="number"
                                 value={numPeople}
                                 onChange={(e) => setNumPeople(e.target.value)}
                                 placeholder="Số người"
                                 required
                             />
-                            <button type="button" onClick={handleAddDateRange}>Thêm </button>
+                            <button type="button" onClick={handleAddDateRange}>Thêm</button>
                         </div>
 
-                        {/* List of Added Date Ranges */}
                         <ul className="date-range-list">
                             {dateRanges.map((range, index) => (
                                 <li key={index}>
-                                    Từ {formatDate(range.startDate)} đến {formatDate(range.endDate)} : {range.days} ngày, {range.nights} đêm
-                                    - {range.numPeople} người
+                                    Từ {formatDate(range.startDate)} đến {formatDate(range.endDate)} : {range.days} ngày, {range.nights} đêm - {range.numPeople} người
                                     <button type="button" onClick={() => handleRemoveDateRange(index)}>Xóa</button>
                                 </li>
                             ))}
                         </ul>
                     </div>
 
-                    {/* Row for Image Upload */}
                     <div className="row-one-item">
                         <div className="form-group anh2">
                             <label htmlFor="imageUpload">Ảnh</label>

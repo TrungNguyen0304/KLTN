@@ -45,8 +45,8 @@ const CreateUser = () => {
         <h2>Thêm người dùng</h2>
         {message && <div className="message">{message}</div>}
         <form onSubmit={handleSubmit}>
-          <div className="form-group-inline">
-            <div className="form-group">
+          <div className="form-group-inline ">
+            <div className="form-group anh">
               <label htmlFor="firstName">Tên</label>
               <input
                 id="firstName"
@@ -56,7 +56,7 @@ const CreateUser = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group anh">
               <label htmlFor="lastName">Họ</label>
               <input
                 id="lastName"
@@ -67,7 +67,7 @@ const CreateUser = () => {
               />
             </div>
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -77,7 +77,7 @@ const CreateUser = () => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="phone">Số điện thoại</label>
             <input
               id="phone"
@@ -87,7 +87,7 @@ const CreateUser = () => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="password">Mật Khẩu</label>
             <input
               id="password"
@@ -97,7 +97,7 @@ const CreateUser = () => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="role" className="form-label">Vai trò</label>
             <select
               className="form-select"

@@ -133,33 +133,6 @@ const UpdateDestination = () => {
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới</label>
                     </div>
 
-                    <div className="form-group anh">
-                        <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
-                        {groupPreviews.length > 0 && (
-                            <div>
-                                <p>Ảnh nhóm hiện tại:</p>
-                                <div className="image-previews">
-                                    {groupPreviews.map((preview, index) => (
-                                        <img
-                                            key={index}
-                                            src={preview} // Hiển thị preview của ảnh nhóm cũ hoặc mới
-                                            alt={`Preview ${index}`}
-                                            style={{ maxWidth: "100px", marginRight: "10px" }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                        <input
-                            id="groupImagesUpload"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleGroupImagesChange}
-                        />
-                        <label htmlFor="groupImagesUpload" className="file-input-label">Chọn nhiều ảnh</label>
-                    </div>
-
                     <div className="form-group">
                         <label htmlFor="description" className="form-label">Mô tả</label>
                         <textarea
