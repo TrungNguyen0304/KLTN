@@ -41,11 +41,13 @@ export const SidebarData = [
   },
   {
     icon: UilPackage,
-    heading: 'Bookings'
+    heading: 'Tour',
+    Link: "/tour",
   },
   {
-    icon: UilChart,
-    heading: 'Analytics'
+    icon: UilPackage,
+    heading: 'TourGuide',
+    Link:'/tourGuide'
   },
 ];
 

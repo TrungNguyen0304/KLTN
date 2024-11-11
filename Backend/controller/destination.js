@@ -6,7 +6,6 @@ const createDestination = async (req, res) => {
   try {
     const { DestinationName, Description, locationId } = req.body;
     const Images = req.files['image'] ? req.files['image'][0].path : "";
-    const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
     // Xóa khoảng trắng ở đầu và cuối DestinationName
     const trimmedDestinationName = DestinationName.trim();
 
@@ -19,7 +18,6 @@ const createDestination = async (req, res) => {
       DestinationName: trimmedDestinationName,
       Images,
       Description,
-      GroupImages,
       locationId,
     });
 
@@ -55,7 +53,6 @@ const editDestination = async (req, res) => {
 
   // Lấy ảnh chính và ảnh nhóm mới (nếu có)
   let Images = req.files['image'] ? req.files['image'][0].path : ""; // Dùng ảnh mới nếu có
-  let GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : []; // Dùng ảnh nhóm mới nếu có
 
   try {
     // Lấy thông tin địa danh hiện tại từ DB
@@ -69,10 +66,7 @@ const editDestination = async (req, res) => {
       Images = destination.Images;
     }
 
-    // Giữ lại các ảnh nhóm cũ nếu không có ảnh nhóm mới
-    if (GroupImages.length === 0) {
-      GroupImages = destination.GroupImages;
-    }
+     
 
     // Cập nhật thông tin địa danh
     const updatedDestination = await Destination.findByIdAndUpdate(
@@ -81,7 +75,6 @@ const editDestination = async (req, res) => {
         DestinationName: DestinationName.trim(),
         Images,
         Description,
-        GroupImages,
         locationId,
         updatedAt: Date.now(),
       },

@@ -12,51 +12,41 @@ const UpdateDestination = () => {
     const [state, setState] = useState('');
     const [locationId, setLocationId] = useState('');
     const [locations, setLocations] = useState([]);
-    const [groupImages, setGroupImages] = useState([]); // Mảng chứa ảnh nhóm
-    const [groupPreviews, setGroupPreviews] = useState([]); // Mảng chứa ảnh preview nhóm
     const navigate = useNavigate();
 
     // Fetch data for the destination and locations
- useEffect(() => {
-    const fetchDestination = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8001/api/destination/${id}`);
-            const data = response.data;
+    useEffect(() => {
+        const fetchDestination = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8001/api/destination/${id}`);
+                const data = response.data;
 
-            // Cập nhật các trường thông tin
-            setDestinationName(data.DestinationName);
-            setDescription(data.Description);
-            setState(data.state || '');
-            setCurrentImage(data.Images); // URL ảnh hiện tại
-            setLocationId(data.locationId || '');
+                // Cập nhật các trường thông tin
+                setDestinationName(data.DestinationName);
+                setDescription(data.Description);
+                setState(data.state || '');
+                setCurrentImage(data.Images); // URL ảnh hiện tại
+                setLocationId(data.locationId || '');
 
-            // Cập nhật ảnh nhóm cũ (groupImages)
-            if (data.groupImages && data.groupImages.length > 0) {
-                setGroupImages(data.groupImages);  // Dữ liệu ảnh nhóm từ API
-                setGroupPreviews(data.groupImages.map(img => URL.createObjectURL(img)));  // Tạo URL từ ảnh cũ và lưu vào groupPreviews
-            } else {
-                setGroupPreviews([]); // Nếu không có ảnh nhóm
+            } catch (error) {
+                console.error("Lỗi khi lấy dữ liệu địa danh:", error);
+                alert("Không thể tải dữ liệu địa danh.");
             }
+        };
 
-        } catch (error) {
-            console.error("Lỗi khi lấy dữ liệu địa danh:", error);
-            alert("Không thể tải dữ liệu địa danh.");
-        }
-    };
+        const fetchLocations = async () => {
+            try {
+                const response = await axios.get("http://localhost:8001/api/location");
+                setLocations(response.data);
+            } catch (error) {
+                console.error("Lỗi khi lấy danh sách location:", error);
+                alert("Không thể tải danh sách tỉnh/thành phố.");
+            }
+        };
 
-    const fetchLocations = async () => {
-        try {
-            const response = await axios.get("http://localhost:8001/api/location");
-            setLocations(response.data);
-        } catch (error) {
-            console.error("Lỗi khi lấy danh sách location:", error);
-            alert("Không thể tải danh sách tỉnh/thành phố.");
-        }
-    };
-
-    fetchDestination();
-    fetchLocations();
-}, [id]);
+        fetchDestination();
+        fetchLocations();
+    }, [id]);
 
     // Xử lý thay đổi ảnh chính
     const handleImageChange = (e) => {
@@ -69,25 +59,6 @@ const UpdateDestination = () => {
                 setCurrentImage(reader.result);
             };
             reader.readAsDataURL(file);
-        }
-    };
-
-    // Xử lý thay đổi ảnh nhóm
-    const handleGroupImagesChange = (e) => {
-        const files = Array.from(e.target.files);
-
-        if (files.length > 0) {
-            // Nếu có ảnh mới, cập nhật groupImages và groupPreviews
-            setGroupImages(files); // Cập nhật ảnh nhóm mới
-            const imagePreviews = files.map(file => URL.createObjectURL(file)); // Tạo ảnh preview mới
-            setGroupPreviews(imagePreviews); // Hiển thị ảnh mới
-        } else {
-            // Nếu không có ảnh mới, giữ lại các ảnh nhóm cũ
-            const currentPreviews = groupImages.map((file) => {
-                // Sử dụng URL.createObjectURL để tạo preview từ ảnh cũ
-                return URL.createObjectURL(file);
-            });
-            setGroupPreviews(currentPreviews); // Hiển thị ảnh cũ
         }
     };
 
@@ -106,13 +77,6 @@ const UpdateDestination = () => {
             formData.append("image", image);
         } else if (currentImage && !currentImage.startsWith("data:image")) {
             formData.append("currentImageURL", currentImage); // Thêm URL ảnh hiện tại nếu không phải base64
-        }
-
-        // Thêm các ảnh nhóm
-        if (groupImages.length > 0) {
-            groupImages.forEach((file) => {
-                formData.append("groupImages", file); // Thêm từng ảnh nhóm vào FormData
-            });
         }
 
         try {
@@ -168,36 +132,6 @@ const UpdateDestination = () => {
                         />
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới (nếu có)</label>
                     </div>
-
-                    <div className="form-group">
-                        <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
-                        {groupPreviews.length > 0 && (
-                            <div>
-                                <p>Ảnh nhóm hiện tại:</p>
-                                <div className="image-previews">
-                                    {groupPreviews.map((preview, index) => (
-                                        <img
-                                            key={index}
-                                            src={preview} // Hiển thị preview của ảnh nhóm cũ hoặc mới
-                                            alt={`Preview ${index}`}
-                                            style={{ maxWidth: "100px", marginRight: "10px" }}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                        <input
-                            id="groupImagesUpload"
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleGroupImagesChange}
-                        />
-                        <label htmlFor="groupImagesUpload" className="file-input-label">Chọn nhiều ảnh</label>
-                    </div>
-
-
-
 
                     <div className="form-group">
                         <label htmlFor="description" className="form-label">Mô tả</label>

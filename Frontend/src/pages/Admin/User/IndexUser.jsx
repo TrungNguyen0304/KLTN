@@ -25,7 +25,6 @@ const IndexUser = () => {
       await axios.delete(`http://localhost:8001/api/user/delete/${id}`);
       setusers(users.filter((user) => user.id !== id));
       window.location.reload();
-
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -78,7 +77,6 @@ const IndexUser = () => {
                   <button
                     className="delete-button"
                     onClick={() => deleteUser(user._id)}
-
                   >
                     Delete
                   </button>

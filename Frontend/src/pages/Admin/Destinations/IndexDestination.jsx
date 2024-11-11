@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaTrash } from 'react-icons/fa'; 
+import { FaTrash } from 'react-icons/fa';
 import './Destination.css';
 
 const IndexDestination = () => {
   const [destinations, setDestinations] = useState([]);
-  
+
+
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
@@ -38,6 +39,8 @@ const IndexDestination = () => {
     }
   };
 
+
+
   return (
     <Container className="ContainerDestination">
       <Row className="align-items-center mb-3">
@@ -68,16 +71,16 @@ const IndexDestination = () => {
                 <div className="location-container">
                   <p>Location:</p>
                   <Card.Text className="destination-location ms-2">
-                    {/* Display the name of the location instead of the ID */}
                     {destination.locationId ? destination.locationId.firstname : "Unknown"}
                   </Card.Text>
                 </div>
-               
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
+
+
     </Container>
   );
 };

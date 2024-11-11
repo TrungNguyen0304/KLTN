@@ -4,15 +4,18 @@ const bcrypt = require("bcrypt");
 const createTourGuide = async (req, res) => {
   try {
     const { first_name, last_name, phone_number, email } = req.body;
+    const images = req.files['image'] ? req.files['image'][0].path : "";
     const newTourGuide = new tourGuide({
       first_name,
       last_name,
+      images,
       phone_number,
       email,
     });
     const savedTourGuide = await newTourGuide.save();
     res.status(201).json({
       success: true,
+      message: "Đã tạo hướng dẫn viên.",
       data: savedTourGuide,
     });
   } catch (error) {
@@ -32,7 +35,7 @@ const deleteTourGuide = async (req, res) => {
     if (!deleteTourGuide) {
       return res.status(404).json({ message: "Hướng dẫn viên không tồn tại" });
     }
-    res.status(200).json({ message: "Địa danh đã được xóa thành công " });
+    res.status(200).json({ message: " Đã được xóa thành công hướng dẫn viên. " });
   } catch (error) {
     console.error("Lỗi khi xóa hướng dẫn viên :", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
@@ -42,10 +45,12 @@ const deleteTourGuide = async (req, res) => {
 const editTourGuide = async (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, phone_number, email } = req.body;
+  const images = req.files['image'] ? req.files['image'][0].path : "";
+
   try {
     const updateTourGuide = await tourGuide.findByIdAndUpdate(
       id,
-      { first_name, last_name, phone_number, email, updatedAt: Date.now() },
+      { first_name, last_name, phone_number,images, email, updatedAt: Date.now() },
       { new: true, runValidators: true }
     );
     if (!updateTourGuide) {

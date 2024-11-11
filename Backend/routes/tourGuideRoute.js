@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const upload =require("../middlewares/upload")
 const {
   createTourGuide,
   deleteTourGuide,
@@ -10,8 +10,8 @@ const {
 } = require("../controller/tourGuide");
 
 router.delete("/delete/:id", deleteTourGuide);
-router.post("/create", createTourGuide);
-router.put("/edit/:id", editTourGuide);
+router.post("/create",upload, createTourGuide);
+router.put("/update/:id", upload,editTourGuide);
 router.get("/getAll", getAllTourGuide);
 router.get("/:id", getTourGuideById);
 
