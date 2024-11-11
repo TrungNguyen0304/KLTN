@@ -1,35 +1,39 @@
 const TourPackage = require("../models/tourPackage");
 const bcrypt = require("bcrypt");
 
+
+// Api Create tourPacket
 const createTour = async (req, res) => {
   try {
-    const { package_name, description, price, duration, destination_id } =
-      req.body;
-    const images = req.file ? req.file.path : "";
-    const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
+    const { package_name, description, price, duration, destination_id } = req.body;
+    const images = req.file ? req.file.path : null;
+    const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : null;
+
     if (!package_name || !price || !destination_id) {
       return res.status(400).json({ message: "Thiếu các trường bắt buộc." });
     }
+
+    // Tạo một đối tượng mới cho gói tour
     const newTour = new TourPackage({
       package_name,
       description,
-      images,
-      GroupImages,
       price,
       duration,
       destination_id,
+      ...(images ? { images } : {}),  
+      ...(groupImages ? { groupImages } : {}), 
     });
+
+    // Lưu gói tour vào cơ sở dữ liệu
     const savedTour = await newTour.save();
-    res
-      .status(201)
-      .json({ message: "Gói tour được tạo thành công.", tour: savedTour });
+
+    res.status(201).json({ message: "Gói tour được tạo thành công.", tour: savedTour });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "Lỗi máy chủ cục bộ.", error: error.message });
+    res.status(500).json({ message: "Lỗi máy chủ cục bộ.", error: error.message });
   }
 };
+
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
   const { id } = req.params;
@@ -44,24 +48,27 @@ const deleteTour = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
   }
 };
+
 //Api edit tour
 const editTour = async (req, res) => {
   const { id } = req.params;
   const { package_name, description, price, duration, destination_id } =
     req.body;
-  const images = req.file ? req.file.path : "";
-  const GroupImages = req.files['groupImages'] ? req.files['groupImages'].map(file => file.path) : [];
+  const images = req.file ? req.file.path : null;
+  const groupImages = req.files["groupImages"]
+    ? req.files["groupImages"].map((file) => file.path)
+    : null;
   try {
     const updatedTour = await TourPackage.findByIdAndUpdate(
       id,
       {
         package_name,
         description,
-        images,
-        GroupImages,
         price,
         duration,
         destination_id,
+        ...(images && { images }),
+        ...(groupImages && { groupImages }),
         updatedAt: Date.now(),
       },
       { new: true, runValidators: true }
@@ -78,6 +85,7 @@ const editTour = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
 // API get all tourPacket
 const getAllTour = async (req, res) => {
   try {

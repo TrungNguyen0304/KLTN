@@ -8,12 +8,10 @@ const CreateDestination = () => {
     const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
     const [state, setState] = useState('');
-    const [groupImages, setGroupImages] = useState([]); // Sửa từ groudImages thành groupImages
-    const [groupPreviews, setGroupPreviews] = useState([]); // Sửa từ groudPreviews thành groupPreviews
     const [locations, setLocations] = useState([]);
     const navigate = useNavigate();
 
-    // Fetch locations khi component mount
+    // Fetch locations when component mounts
     useEffect(() => {
         const fetchLocations = async () => {
             try {
@@ -28,7 +26,7 @@ const CreateDestination = () => {
         fetchLocations();
     }, []);
 
-    // Xử lý chọn ảnh đại diện
+    // Handle single image upload
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
@@ -41,29 +39,15 @@ const CreateDestination = () => {
         }
     };
 
-    // Xử lý chọn nhiều ảnh
-    const handleGroupImagesChange = (e) => {
-        const files = Array.from(e.target.files);
-        setGroupImages(files);
-
-        const imagePreviews = files.map(file => URL.createObjectURL(file));
-        setGroupPreviews(imagePreviews);
-    };
-
-    // Xử lý gửi form
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const formData = new FormData();
         formData.append("DestinationName", destinationName);
         formData.append("Description", description);
-        formData.append("image", image); // Ảnh đơn
+        formData.append("image", image); // Single image
         formData.append("locationId", state);
-
-        // Thêm tất cả các ảnh nhóm vào FormData
-        groupImages.forEach((img) => {
-            formData.append("groupImages", img);  // Sửa từ groudImages thành groupImages
-        });
 
         try {
             const response = await fetch("http://localhost:8001/api/destination/create", {
@@ -79,9 +63,7 @@ const CreateDestination = () => {
                 setDescription('');
                 setImage(null);
                 setState('');
-                setGroupImages([]); // Sửa từ groudImages thành groupImages
                 setPreview(null);
-                setGroupPreviews([]); // Sửa từ groudPreviews thành groupPreviews
                 navigate("/destination");
             } else {
                 alert(result.message || "Đã xảy ra lỗi khi thêm địa danh.");
@@ -114,7 +96,7 @@ const CreateDestination = () => {
                             <div>
                                 <p>Ảnh hiện tại:</p>
                                 <img
-                                    src={preview} // Hiển thị ảnh preview
+                                    src={preview} // Preview image
                                     alt="Current"
                                     className="current-image"
                                     style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
@@ -125,10 +107,11 @@ const CreateDestination = () => {
                             id="imageUpload"
                             type="file"
                             accept="image/*"
-                            onChange={handleImageChange} // Chỉ lưu ảnh đơn
+                            onChange={handleImageChange} // Only handle single image
                         />
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới </label>
                     </div>
+
 
                     <div className="form-group anh">
                         <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
@@ -156,6 +139,7 @@ const CreateDestination = () => {
                             ))}
                         </div>
                     )}
+
 
                     <div className="form-group">
                         <label htmlFor="description" className="form-label">Mô tả</label>

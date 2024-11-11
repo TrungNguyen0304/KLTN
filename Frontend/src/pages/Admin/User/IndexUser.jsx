@@ -10,7 +10,6 @@ const IndexUser = () => {
     const fetchusers = async () => {
       try {
         const response = await axios.get("http://localhost:8001/api/user");
-        console.log(response.data);
         setusers(response.data);
       } catch (error) {
         console.error("Error fetching users:", error);
