@@ -21,8 +21,10 @@ import EditUser from "./pages/Admin/User/EditUser";
 import IndexLocation from "./pages/Admin/Location/IndexLocation"
 import CreateLocation from "./pages/Admin/Location/CreateLocation";
 import EditLocation from "./pages/Admin/Location/EditLocation";
+
 import IndexTour from "./pages/Admin/Tour/IndexTour";
 import CreateTour from "./pages/Admin/Tour/CreateTour";
+import EditTour from "./pages/Admin/Tour/EditTour";
 
 import CreateTourGuide from "./pages/Admin/TourGuide/CreateTourGuide";
 import IndexTourGuide from "./pages/Admin/TourGuide/IndexTourGuide";
@@ -64,8 +66,10 @@ function App() {
           <Route path="location" element={<IndexLocation />} />
           <Route path="location/create" element={<CreateLocation />} />
           <Route path="/location/update/:id" element={<EditLocation />} />
+
           <Route path="tour" element={<IndexTour />} />
           <Route path="tour/create" element={<CreateTour />} />
+          <Route path="/tour/update/:id" element={<EditTour />} />
 
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />

@@ -1,28 +1,41 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaUserAlt } from 'react-icons/fa'; // Import icons
+import { FaMapMarkerAlt, FaUserAlt, FaTrash } from 'react-icons/fa';
 import './Tour.css';
+import axios from 'axios';
 
 const IndexTour = () => {
-  const tours = [
-    {
-      id: 1,
-      title: "Discover Singapore",
-      location: "Huế",
-      destination: "Đại Nội",
-    
-      rating: 3,
-      reviews: 5,
-      originalPrice: 100,
-      discountedPrice: 92,
-      duration: "5 days - 4 nights",
-      types: [""],
-      guideName: "Nguyễn Văn A",  // Add guide's name
-      imageUrl: "https://huesmiletravel.com.vn/images/dai_noi_ve_dem.jpg", // Replace with your image URL
-    },
-    // Add more tour objects as needed
-  ];
+  const [tours, setTours] = useState([]); // State to store tours data
+
+  // Fetch tours data from API
+  useEffect(() => {
+    const fetchTours = async () => {
+      try {
+        const response = await axios.get('http://localhost:8001/api/tourPackage');
+        setTours(response.data); // Set the fetched data to the state
+      } catch (error) {
+        console.error("Error fetching tours:", error);
+      }
+    };
+
+    fetchTours();
+  }, []);
+
+  // Delete tour function
+  const handleDelete = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8001/api/tourPackage/delete/${id}`);
+      if (response.status === 200) {
+        // Filter out the deleted tour from the tours state
+        setTours(tours.filter((tour) => tour._id !== id));
+        alert('Tour đã được xóa thành công');
+      }
+    } catch (error) {
+      console.error('Error deleting tour:', error);
+      alert('Có lỗi xảy ra khi xóa tour');
+    }
+  };
 
   return (
     <Container className="ContainerTour">
@@ -37,51 +50,56 @@ const IndexTour = () => {
 
       <Row className="d-flex">
         {tours.map((tour) => (
-          <Col md={4} key={tour.id} className="mb-4">
+          <Col md={4} key={tour._id} className="mb-4">
             <Card className="tour-card">
-              <Card.Img variant="top" src={tour.imageUrl} className="tour-image" />
+              <div className="delete-icon" onClick={() => handleDelete(tour._id)}>
+                <FaTrash />
+              </div>
+
+              {/* Wrap the image with a Link to navigate to the edit page */}
+              <Link to={`update/${tour._id}`} className="tour-image-container position-relative">
+                <Card.Img variant="top" src={tour.image} className="tour-image" />
+              </Link>
+
               <Card.Body>
                 <div className="tour-location mb-2">
                   <FaMapMarkerAlt className="tour-location-icon" />
-                  <small className="text-muted">{tour.location}</small>
-                  <span className="tour-separator">|</span> 
-                  <small className="text-muted ms-2">{tour.destination}</small>
+                  <small className="text-muted">{tour.locationId?.firstname}</small>
+                  <span className="tour-separator">|</span>
+                  <small className="text-muted ms-2">{tour.destinationId?.DestinationName}</small>
                 </div>
-                
-                <Card.Title className="tour-title">{tour.title}</Card.Title>
+
+                <Card.Title className="tour-title">{tour.package_name}</Card.Title>
                 <div className="tour-rating mb-2">
-                  <span className="tour-rating-text">★ {tour.rating} ({tour.reviews} reviews)</span>
+                  <span className="tour-rating-text">★ {tour.rating || 0} ({tour.reviews || 0} reviews)</span>
                 </div>
                 <div className="tour-types mb-2">
-                  {tour.types.map((type, index) => (
+                  {tour.types?.map((type, index) => (
                     <Badge key={index} bg={type === "Rail Tour" ? "warning" : "secondary"} className="me-1">
                       {type}
                     </Badge>
                   ))}
-                       {tour.guideName && (
-                  <div className="tour-guide mt-3">
-                    <FaUserAlt className="tour-guide-icon" />
-                    <span className="tour-guide-name">{tour.guideName}</span>
+                  {tour.tourGuideId && (
+                    <div className="tour-guide mt-3">
+                      <FaUserAlt className="tour-guide-icon" />
+                      <span className="tour-guide-name">
+                        Hướng dẫn viên: <span className="first_name">{tour.tourGuideId.first_name}</span>
+                      </span>
+                    </div>
+                  )}
+                  {/* Displaying duration as "X days Y nights" */}
+                  <div className="tour-duration mt-2">
+                    🕒 {tour.durations && tour.durations[0]?.durationText || 'N/A'}
                   </div>
-                )}
                 </div>
                 <div className="tour-price mb-2">
-                  <span style={{ textDecoration: 'line-through', color: '#777' }}>${tour.originalPrice}</span>
-                  <span className="text-primary ms-2" style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
-                    From ${tour.discountedPrice}
-                  </span>
+                  <span className="original-price">${tour.originalPrice}</span>
+                  <span>{tour.price}</span>
                 </div>
-                 {/* Displaying the tour guide's name */}
-            
-                <div className="tour-duration mt-2">
-                  🕒 {tour.duration}
-                </div>
-               
               </Card.Body>
             </Card>
           </Col>
         ))}
- 
       </Row>
     </Container>
   );
