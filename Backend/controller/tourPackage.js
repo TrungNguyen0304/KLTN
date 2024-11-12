@@ -1,6 +1,7 @@
+const tourPackage = require("../models/tourPackage");
 const TourPackage = require("../models/tourPackage");
 
-const mongoose = require('mongoose');  // Make sure mongoose is imported
+const mongoose = require('mongoose');
 
 const createTour = async (req, res) => {
   try {
@@ -14,40 +15,34 @@ const createTour = async (req, res) => {
       parsedDurations = JSON.parse(durations);
     }
 
-    // Validate durations
     if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
       return res.status(400).json({ message: "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng." });
     }
 
-    // Ensure all IDs are valid ObjectIds
     const invalidDurations = parsedDurations.filter(id => !mongoose.Types.ObjectId.isValid(id));
     if (invalidDurations.length > 0) {
       return res.status(400).json({ message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(', ')}` });
     }
 
-    // Create new TourPackage object
     const newTour = new TourPackage({
       package_name,
       description,
       price,
       image,
-      durations: parsedDurations, // Use the parsed durations here
+      durations: parsedDurations, 
       destinationId,
       tourGuideId,
       locationId,
-      incAndExc, // Includes the 'incAndExc' field
+      incAndExc, 
       groupImages
     });
 
-    // Save the new tour package to the database
     await newTour.save();
     console.log("Tour package saved successfully:", newTour);
 
-    // Return success response
     return res.status(201).json({ message: "Tour package created successfully!", tour: newTour });
 
   } catch (error) {
-    // Log the error message for debugging
     console.error("Error creating tour:", error);
     return res.status(500).json({ message: "Đã xảy ra lỗi trong quá trình tạo tour.", error: error.message });
   }
@@ -59,21 +54,21 @@ const createTour = async (req, res) => {
 const deleteTour = async (req, res) => {
   const { id } = req.params;
   try {
-    const deleteTour = await TourPackage.findByIdAndDelete(id);
+    const deleteTour = await tourPackage.findByIdAndDelete(id);
     if (!deleteTour) {
-      return res.status(404).json({ message: " Gói tour không tồn tại " });
+      return res.status(404).json({ message: "Tour package không tồn tại" });
     }
-    res.status(200).json({ message: "Gói tour đã được xóa thành công" });
+    res.status(200).json({ message: " Đã được xóa thành công Tour package. " });
   } catch (error) {
-    console.error("Lỗi khi xóa gói tour", error);
-    res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
+    console.error("Lỗi khi xóa Tour package :", error);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
 
 //Api edit tour
 const editTour = async (req, res) => {
   const { id } = req.params;
-  const { package_name, description, price, duration, destination_id } =
+  const { package_name, description, price, durations, destination_id } =
     req.body;
   const images = req.file ? req.file.path : null;
   const groupImages = req.files["groupImages"]
@@ -86,7 +81,7 @@ const editTour = async (req, res) => {
         package_name,
         description,
         price,
-        duration,
+        durations,
         destination_id,
         ...(images && { images }),
         ...(groupImages && { groupImages }),
@@ -117,7 +112,7 @@ const getAllTour = async (req, res) => {
       .populate("locationId", "firstname")
       .exec();
 
-    res.status(200).json(tourpackages); // Return the tour packages as response
+    res.status(200).json(tourpackages); 
   } catch (error) {
     console.error("Error fetching tour packages", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });

@@ -6,6 +6,7 @@ const upload = require("../middlewares/upload");
 router.post("/create", upload,createTour);
 router.get("/", getAllTour);
 router.get("/edit/:id", editTour);
-router.get("/delete/:id", deleteTour);
+router.delete("/delete/:id", deleteTour);
+
 
 module.exports = router;

@@ -58,7 +58,6 @@ const CreateDestination = () => {
             const result = await response.json();
             if (response.ok) {
                 alert(result.message);
-                // Reset form
                 setDestinationName('');
                 setDescription('');
                 setImage(null);
@@ -95,7 +94,7 @@ const CreateDestination = () => {
                             <div>
                                 <p>Ảnh hiện tại:</p>
                                 <img
-                                    src={preview} // Preview image
+                                    src={preview} 
                                     alt="Current"
                                     className="current-image"
                                     style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
@@ -106,7 +105,7 @@ const CreateDestination = () => {
                             id="imageUpload"
                             type="file"
                             accept="image/*"
-                            onChange={handleImageChange} // Only handle single image
+                            onChange={handleImageChange} 
                         />
                         <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới </label>
                     </div>

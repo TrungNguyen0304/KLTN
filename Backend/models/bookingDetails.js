@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const bookingDetailsSchema = new mongoose.Schema(
   {
-    booking_id: { type: Schema.Types.ObjectId, ref: "Booking", required: true },
+    bookingid: { type: Schema.Types.ObjectId, ref: "Booking", required: true },
+    userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true },
     age: { type: Number },
     special_requests: { type: String },

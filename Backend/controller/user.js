@@ -42,14 +42,19 @@ const login = async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
-      return res.status(200).json({ message: "Đăng nhập thành công!" });
+      return res.status(200).json({
+        message: "Đăng nhập thành công!",
+        userid: user._id,  
+      });
     } else {
       return res.status(401).json({ message: "Mật khẩu không hợp lệ." });
     }
+    
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
+
 };
 // API Delete user by ID
 const deleteUser = async (req, res) => {
