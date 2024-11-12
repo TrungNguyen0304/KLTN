@@ -1,64 +1,128 @@
-import React, { useState } from 'react';
-import { format } from 'date-fns'; // Import date-fns for formatting
+import React, { useState, useEffect } from 'react';
 import './CreateTour.css';
 
 const CreateTour = () => {
-    const [dateRanges, setDateRanges] = useState([]);
-    const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
-    const [numPeople, setNumPeople] = useState(''); // State for the number of people
+    const [package_name, setPackageName] = useState('');
+    const [price, setPrice] = useState('');
+    const [incAndExc, setIncAndExc] = useState('');
+    const [description, setDescription] = useState('');
+    const [groupImages, setGroupImages] = useState([]); // Store group images as file objects
+    const [image, setImage] = useState(null);
+    const [preview, setPreview] = useState(null);
+    const [selectedDurations, setSelectedDurations] = useState([]);
 
-    const handleAddDateRange = () => {
-        if (startDate && endDate && numPeople && new Date(startDate) <= new Date(endDate)) {
-            const { days, nights } = calculateDaysAndNights(startDate, endDate);
+    const [destinations, setDestinations] = useState([]);
+    const [tourGuides, setTourGuides] = useState([]);
+    const [locations, setLocations] = useState([]);
+    const [durations, setDurations] = useState([]);
 
-            setDateRanges([
-                ...dateRanges,
-                { startDate, endDate, days, nights, numPeople }
-            ]);
+    const [destinationId, setDestinationId] = useState('');
+    const [tourGuideId, setTourGuideId] = useState('');
+    const [locationId, setLocationId] = useState('');
 
-            setStartDate('');
-            setEndDate('');
-            setNumPeople('');
+    useEffect(() => {
+        const fetchData = async (url, setterFunction) => {
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                setterFunction(data);
+            } catch (error) {
+                console.error(`Error fetching data from ${url}:`, error);
+            }
+        };
+
+        fetchData("http://localhost:8001/api/location", setLocations);
+        fetchData("http://localhost:8001/api/destination", setDestinations);
+        fetchData("http://localhost:8001/api/tourGuide/getAll", setTourGuides);
+        fetchData("http://localhost:8001/api/duration", setDurations);
+    }, []);
+
+    const handleDurationChange = (e) => {
+        const selectedIds = Array.from(e.target.selectedOptions, option => option.value);
+        setSelectedDurations(selectedIds);
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setPreview(imageUrl);
+        } else {
+            setPreview(null);
         }
     };
 
-    const handleRemoveDateRange = (index) => {
-        setDateRanges(dateRanges.filter((_, i) => i !== index));
+    const handleGroupImageChange = (e) => {
+        const files = Array.from(e.target.files);
+        setGroupImages(files);
     };
 
-    const calculateDaysAndNights = (start, end) => {
-        const startDateObj = new Date(start);
-        const endDateObj = new Date(end);
-        
-        const timeDifference = endDateObj - startDateObj;
-        const daysCount = timeDifference / (1000 * 3600 * 24);
-        
-        return {
-            days: daysCount + 1, // Add 1 to include the start day
-            nights: daysCount // Nights is the number of days minus 1
-        };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (selectedDurations.length === 0) {
+            alert("Bạn cần chọn ít nhất một khoảng thời gian.");
+            return;
+        }
+    
+        // Log selectedDurations to debug
+        console.log("Selected Durations: ", selectedDurations);
+    
+        const formData = new FormData();
+        formData.append("package_name", package_name);
+        formData.append("description", description);
+        formData.append("incAndExc", incAndExc);
+        formData.append("price", price);
+        formData.append("durations", JSON.stringify(selectedDurations)); // Send durations as JSON string
+        formData.append("destinationId", destinationId);
+        formData.append("tourGuideId", tourGuideId);
+        formData.append("locationId", locationId);
+        formData.append("image", image); // Single image
+    
+        // Append group images to formData
+        groupImages.forEach((file) => {
+            formData.append("groupImages", file);
+        });
+    
+        // Debug: Log the formData to check its contents
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+    
+        try {
+            const response = await fetch("http://localhost:8001/api/tourPackage/create", {
+                method: 'POST',
+                body: formData
+            });
+    
+            const result = await response.json();
+            if (response.ok) {
+                alert("Gói tour đã được tạo thành công!");
+                console.log(result);
+            } else {
+                alert(result.message || "Có lỗi xảy ra.");
+            }
+        } catch (error) {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+            alert("Có lỗi khi gửi yêu cầu.");
+        }
     };
-
-    const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        return format(date, 'dd/MM/yyyy');
-    };
-
     return (
         <div className='parent-container'>
             <div className="form-container">
-                <h2>Thêm Tour du lịch</h2>
-                <form>
-                    {/* Row for Destination Name and Price */}
+                <h2>Thêm Tour Du Lịch</h2>
+                <form onSubmit={handleSubmit}>
+                    {/* Tour Name and Price */}
                     <div className="form-row">
                         <div className="form-group">
-                            <label htmlFor="package_name">Tên Tour</label>
+                            <label htmlFor="packagename">Tên Tour</label>
                             <input
-                                id="package_name"
+                                id="packagename"
                                 type="text"
-                                placeholder="Nhập tên Tour"
+                                value={package_name}
+                                onChange={(e) => setPackageName(e.target.value)}
                                 required
                             />
                         </div>
@@ -66,112 +130,157 @@ const CreateTour = () => {
                             <label htmlFor="price">Giá</label>
                             <input
                                 id="price"
-                                type="text"
-                                placeholder="Giá"
+                                type="number"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
                                 required
                             />
                         </div>
                     </div>
 
-                    {/* Row for Description, Itinerary, Inclusions, and Exclusions */}
+                    {/* Description and Inclusions/Exclusions */}
                     <div className="form-row">
                         <div className="form-group">
-                            <label htmlFor="description">Mô tả</label>
+                            <label htmlFor="description">Mô Tả</label>
                             <textarea
                                 id="description"
                                 rows="2"
-                                placeholder="Nhập mô tả"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="IncAndExcl">Bao gồm/Không bao gồm</label>
+                            <label htmlFor="incAndExc">Bao Gồm/Không Bao Gồm</label>
                             <textarea
-                                id="IncAndExcl"
+                                id="incAndExc"
                                 rows="2"
-                                placeholder="Nhập mục bao gồm"
+                                value={incAndExc}
+                                onChange={(e) => setIncAndExc(e.target.value)}
                                 required
                             />
                         </div>
-                        
                     </div>
 
-                    {/* Other Form Fields */}
+                    {/* Tour Guide and Duration */}
                     <div className="row-two-items">
                         <div className="form-group">
-                            <label htmlFor="guide">Hướng dẫn viên</label>
-                            <select id="guide" required>
-                                <option value="" disabled>Chọn...</option>
+                            <label htmlFor="guide">Hướng Dẫn Viên</label>
+                            <select
+                                id="guide"
+                                value={tourGuideId}
+                                onChange={(e) => setTourGuideId(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Chọn Hướng Dẫn Viên</option>
+                                {tourGuides.map(tourGuide => (
+                                    <option key={tourGuide._id} value={tourGuide._id}>
+                                        {tourGuide.first_name}
+                                    </option>
+                                ))}
                             </select>
                         </div>
+
                         <div className="form-group">
-                            <label htmlFor="destination">Điểm đến</label>
-                            <select id="destination" required>
-                                <option value="" disabled>Chọn...</option>
-                            </select>
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="country">Quốc gia</label>
-                            <select id="country" required>
-                                <option value="" disabled>Chọn...</option>
+                            <label htmlFor="duration">Khoảng Thời Gian</label>
+                            <select
+                                id="duration"
+                                value={selectedDurations}
+                                onChange={handleDurationChange}
+                                multiple
+                                required
+                            >
+                                {durations.map(duration => (
+                                    <option key={duration._id} value={duration._id}>
+                                        {new Date(duration.start_date).toLocaleDateString()} - {new Date(duration.end_date).toLocaleDateString()}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
 
-                    <div className="form-group">
-                        <label>Khoảng thời gian có sẵn</label>
-                        <div className="date-picker-row">
-                            <input
-                                type="date"
-                                value={startDate}
-                                onChange={(e) => setStartDate(e.target.value)}
-                                placeholder="Ngày bắt đầu"
+                    {/* Destination and Location */}
+                    <div className="row-two-items">
+                        <div className="form-group">
+                            <label htmlFor="destination">Điểm Đến</label>
+                            <select
+                                id="destination"
+                                value={destinationId}
+                                onChange={(e) => setDestinationId(e.target.value)}
                                 required
-                            />
-                            <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                placeholder="Ngày kết thúc"
-                                required
-                            />
-                            <input
-                                type="number"
-                                value={numPeople}
-                                onChange={(e) => setNumPeople(e.target.value)}
-                                placeholder="Số người"
-                                required
-                            />
-                            <button type="button" onClick={handleAddDateRange}>Thêm</button>
+                            >
+                                <option value="" disabled>Chọn Điểm Đến</option>
+                                {destinations.map(destination => (
+                                    <option key={destination._id} value={destination._id}>
+                                        {destination.DestinationName}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
-                        <ul className="date-range-list">
-                            {dateRanges.map((range, index) => (
-                                <li key={index}>
-                                    Từ {formatDate(range.startDate)} đến {formatDate(range.endDate)} : {range.days} ngày, {range.nights} đêm - {range.numPeople} người
-                                    <button type="button" onClick={() => handleRemoveDateRange(index)}>Xóa</button>
-                                </li>
-                            ))}
-                        </ul>
+                        <div className="form-group">
+                            <label htmlFor="location">Quốc Gia</label>
+                            <select
+                                id="location"
+                                value={locationId}
+                                onChange={(e) => setLocationId(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Chọn Quốc Gia</option>
+                                {locations.map(location => (
+                                    <option key={location._id} value={location._id}>
+                                        {location.firstname}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
+                    {/* Image and Group Images */}
                     <div className="row-one-item">
                         <div className="form-group anh2">
-                            <label htmlFor="imageUpload">Ảnh</label>
+                            <label htmlFor="image">Ảnh</label>
+                            {image && (
+                                <div>
+                                    <p>Ảnh hiện tại:</p>
+                                    <img
+                                        src={preview} // Preview image
+                                        alt="Current"
+                                        className="current-image"
+                                        style={{ width: '200px', height: '200px', marginRight: '10px', marginBottom: '10px' }}
+                                    />
+                                </div>
+                            )}
                             <input
                                 id="imageUpload"
                                 type="file"
                                 accept="image/*"
+                                onChange={handleImageChange} // Only handle single image
                             />
+                            <label htmlFor="imageUpload" className="file-input-label">Chọn ảnh mới</label>
                         </div>
                         <div className="form-group anh2">
-                            <label htmlFor="groupImagesUpload">Chọn nhiều ảnh</label>
+                            <label htmlFor="groupImages">Chọn nhiều ảnh</label>
                             <input
-                                id="groupImagesUpload"
+                                id="groupImageUpload"
                                 type="file"
                                 accept="image/*"
                                 multiple
+                                onChange={handleGroupImageChange}
                             />
+                            {groupImages.length > 0 && (
+                                <div>
+                                    <h3>Group Images</h3>
+                                    {groupImages.map((file, index) => (
+                                        <img
+                                            key={index}
+                                            src={URL.createObjectURL(file)}
+                                            alt={`Group Image ${index + 1}`}
+                                            style={{ width: "100px", height: "100px", marginBottom: "10px" }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
 
