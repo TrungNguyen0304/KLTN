@@ -11,6 +11,8 @@ import Destinations from "./pages/Home/Destinations/Destinations";
 import PhotoGallery from "./pages/Home/PhotoGallery/PhotoGallery";
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
+import Notifications from "./components/notifications/notifications";
+import NotificationDetail from "./components/notifications/NotificationDetail";
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -31,10 +33,10 @@ import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
 
 
 // </>
-import MainLayout from "./layouts/MainLayout"; // Import MainLayout
-import AdminLayout from "./layouts/AdminLayout"; // Import AdminLayout
+import MainLayout from "./layouts/MainLayout"; 
+import AdminLayout from "./layouts/AdminLayout"; 
 import Dashboard from "./pages/Admin/Dashboard"
-import NoFooterLayout from "./layouts/NoFooterLayout"; // Import NoFooterLayout
+import NoFooterLayout from "./layouts/NoFooterLayout"; 
 function App() {
 
   return (
@@ -65,13 +67,11 @@ function App() {
           <Route path="/location/update/:id" element={<EditLocation />} />
           <Route path="tour" element={<IndexTour />} />
           <Route path="tour/create" element={<CreateTour />} />
-
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />
           <Route path="tourGuide/update/:id" element={<EditTourGuide />} />
 
          
-          {/* Thêm các route admin khác nếu cần */}
         </Route>
 
 
@@ -80,7 +80,10 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
-        </Route>
+          <Route path="notifications" element={<Notifications />} />
+          <Route path="/notifications/:id" element={<NotificationDetail />} />
+
+          </Route>
       </Routes>
 
     </>

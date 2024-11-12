@@ -1,60 +1,62 @@
-import React, { useEffect, useState } from "react";
-import {
-  Container,
-  Navbar,
-  Offcanvas,
-  Nav,
-  NavDropdown,
-} from "react-bootstrap";
+import React, { useEffect, useContext, useState } from "react";
+import { Container, Navbar, Offcanvas, Nav, NavDropdown } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FaUserCircle, FaSignOutAlt, FaHistory } from "react-icons/fa";
+import { FaUserCircle, FaSignOutAlt, FaHistory, FaBell } from "react-icons/fa";
+import { UserContext } from "../../../context/UserContext";
 import "../Header/header.css";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext); 
   const navigate = useNavigate();
 
-  const toggleMenu = () => {
-    setOpen(!open);
-  };
+  const toggleMenu = () => setOpen((prev) => !prev);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userid"); 
+    
+    if ("caches" in window) {
+      caches.keys().then((cacheNames) => {
+        cacheNames.forEach((cacheName) => caches.delete(cacheName));
+      });
+    }
+  
     setIsLoggedIn(false);
-    navigate("/login");
+  
+    navigate("/login", { replace: true });
+    window.location.reload(); 
   };
+  
 
   const handleLogin = () => {
     navigate("/login");
+    
   };
 
+  const isSticky = () => {
+    const header = document.querySelector(".header-section");
+    if (header) {
+      window.scrollY >= 120
+        ? header.classList.add("is-sticky")
+        : header.classList.remove("is-sticky");
+    }
+  };
+
+  // Listen to storage changes to update isLoggedIn
   useEffect(() => {
     const handleStorageChange = () => {
       setIsLoggedIn(!!localStorage.getItem("user"));
     };
-
     window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("scroll", isSticky);
 
     return () => {
       window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", isSticky);
-    return () => {
       window.removeEventListener("scroll", isSticky);
     };
-  }, []);
-
-  const isSticky = () => {
-    const header = document.querySelector(".header-section");
-    const scrollTop = window.scrollY;
-    scrollTop >= 120
-      ? header.classList.add("is-sticky")
-      : header.classList.remove("is-sticky");
-  };
+  }, [setIsLoggedIn]);
 
   return (
     <header className="header-section">
@@ -66,7 +68,6 @@ const Header = () => {
 
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-lg`}
-            aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
             placement="start"
             show={open}
           >
@@ -76,56 +77,40 @@ const Header = () => {
                 <i className="bi bi-x-lg"></i>
               </span>
             </Offcanvas.Header>
-
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                <NavLink className="nav-link" to="/">
-                  Home
-                </NavLink>
-                <NavLink className="nav-link" to="/about-us">
-                  ABOUT US
-                </NavLink>
-                <NavLink className="nav-link" to="/tours">
-                  TOURS
-                </NavLink>
-                <NavDropdown
-                  title="DESTINATION"
-                  id={`offcanvasNavbarDropdown-expand-lg`}
-                >
-                  <NavLink className="nav-link text-dark" to="/destinations">
-                    SPAIN TOURS
-                  </NavLink>
+                <NavLink className="nav-link" to="/">Home</NavLink>
+                <NavLink className="nav-link" to="/about-us">ABOUT US</NavLink>
+                <NavLink className="nav-link" to="/tours">TOURS</NavLink>
+                <NavDropdown title="DESTINATION">
+                  <NavLink className="nav-link text-dark" to="/destinations">SPAIN TOURS</NavLink>
                 </NavDropdown>
-                <NavLink className="nav-link" to="/gallery">
-                  GALLERY
-                </NavLink>
-                <NavLink className="nav-link" to="/contact-us">
-                  CONTACT
-                </NavLink>
+                <NavLink className="nav-link" to="/gallery">GALLERY</NavLink>
+                <NavLink className="nav-link" to="/contact-us">CONTACT</NavLink>
               </Nav>
-
-              {/* User Menu with Icons */}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
+
           <div className="ms-md-4 ms-2">
             <li className="d-inline-block d-lg-none ms-3 toggle_btn">
-              <i
-                className={open ? "bi bi-x-lg" : "bi bi-list"}
-                onClick={toggleMenu}
-              ></i>
+              <i className={open ? "bi bi-x-lg" : "bi bi-list"} onClick={toggleMenu}></i>
             </li>
           </div>
-          <Nav>
+
+          <Nav className="align-items-center">
+            <li className="nav-item">
+              <FaBell
+                className="notification-icon"
+                onClick={() => navigate("/notifications")}
+              />
+            </li>
             {isLoggedIn ? (
-              <NavDropdown
-                title={<FaUserCircle className="user-icon-header" />}
-                id="user-dropdown"
-              >
+              <NavDropdown title={<FaUserCircle className="user-icon-header" />}>
                 <NavDropdown.Item onClick={() => navigate("/profile")}>
-                  <FaUserCircle className="user-icon" /> Hồ sơ của tôi
+                  <FaUserCircle className="user-icon" /> My Profile
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("/my-bookings")}>
-                  <FaHistory className="user-icon" /> Đơn hang của tôi
+                  <FaHistory className="user-icon" /> My Bookings
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>
                   <FaSignOutAlt className="user-icon" /> Đăng xuất

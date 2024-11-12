@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 // Api Create tourPacket
 const createTour = async (req, res) => {
   try {
-    const { package_name, description, price, duration, destination_id } = req.body;
+    const { package_name, description, price, durations, destination_id } = req.body;
     const images = req.file ? req.file.path : null;
     const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : null;
 
@@ -18,7 +18,7 @@ const createTour = async (req, res) => {
       package_name,
       description,
       price,
-      duration,
+      durations,
       destination_id,
       ...(images ? { images } : {}),  
       ...(groupImages ? { groupImages } : {}), 
@@ -52,7 +52,7 @@ const deleteTour = async (req, res) => {
 //Api edit tour
 const editTour = async (req, res) => {
   const { id } = req.params;
-  const { package_name, description, price, duration, destination_id } =
+  const { package_name, description, price, durations, destination_id } =
     req.body;
   const images = req.file ? req.file.path : null;
   const groupImages = req.files["groupImages"]
@@ -65,7 +65,7 @@ const editTour = async (req, res) => {
         package_name,
         description,
         price,
-        duration,
+        durations,
         destination_id,
         ...(images && { images }),
         ...(groupImages && { groupImages }),
