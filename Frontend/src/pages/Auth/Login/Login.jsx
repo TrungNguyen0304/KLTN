@@ -13,6 +13,7 @@ function Login() {
     const user = localStorage.getItem("user");
     if (user) {
       navigate("/");
+      
     }
   }, [navigate]);
 
@@ -39,19 +40,26 @@ function Login() {
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
+        localStorage.setItem("userid", data.userid);
 
-        // Hiển thị thông báo tùy chỉnh
-        showCustomAlert(data.message, 'success');
+        // console.log("Id người dùng mới sau khi đăng nhập:", data.userid);
+        // console.log(
+        //   "Id người dùng được lưu trữ trong localStorage:",
+        //   localStorage.getItem("userid")
+        // );
+
+        showCustomAlert(data.message, "success");
         setTimeout(() => {
-          navigate("/");
-          window.location.reload();
+          navigate("/"); 
+          window.location.reload(); 
+
         }, 2000);
       } else {
-        showCustomAlert(data.message, 'error');
+        showCustomAlert(data.message, "error");
       }
     } catch (error) {
       console.error("Login error:", error);
-      showCustomAlert("Có lỗi xảy ra.", 'error');
+      showCustomAlert("Có lỗi xảy ra.", "error");
     }
   };
 
@@ -64,7 +72,7 @@ function Login() {
     alertBox.style.display = "block";
 
     // Thay đổi màu sắc dựa trên loại thông báo
-    if (type === 'success') {
+    if (type === "success") {
       alertBox.style.backgroundColor = "#28a745"; // màu xanh cho thành công
     } else {
       alertBox.style.backgroundColor = "#dc3545"; // màu đỏ cho lỗi
@@ -78,9 +86,17 @@ function Login() {
 
   return (
     <div className="login-container">
-      <div id="customAlert" className="custom-alert" style={{ display: "none" }}>
+      <div
+        id="customAlert"
+        className="custom-alert"
+        style={{ display: "none" }}
+      >
         <span id="alertMessage"></span>
-        <button onClick={() => document.getElementById('customAlert').style.display = 'none'}>
+        <button
+          onClick={() =>
+            (document.getElementById("customAlert").style.display = "none")
+          }
+        >
           Đóng
         </button>
       </div>

@@ -20,7 +20,15 @@ const EditTourGuide = () => {
     const fetchTourGuide = async () => {
       try {
         const response = await axios.get(`http://localhost:8001/api/tourGuide/${id}`);
-        setTourGuideData(response.data);
+        const data = response.data;
+
+        setTourGuideData({
+          first_name: data.first_name || "",
+          last_name: data.last_name || "",
+          email: data.email || "",
+          phone_number: data.phone_number || "",
+          images: data.images || "",
+        });
       } catch (error) {
         console.error("Error fetching tour guide data:", error);
       }
@@ -29,6 +37,7 @@ const EditTourGuide = () => {
     fetchTourGuide();
   }, [id]);
 
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -36,12 +45,11 @@ const EditTourGuide = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setTourGuideData({ ...tourGuideData, images: reader.result }); 
+        setTourGuideData({ ...tourGuideData, images: reader.result });  
       };
       reader.readAsDataURL(file);
     }
   };
-
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -71,6 +79,10 @@ const EditTourGuide = () => {
       console.error("Error updating tour guide:", error);
     }
   };
+
+  if (!tourGuideData.first_name) {
+    return <div>Loading...</div>;  
+  }
 
   return (
     <div className="ContainerTour">
@@ -106,20 +118,31 @@ const EditTourGuide = () => {
             <Form.Label>Upload Image</Form.Label>
             <Form.Control
               type="file"
-              name="images" 
+              name="images"
               accept="image/*"
               onChange={handleImageChange}
             />
-            {tourGuideData.images && (
-               <div>
-                 <p>Ảnh hiện tại:</p>
-                 <img
-                   src={tourGuideData.images} 
-                   alt="Current"
-                   className="current-image"
-                   style={{ width: "200px", height: "200px", marginBottom: "10px" }}
-                 />
-               </div>
+            {tourGuideData.images && !image && (  
+              <div>
+                <p>Current Image:</p>
+                <img
+                  src={tourGuideData.images}
+                  alt="Current"
+                  className="current-image"
+                  style={{ width: "200px", height: "200px", marginBottom: "10px" }}
+                />
+              </div>
+            )}
+            {image && (
+              <div>
+                <p>New Image:</p>
+                <img
+                  src={URL.createObjectURL(image)}
+                  alt="New"
+                  className="new-image"
+                  style={{ width: "200px", height: "200px", marginBottom: "10px" }}
+                />
+              </div>
             )}
           </Form.Group>
 
@@ -148,7 +171,7 @@ const EditTourGuide = () => {
           </Form.Group>
 
           <Button className="buttonCreate" type="submit">
-            Gửi
+            Submit
           </Button>
         </Form>
       </div>
