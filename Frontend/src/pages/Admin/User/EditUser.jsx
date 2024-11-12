@@ -50,7 +50,7 @@ const EditUser = () => {
         <h2>Cập nhật người dùng</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group-inline">
-            <div className="form-group">
+            <div className="form-group anh">
               <label htmlFor="firstname">Tên</label>
               <input
                 id="firstname"
@@ -62,7 +62,7 @@ const EditUser = () => {
                 required
               />
             </div>
-            <div className="form-group">
+            <div className="form-group anh">
               <label htmlFor="lastname">Họ</label>
               <input
                 id="lastname"
@@ -75,7 +75,7 @@ const EditUser = () => {
               />
             </div>
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="email">Email</label>
             <input
               id="email"
@@ -87,7 +87,7 @@ const EditUser = () => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="phoneNumber">Số điện thoại</label>
             <input
               id="phoneNumber"
@@ -99,7 +99,7 @@ const EditUser = () => {
               required
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="password">Mật Khẩu</label>
             <input
               id="password"
@@ -109,7 +109,7 @@ const EditUser = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="form-group">
+          <div className="form-group anh">
             <label htmlFor="role" className="form-label">
               Vai trò
             </label>

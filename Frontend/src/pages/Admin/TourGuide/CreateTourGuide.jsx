@@ -53,7 +53,6 @@ const CreateTourGuide = () => {
         method: "POST",
         body: data,
       });
-  
       const result = await response.json();
       if (response.ok) {
         alert(result.message);

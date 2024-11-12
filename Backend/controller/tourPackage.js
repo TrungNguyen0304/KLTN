@@ -1,51 +1,67 @@
+const tourPackage = require("../models/tourPackage");
 const TourPackage = require("../models/tourPackage");
-const bcrypt = require("bcrypt");
 
+const mongoose = require('mongoose');
 
-// Api Create tourPacket
 const createTour = async (req, res) => {
   try {
-    const { package_name, description, price, durations, destination_id } = req.body;
-    const images = req.file ? req.file.path : null;
-    const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : null;
+    const image = req.files && req.files['image'] ? req.files['image'][0].path : "";
+    const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : [];
 
-    if (!package_name || !price || !destination_id) {
-      return res.status(400).json({ message: "Thiếu các trường bắt buộc." });
+    const { package_name, description, price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
+
+    let parsedDurations = durations;
+    if (typeof durations === 'string') {
+      parsedDurations = JSON.parse(durations);
     }
 
-    // Tạo một đối tượng mới cho gói tour
+    if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
+      return res.status(400).json({ message: "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng." });
+    }
+
+    const invalidDurations = parsedDurations.filter(id => !mongoose.Types.ObjectId.isValid(id));
+    if (invalidDurations.length > 0) {
+      return res.status(400).json({ message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(', ')}` });
+    }
+
     const newTour = new TourPackage({
       package_name,
       description,
       price,
-      durations,
-      destination_id,
-      ...(images ? { images } : {}),  
-      ...(groupImages ? { groupImages } : {}), 
+      image,
+      durations: parsedDurations, 
+      destinationId,
+      tourGuideId,
+      locationId,
+      incAndExc, 
+      groupImages
     });
 
-    // Lưu gói tour vào cơ sở dữ liệu
-    const savedTour = await newTour.save();
+    await newTour.save();
+    console.log("Tour package saved successfully:", newTour);
 
-    res.status(201).json({ message: "Gói tour được tạo thành công.", tour: savedTour });
+    return res.status(201).json({ message: "Tour package created successfully!", tour: newTour });
+
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Lỗi máy chủ cục bộ.", error: error.message });
+    console.error("Error creating tour:", error);
+    return res.status(500).json({ message: "Đã xảy ra lỗi trong quá trình tạo tour.", error: error.message });
   }
 };
+
+
 
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
   const { id } = req.params;
   try {
-    const deleteTour = await TourPackage.findByIdAndDelete(id);
+    const deleteTour = await tourPackage.findByIdAndDelete(id);
     if (!deleteTour) {
-      return res.status(404).json({ message: " Gói tour không tồn tại " });
+      return res.status(404).json({ message: "Tour package không tồn tại" });
     }
-    res.status(200).json({ message: "Gói tour đã được xóa thành công" });
+    res.status(200).json({ message: " Đã được xóa thành công Tour package. " });
   } catch (error) {
-    console.error("Lỗi khi xóa gói tour", error);
-    res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
+    console.error("Lỗi khi xóa Tour package :", error);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
 
@@ -89,12 +105,16 @@ const editTour = async (req, res) => {
 // API get all tourPacket
 const getAllTour = async (req, res) => {
   try {
+    
     const tourpackages = await TourPackage.find({})
-      .populate("destination_id", "package_name")
+      .populate("destinationId", "DestinationName") 
+      .populate("tourGuideId", "first_name") 
+      .populate("locationId", "firstname")
       .exec();
-    res.status(200).json(tourpackages);
+
+    res.status(200).json(tourpackages); 
   } catch (error) {
-    console.error("Lỗi lấy danh sách địa danh", error);
+    console.error("Error fetching tour packages", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };

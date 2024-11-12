@@ -134,6 +134,18 @@ const UpdateDestination = () => {
                     </div>
 
                     <div className="form-group">
+                        <label htmlFor="description" className="form-label">Mô tả</label>
+                        <textarea
+                            className="form-control"
+                            id="description"
+                            rows="3"
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
                         <label htmlFor="locationId">Tỉnh/Thành Phố</label>
                         <select
                             id="locationId"

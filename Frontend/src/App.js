@@ -30,8 +30,9 @@ import CreateTourGuide from "./pages/Admin/TourGuide/CreateTourGuide";
 import IndexTourGuide from "./pages/Admin/TourGuide/IndexTourGuide";
 import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
 
-
-
+import IndexDuration from "./pages/Admin/duration/IndexDuration";
+import CreateDuration from "./pages/Admin/duration/CreateDuration";
+import EditDuration from "./pages/Admin/duration/EditDuration";
 // </>
 import MainLayout from "./layouts/MainLayout"; 
 import AdminLayout from "./layouts/AdminLayout"; 
@@ -70,7 +71,9 @@ function App() {
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />
           <Route path="tourGuide/update/:id" element={<EditTourGuide />} />
-
+          <Route path="duration" element={<IndexDuration />} />
+          <Route path="duration/create" element={<CreateDuration />} />
+          <Route path="/duration/update/:id" element={<EditDuration />} />
          
         </Route>
 
