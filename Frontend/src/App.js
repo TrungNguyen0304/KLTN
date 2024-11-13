@@ -71,6 +71,7 @@ function App() {
 
           <Route path="tour" element={<IndexTour />} />
           <Route path="tour/create" element={<CreateTour />} />
+          <Route path="tour/update/:id" element={< EditTour/>} />
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />
           <Route path="tourGuide/update/:id" element={<EditTourGuide />} />

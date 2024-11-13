@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const createTourGuide = async (req, res) => {
   try {
     const { first_name, last_name, phone_number, email } = req.body;
-    const images = req.files['image'] ? req.files['image'][0].path : "";
+    const images = req.files["image"] ? req.files["image"][0].path : "";
     const newTourGuide = new tourGuide({
       first_name,
       last_name,
@@ -35,7 +35,9 @@ const deleteTourGuide = async (req, res) => {
     if (!deleteTourGuide) {
       return res.status(404).json({ message: "Hướng dẫn viên không tồn tại" });
     }
-    res.status(200).json({ message: " Đã được xóa thành công hướng dẫn viên. " });
+    res
+      .status(200)
+      .json({ message: " Đã được xóa thành công hướng dẫn viên. " });
   } catch (error) {
     console.error("Lỗi khi xóa hướng dẫn viên :", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
@@ -45,26 +47,42 @@ const deleteTourGuide = async (req, res) => {
 const editTourGuide = async (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, phone_number, email } = req.body;
-  const images = req.files['image'] ? req.files['image'][0].path : "";
+
+  let images = req.files?.["image"] ? req.files["image"][0].path : null;
 
   try {
+    const currentTourGuide = await tourGuide.findById(id);
+    if (!currentTourGuide) {
+      return res.status(404).json({ message: "Tour guide does not exist" });
+    }
+
+    if (!images) {
+      images = currentTourGuide.images;
+    }
+
     const updateTourGuide = await tourGuide.findByIdAndUpdate(
       id,
-      { first_name, last_name, phone_number,images, email, updatedAt: Date.now() },
+      {
+        first_name,
+        last_name,
+        phone_number,
+        images,
+        email,
+        updatedAt: Date.now(),
+      },
       { new: true, runValidators: true }
     );
-    if (!updateTourGuide) {
-      return res.status(404).json({ message: "Hướng đãn viên không tồn tại" });
-    }
+
     res.status(200).json({
-      message: "Đã cập nhật hướng dẫn viên thành công",
+      message: "Tour guide updated successfully",
       tourGuide: updateTourGuide,
     });
   } catch (error) {
-    console.error("Lỗi khi chỉnh sửa hướng dẫn viên", error);
-    res.status(500).json({ message: "Lỗi máy chủ nội bộ. " });
+    console.error("Error updating tour guide:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+
 // API get all tourGuide
 const getAllTourGuide = async (req, res) => {
   try {
@@ -77,13 +95,13 @@ const getAllTourGuide = async (req, res) => {
 };
 const getTourGuideById = async (req, res) => {
   try {
-      const tourGuides = await tourGuide.findById(req.params.id);
-      if (!tourGuides) {
-          return res.status(404).json({ message: 'tourGuides not found' });
-      }
-      res.status(200).json(tourGuides);
+    const tourGuides = await tourGuide.findById(req.params.id);
+    if (!tourGuides) {
+      return res.status(404).json({ message: "tourGuides not found" });
+    }
+    res.status(200).json(tourGuides);
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 module.exports = {
@@ -91,5 +109,5 @@ module.exports = {
   deleteTourGuide,
   editTourGuide,
   getAllTourGuide,
-  getTourGuideById
+  getTourGuideById,
 };
