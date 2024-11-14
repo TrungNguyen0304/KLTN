@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Form, Button, Container } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
+import "./CreateTour.css"; // Import the same CSS file
 
 const EditTour = () => {
   const { id } = useParams();
@@ -26,6 +27,7 @@ const EditTour = () => {
   const [destinations, setDestinations] = useState([]);
   const [tourGuides, setTourGuides] = useState([]);
   const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTourData = async () => {
@@ -34,9 +36,12 @@ const EditTour = () => {
           `http://localhost:8001/api/tourPackage/${id}`
         );
         setTourData(response.data);
-        setPreview(response.data.image); // Set preview if the image exists
+        setPreview(response.data.image);
+        setGroupImagePreviews(response.data.groupImages || []);
       } catch (error) {
         console.error("Error fetching tour data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -70,6 +75,10 @@ const EditTour = () => {
     fetchData();
   }, [id]);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setTourData({ ...tourData, [name]: value });
@@ -84,8 +93,9 @@ const EditTour = () => {
   const handleGroupImageChange = (e) => {
     const files = Array.from(e.target.files);
     setGroupImages(files);
-    setGroupImagePreviews(files.map((file) => URL.createObjectURL(file))); 
-
+    setGroupImagePreviews(
+      files.length > 0 ? files.map((file) => URL.createObjectURL(file)) : []
+    );
   };
 
   const handleDurationChange = (e) => {
@@ -103,14 +113,14 @@ const EditTour = () => {
     formData.append("package_name", tourData.package_name);
     formData.append("description", tourData.description);
     formData.append("price", tourData.price);
-    formData.append("durations", JSON.stringify(tourData.durations)); // Send durations as JSON
+    formData.append("durations", JSON.stringify(tourData.durations));
     formData.append("destinationId", tourData.destinationId);
     formData.append("tourGuideId", tourData.tourGuideId);
     formData.append("locationId", tourData.locationId);
     formData.append("incAndExc", tourData.incAndExc);
 
     if (image) formData.append("image", image);
-    groupImages.forEach((img) => formData.append("groupImages", img)); 
+    groupImages.forEach((img) => formData.append("groupImages", img));
 
     try {
       const response = await axios.put(
@@ -128,158 +138,196 @@ const EditTour = () => {
   };
 
   return (
-    <Container>
-      <h2>Edit Tour</h2>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="packageName">
-          <Form.Label>Package Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="package_name"
-            value={tourData.package_name}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="description">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="description"
-            value={tourData.description}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="price">
-          <Form.Label>Price</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            value={tourData.price}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="durations">
-          <Form.Label>Durations</Form.Label>
-          <Form.Control
-            as="select"
-            multiple
-            name="durations"
-            value={tourData.durations}
-            onChange={handleDurationChange}
-          >
-            {durations.map((duration) => (
-              <option key={duration._id} value={duration._id}>
-                {new Date(duration.start_date).toLocaleDateString()} -{" "}
-                {new Date(duration.end_date).toLocaleDateString()}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="destinationId">
-          <Form.Label>Destination</Form.Label>
-          <Form.Control
-            as="select"
-            name="destinationId"
-            value={tourData.destinationId}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Destination</option>
-            {destinations.map((destination) => (
-              <option key={destination._id} value={destination._id}>
-                {destination.DestinationName}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="tourGuideId">
-          <Form.Label>Tour Guide</Form.Label>
-          <Form.Control
-            as="select"
-            name="tourGuideId"
-            value={tourData.tourGuideId}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Tour Guide</option>
-            {tourGuides.map((guide) => (
-              <option key={guide._id} value={guide._id}>
-                {guide.first_name} {guide.last_name}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="locationId">
-          <Form.Label>Location</Form.Label>
-          <Form.Control
-            as="select"
-            name="locationId"
-            value={tourData.locationId}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Location</option>
-            {locations.map((location) => (
-              <option key={location._id} value={location._id}>
-                {location.firstname}
-              </option>
-            ))}
-          </Form.Control>
-        </Form.Group>
-
-        <Form.Group controlId="incAndExc">
-          <Form.Label>Inclusions and Exclusions</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={3}
-            name="incAndExc"
-            value={tourData.incAndExc}
-            onChange={handleInputChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="image">
-          <Form.Label>Tour Image</Form.Label>
-          {preview && (
-            <img src={preview} alt="Preview" style={{ width: "100px" }} />
-          )}
-          <Form.Control
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-        </Form.Group>
-
-        <Form.Group controlId="groupImages">
-          <Form.Label>Group Images</Form.Label>
-          {groupImagePreviews.length > 0 && (
-            <div>
-              {groupImagePreviews.map((preview, index) => (
-                <img
-                  key={index}
-                  src={preview}
-                  alt={`Group Preview ${index + 1}`}
-                  style={{ width: "100px", marginRight: "10px" }}
-                />
-              ))}
+    <Container className="parent-container">
+      <div className="form-container">
+        <h2>Edit Tour</h2>
+        <Form onSubmit={handleSubmit}>
+          {/* Package Name and Price */}
+          <div className="form-row">
+            <div className="form-group">
+              <Form.Label htmlFor="package_name">Package Name</Form.Label>
+              <Form.Control
+                id="package_name"
+                type="text"
+                name="package_name"
+                value={tourData.package_name}
+                onChange={handleInputChange}
+                required
+              />
             </div>
-          )}
-          <Form.Control
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleGroupImageChange}
-          />
-        </Form.Group>
+            <div className="form-group">
+              <Form.Label htmlFor="price">Price</Form.Label>
+              <Form.Control
+                id="price"
+                type="number"
+                name="price"
+                value={tourData.price}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
 
-        <Button variant="primary" type="submit" className="mt-3">
-          Update Tour
-        </Button>
-      </Form>
+          {/* Description and Inclusions/Exclusions */}
+          <div className="form-row">
+            <div className="form-group">
+              <Form.Label htmlFor="description">Description</Form.Label>
+              <Form.Control
+                id="description"
+                as="textarea"
+                rows={3}
+                name="description"
+                value={tourData.description}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <Form.Label htmlFor="incAndExc">Inclusions/Exclusions</Form.Label>
+              <Form.Control
+                id="incAndExc"
+                as="textarea"
+                rows={3}
+                name="incAndExc"
+                value={tourData.incAndExc}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
+
+          {/* Tour Guide and Duration */}
+          <div className="row-two-items">
+            <div className="form-group">
+              <Form.Label htmlFor="tourGuideId">Tour Guide</Form.Label>
+              <Form.Control
+                id="tourGuideId"
+                as="select"
+                name="tourGuideId"
+                value={tourData.tourGuideId || ""} 
+                onChange={handleInputChange}
+                required
+              >
+                {tourGuides.map((guide) => (
+                  <option key={guide._id} value={guide._id}>
+                    {guide.first_name} {guide.last_name}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+
+            <div className="form-group">
+              <Form.Label htmlFor="durations">Duration</Form.Label>
+              <Form.Control
+                id="durations"
+                as="select"
+                multiple
+                name="durations"
+                value={tourData.durations}
+                onChange={handleDurationChange}
+                required
+              >
+                {durations.map((duration) => (
+                  <option key={duration._id} value={duration._id}>
+                    {new Date(duration.start_date).toLocaleDateString()} -{" "}
+                    {new Date(duration.end_date).toLocaleDateString()}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+          </div>
+
+          {/* Destination and Location */}
+          <div className="row-two-items">
+            <div className="form-group">
+              <Form.Label htmlFor="destinationId">Destination</Form.Label>
+              <Form.Control
+                id="destinationId"
+                as="select"
+                name="destinationId"
+                value={tourData.destinationId}
+                onChange={handleInputChange}
+                required
+              >
+                {destinations.map((destination) => (
+                  <option key={destination._id} value={destination._id}>
+                    {destination.DestinationName}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+
+            <div className="form-group">
+              <Form.Label htmlFor="locationId">Location</Form.Label>
+              <Form.Control
+                id="locationId"
+                as="select"
+                name="locationId"
+                value={tourData.locationId}
+                onChange={handleInputChange}
+                required
+              >
+                {locations.map((location) => (
+                  <option key={location._id} value={location._id}>
+                    {location.firstname}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
+          </div>
+
+          {/* Image and Group Images */}
+          <div className="form-group anh2">
+            <Form.Label htmlFor="image">Tour Image</Form.Label>
+            {preview && (
+              <div>
+                <p>Current Image:</p>
+                <img
+                  src={preview}
+                  alt="Preview"
+                  className="current-image"
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    marginRight: "10px",
+                  }}
+                />
+              </div>
+            )}
+            <Form.Control id="image" type="file" onChange={handleImageChange} />
+          </div>
+
+          <div className="form-group">
+            <Form.Label htmlFor="groupImages">Additional Images</Form.Label>
+            <Form.Control
+              id="groupImages"
+              type="file"
+              multiple
+              onChange={handleGroupImageChange}
+            />
+            <div className="image-previews">
+              {Array.isArray(groupImagePreviews) &&
+                groupImagePreviews.map((preview, index) => (
+                  <img
+                    key={index}
+                    src={preview}
+                    alt={`Group Image ${index + 1}`}
+                    className="group-image-preview"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      marginRight: "10px",
+                    }}
+                  />
+                ))}
+            </div>
+          </div>
+
+          <Button variant="primary" type="submit">
+            Update Tour
+          </Button>
+        </Form>
+      </div>
     </Container>
   );
 };

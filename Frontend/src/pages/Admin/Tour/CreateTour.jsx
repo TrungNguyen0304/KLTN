@@ -178,7 +178,7 @@ const CreateTour = () => {
                                 <option value="" disabled>Chọn Hướng Dẫn Viên</option>
                                 {tourGuides.map(tourGuide => (
                                     <option key={tourGuide._id} value={tourGuide._id}>
-                                        {tourGuide.first_name}
+                                        {tourGuide.first_name} {tourGuide.last_name}
                                     </option>
                                 ))}
                             </select>
