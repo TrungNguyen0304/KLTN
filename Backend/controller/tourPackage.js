@@ -1,6 +1,6 @@
 const TourPackage = require("../models/tourPackage");
 const Duration = require("../models/duration");
-const mongoose = require('mongoose');  // Make sure mongoose is imported
+const mongoose = require('mongoose');  
 
 const createTour = async (req, res) => {
   try {
