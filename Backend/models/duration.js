@@ -10,7 +10,7 @@ const DurationSchema = new mongoose.Schema({
   ],
   start_date: { type: Date, required: true },
   end_date: { type: Date, required: true },
-  tourPackageId: { type: Schema.Types.ObjectId, ref: "tourPackage" },
+  tourPackageId: { type: Schema.Types.ObjectId, ref: "TourPackage" },
 });
 
 
