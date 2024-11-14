@@ -71,17 +71,12 @@ const deleteDuration = async (req, res) => {
 };
 const getAllDurations = async (req, res) => {
   try {
-    const durations = await Duration.find().populate(
-      "tourPackageId",
-      "package_name"
-    );
-    console.log("Durations with populated tourPackageId:", durations);
+    const durations = await Duration.find().populate('tourPackageId', 'package_name');
     res.status(200).json(durations);
+    console.log(durations)
   } catch (error) {
     console.error("Lỗi khi lấy tất cả Duration:", error.message);
-    res
-      .status(500)
-      .json({ message: "Lỗi khi lấy tất cả Duration", error: error.message });
+    res.status(500).json({ message: "Lỗi khi lấy tất cả Duration", error: error.message });
   }
 };
 

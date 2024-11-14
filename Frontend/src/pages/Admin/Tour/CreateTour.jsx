@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CreateTour.css';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const CreateTour = () => {
     const [package_name, setPackageName] = useState('');
@@ -20,6 +20,7 @@ const CreateTour = () => {
     const [destinationId, setDestinationId] = useState('');
     const [tourGuideId, setTourGuideId] = useState('');
     const [locationId, setLocationId] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async (url, setterFunction) => {
@@ -62,15 +63,15 @@ const CreateTour = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (selectedDurations.length === 0) {
             alert("Bạn cần chọn ít nhất một khoảng thời gian.");
             return;
         }
-    
+
         // Log selectedDurations to debug
         console.log("Selected Durations: ", selectedDurations);
-    
+
         const formData = new FormData();
         formData.append("package_name", package_name);
         formData.append("description", description);
@@ -81,29 +82,29 @@ const CreateTour = () => {
         formData.append("tourGuideId", tourGuideId);
         formData.append("locationId", locationId);
         formData.append("image", image); // Single image
-    
+
         // Append group images to formData
         groupImages.forEach((file) => {
             formData.append("groupImages", file);
         });
-    
+
         // Debug: Log the formData to check its contents
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
-    
+
         try {
             const response = await fetch("http://localhost:8001/api/tourPackage/create", {
                 method: 'POST',
                 body: formData
             });
-    
+
             const result = await response.json();
             if (response.ok) {
                 alert("Gói tour đã được tạo thành công!");
                 console.log(result);
-                Navigate("/tourPackage");
-
+                navigate("/tour");
+                
             } else {
                 alert(result.message || "Có lỗi xảy ra.");
             }
@@ -178,7 +179,8 @@ const CreateTour = () => {
                                 <option value="" disabled>Chọn Hướng Dẫn Viên</option>
                                 {tourGuides.map(tourGuide => (
                                     <option key={tourGuide._id} value={tourGuide._id}>
-                                        {tourGuide.first_name}
+                                        {tourGuide.first_name}    {tourGuide.last_name}
+
                                     </option>
                                 ))}
                             </select>
