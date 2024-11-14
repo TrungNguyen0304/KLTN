@@ -81,11 +81,16 @@ const IndexTour = () => {
                   ))}
                   {tour.tourGuideId && (
                     <div className="tour-guide mt-3">
-                      <FaUserAlt className="tour-guide-icon" />
-                      <span className="tour-guide-name">
-                        Hướng dẫn viên: <span className="first_name">{tour.tourGuideId.first_name}</span>
+                    <FaUserAlt className="tour-guide-icon" />
+                    <span className="tour-guide-name">
+                      Hướng dẫn viên:{" "}
+                      <span className="first_name">
+                        {`${tour.tourGuideId.first_name || ""} ${
+                          tour.tourGuideId.last_name || ""
+                        }`}
                       </span>
-                    </div>
+                    </span>
+                  </div>
                   )}
                   {/* Displaying duration as "X days Y nights" */}
                   <div className="tour-duration mt-2">

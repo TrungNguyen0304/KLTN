@@ -48,7 +48,7 @@ const getNotificationById = async (req, res) => {
       packageid: packageid
         ? await TourPackage.findById(packageid)
             .populate("locationId", "firstname")  
-            .populate(  "durations")        : null
+            .populate(  "durations") : null
     };
 
     res.status(200).json({ success: true, notification: populatedNotification });

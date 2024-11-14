@@ -41,7 +41,7 @@ const IndexLocation = () => {
         </div>
 
         <div className="createDestination">
-          <Link className="btn btn-primary" to="create">Thêm Quốc Gia</Link>
+          <Link className="btn btn-primary" to="create">Thêm Thành Phố</Link>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ const IndexLocation = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Tên</th>
+            <th>Tên Thành Phố</th>
             <th>Số lượng Destination</th> {/* Thêm cột này */}
             <th>Edit</th>
             <th>Delete</th>

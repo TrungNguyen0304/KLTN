@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './CreateTour.css';
+import { Navigate } from 'react-router-dom';
 
 const CreateTour = () => {
     const [package_name, setPackageName] = useState('');
@@ -101,6 +102,8 @@ const CreateTour = () => {
             if (response.ok) {
                 alert("Gói tour đã được tạo thành công!");
                 console.log(result);
+                Navigate("/tourPackage");
+
             } else {
                 alert(result.message || "Có lỗi xảy ra.");
             }

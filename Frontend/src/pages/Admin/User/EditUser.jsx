@@ -105,7 +105,7 @@ const EditUser = () => {
               id="password"
               name="password"
               type="password"
-              placeholder="Nhập mật khẩu (nếu cần thiết)"
+              value={userData.password}
               onChange={handleChange}
             />
           </div>

@@ -150,11 +150,11 @@
 
       const tourpackages = await TourPackage.find({})
         .populate("destinationId", "DestinationName")
-        .populate("tourGuideId", "first_name")
+        .populate("tourGuideId")
         .populate("locationId", "firstname")
         .populate({
           path: "durations",
-          select: "itinerary start_date end_date durationText", // Include durationText virtual
+          select: "itinerary start_date end_date durationText", 
           options: { virtuals: true }
         })
         .exec();
@@ -165,9 +165,36 @@
       res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
     }
   };
+  const getAllTourById = async (req, res) => {
+    try {
+        const tourPackageId = req.params.id; 
+
+        const tourPackage = await TourPackage.findById(tourPackageId)
+            .populate("destinationId", "DestinationName")
+            .populate("tourGuideId")
+            .populate("locationId", "firstname")
+            .populate({
+                path: "durations",
+                select: "itinerary start_date end_date durationText", 
+                options: { virtuals: true }
+            })
+            .exec();
+
+        if (!tourPackage) {
+            return res.status(404).json({ message: "Tour package not found." });
+        }
+
+        res.status(200).json(tourPackage);
+    } catch (error) {
+        console.error("Error fetching tour package by ID", error);
+        res.status(500).json({ message: "Internal server error." });
+    }
+};
+
   module.exports = {
     createTour,
     deleteTour,
     editTour,
     getAllTour,
+    getAllTourById
   };
