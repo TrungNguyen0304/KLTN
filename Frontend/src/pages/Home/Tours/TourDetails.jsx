@@ -98,6 +98,7 @@ const TourDetails = () => {
                     </Nav>
                   </Col>
 
+
                   <Tab.Content className="mt-4">
                     {/* Overview Tab */}
                     <Tab.Pane eventKey="1">
@@ -106,44 +107,6 @@ const TourDetails = () => {
                           Tổng quan
                         </h1>
                         <p className="body-text">{tourPackage.description}</p>
-
-                        <h5 className="font-bold mb-2 h5 mt-3">
-                          Thông tin tour du lịch
-                        </h5>
-                        <ListGroup>
-                          {/* Check if durations is an array and has items */}
-                          {tourPackage?.durations &&
-                          Array.isArray(tourPackage.durations) &&
-                          tourPackage.durations.length > 0 ? (
-                            tourPackage.durations.map((duration, index) => (
-                              <div key={index} className="itinerary-item">
-                                <h4>Lịch trình cho ngày:</h4>
-                                {duration.itinerary &&
-                                Array.isArray(duration.itinerary) &&
-                                duration.itinerary.length > 0 ? (
-                                  duration.itinerary.map((item, itemIndex) => (
-                                    <div key={itemIndex}>
-                                      {/* Convert item.day and item.activity to strings if needed */}
-                                      <h5>{String(item.day)}</h5>
-                                      <p>
-                                        {String(item.activity) ||
-                                          "Không có hoạt động cho ngày này."}
-                                      </p>
-                                    </div>
-                                  ))
-                                ) : (
-                                  <p>Không có lịch trình cho ngày này.</p>
-                                )}
-                              </div>
-                            ))
-                          ) : (
-                            <p>Không có lịch trình cho tour này.</p>
-                          )}
-                        </ListGroup>
-
-                        <h5 className="font-bold mb-2 h5 mt-3">
-                          Điểm nổi bật của Tour
-                        </h5>
                         {tourPackage?.highlights?.map((val, index) => (
                           <ListGroup.Item
                             className="border-0 pt-0 body-text"
@@ -153,43 +116,91 @@ const TourDetails = () => {
                           </ListGroup.Item>
                         ))}
                       </div>
+
+                      <div className="tour_details">
+                        <h5 className="font-bold mb-2 h5 mt-3">
+                          Lịch khởi hành
+                        </h5>
+                        <p className="body-text">
+                          {tourPackage?.durations && Array.isArray(tourPackage.durations) && tourPackage.durations.length > 0 ? (
+                            <table className="table">
+                              <thead>
+                                <tr>
+                                  <th>Ngày bắt đầu</th>
+                                  <th>Ngày kết thúc</th>
+                                  <th>Đặt ngày</th>
+
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {tourPackage.durations.map((duration, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      {new Date(duration.start_date).toLocaleDateString("vi-VN", {
+                                        weekday: "long", // Optional: Adds day of the week
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric"
+                                      })}
+                                    </td>
+                                    <td>
+                                      {new Date(duration.end_date).toLocaleDateString("vi-VN", {
+                                        weekday: "long", // Optional: Adds day of the week
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric"
+                                      })}
+                                    </td>
+                                    <td>
+                                      <NavLink
+                                        to="/booking"
+                                        className="primaryBtn w-100 d-flex justify-content-center fw-bold"
+                                      >
+                                        Đặt ngay
+                                      </NavLink>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          ) : (
+                            "Không có lịch trình cho tour này."
+                          )}
+                        </p>
+                      </div>
                     </Tab.Pane>
+
+
+
+
 
                     {/* Itinerary Tab */}
                     <Tab.Pane eventKey="2">
                       <div className="tour_details">
-                        <h1 className="font-bold mb-2 h3 border-bottom pb-2">
+                        <h1 className="font-bold mb-4 h3 border-bottom pb-3 ">
                           Hành trình
                         </h1>
                         <Accordion defaultActiveKey="0" className="mt-4">
                           {tourPackage?.durations?.map((val, index) => (
-                            <Accordion.Item
-                              eventKey={index}
-                              key={index}
-                              className="mb-4"
-                            >
-                              <Accordion.Header>
-                                <h1
-                                  dangerouslySetInnerHTML={{
-                                    __html: val.title,
-                                  }}
-                                ></h1>
-                              </Accordion.Header>
-                              <Accordion.Body className="body-text">
-                                {Array.isArray(val.itinerary) ? (
+                            <Accordion.Item eventKey={String(index)} key={index} className="mb-5 shadow-sm rounded-lg">
+                              <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
+                                {Array.isArray(val.itinerary) && val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
-                                    <div key={itemIndex}>
-                                      <h5>{String(item.day)}</h5>
-                                      <p>
-                                        {String(item.activity) ||
-                                          "No activity for this day."}
-                                      </p>
+                                    <div key={itemIndex} className="day-item mb-3">
+                                      <Accordion defaultActiveKey={null}>
+                                        <Accordion.Item eventKey={String(itemIndex)}>
+                                          <Accordion.Header className="d-flex align-items-center justify-content-between text-white rounded">
+                                            <h5 className="mb-0">{item.day}</h5>
+                                          </Accordion.Header>
+                                          <Accordion.Body className="p-3">
+                                            <p>{item.activity || "No activity for this day."}</p>
+                                          </Accordion.Body>
+                                        </Accordion.Item>
+                                      </Accordion>
                                     </div>
                                   ))
                                 ) : (
-                                  <p>
-                                    {val.itinerary || "No itinerary available."}
-                                  </p>
+                                  <p>No itinerary available.</p>
                                 )}
                               </Accordion.Body>
                             </Accordion.Item>
@@ -197,6 +208,9 @@ const TourDetails = () => {
                         </Accordion>
                       </div>
                     </Tab.Pane>
+
+
+
 
                     {/* Inclusions & Exclusions Tab */}
                     <Tab.Pane eventKey="3">
@@ -210,16 +224,10 @@ const TourDetails = () => {
                           const inclusionSection = tourPackage?.incAndExc
                             ?.match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
                             ?.trim();
-                          const exclusionSection = tourPackage?.incAndExc
-                            ?.match(/LOẠI TRỪ:(.*)/s)?.[1]
-                            ?.trim();
+
 
                           return (
                             <>
-                              {/* Inclusions */}
-                              <h5 className="font-bold mb-3 h5 mt-3">
-                                Bao gồm
-                              </h5>
                               {inclusionSection ? (
                                 inclusionSection
                                   .split("\n")
@@ -236,25 +244,6 @@ const TourDetails = () => {
                                 <p>No inclusions available</p>
                               )}
 
-                              {/* Exclusions */}
-                              <h5 className="font-bold mb-3 h5 mt-3">
-                                Loại trừ
-                              </h5>
-                              {exclusionSection ? (
-                                exclusionSection
-                                  .split("\n")
-                                  .map((line, index) => (
-                                    <ListGroup.Item
-                                      className="border-0 pt-0 body-text d-flex align-items-center"
-                                      key={index}
-                                    >
-                                      <i className="bi bi-x-lg me-2 text-danger h5 m-0"></i>
-                                      {line.trim()}
-                                    </ListGroup.Item>
-                                  ))
-                              ) : (
-                                <p>No exclusions available</p>
-                              )}
                             </>
                           );
                         })()}
@@ -288,7 +277,7 @@ const TourDetails = () => {
                       <Card.Body>
                         <Stack gap={2} direction="horizontal">
                           <h1 className="font-bold mb-0 h2">
-                            ${tourPackage.price}
+                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tourPackage.price)}
                           </h1>
                           <span className="fs-4">/người</span>
                         </Stack>

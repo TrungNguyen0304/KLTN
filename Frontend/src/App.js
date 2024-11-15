@@ -13,6 +13,7 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 import Notifications from "./components/notifications/notifications";
 import NotificationDetail from "./components/notifications/NotificationDetail";
+import IndexCategory from "./pages/Home/Categories/IndexCategory"
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -54,7 +55,10 @@ function App() {
           <Route path="/tour-details/:id" element={<TourDetails/>} />
           <Route path="booking" element={<Booking />} />
           <Route path="destinations" element={<Destinations />} />
+          
           <Route path="gallery" element={<PhotoGallery />} />
+          <Route path="/destinations/:destinationId" element={<IndexCategory />} />
+  
         </Route>
         {/* Các route cho layout admin */}
         <Route element={<AdminLayout />}>

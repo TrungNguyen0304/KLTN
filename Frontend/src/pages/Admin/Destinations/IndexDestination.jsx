@@ -7,7 +7,6 @@ import './Destination.css';
 const IndexDestination = () => {
   const [destinations, setDestinations] = useState([]);
 
-
   useEffect(() => {
     const fetchDestinations = async () => {
       try {
@@ -38,8 +37,6 @@ const IndexDestination = () => {
       alert("Lỗi khi xóa địa danh.");
     }
   };
-
-
 
   return (
     <Container className="ContainerDestination">
@@ -74,13 +71,17 @@ const IndexDestination = () => {
                     {destination.locationId ? destination.locationId.firstname : "Unknown"}
                   </Card.Text>
                 </div>
+                <div className="tour-count-container">
+                  <p>Tours:</p>
+                  <Card.Text className="tour-count ms-2">
+                    {destination.tourCount || 0} tours
+                  </Card.Text>
+                </div>
               </Card.Body>
             </Card>
           </Col>
         ))}
       </Row>
-
-
     </Container>
   );
 };

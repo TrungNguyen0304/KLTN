@@ -142,7 +142,7 @@
  
 .popular  .card-body .card-text i {
     position: absolute;
-    top: 15px;
+    
 }
 
 
@@ -182,3 +182,18 @@
     object-position: center; /* Center the image */
   }
   
+
+
+  .text {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Khoảng cách giữa các phần tử */
+  }
+  
+  .text p {
+    margin: 0; /* Xóa margin của phần tử <p> */
+  }
+  
+  .bi-geo-alt {
+    margin-right: 5px; /* Khoảng cách giữa icon và văn bản */
+  }
