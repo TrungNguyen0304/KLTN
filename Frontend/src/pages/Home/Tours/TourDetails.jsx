@@ -29,6 +29,8 @@ const TourDetails = () => {
         const response = await axios.get(
           `http://localhost:8001/api/tourPackage/${id}`
         );
+        console.log(tourPackage);
+
         setTourPackage(response.data);
       } catch (error) {
         console.error("Error fetching tour details:", error);
@@ -106,10 +108,35 @@ const TourDetails = () => {
                           Tổng quan
                         </h1>
                         <p className="body-text">{tourPackage.description}</p>
+                        <h5 className="font-bold mb-2 h5 mt-3">
+                          Lịch khởi hành
+                        </h5>
+                        <p className="body-text">
+                          {tourPackage?.durations &&
+                          Array.isArray(tourPackage.durations) &&
+                          tourPackage.durations.length > 0
+                            ? tourPackage.durations.map((duration, index) => (
+                                <div key={index} className="mb-2">
+                                  <strong>Lịch trình {index + 1}:</strong>
+                                  <br />
+                                  <strong>Ngày bắt đầu:</strong>{" "}
+                                  {new Date(
+                                    duration.start_date
+                                  ).toLocaleDateString()}
+                                  <br />
+                                  <strong>Ngày kết thúc:</strong>{" "}
+                                  {new Date(
+                                    duration.end_date
+                                  ).toLocaleDateString()}
+                                </div>
+                              ))
+                            : "Không có lịch trình cho tour này."}
+                        </p>
 
                         <h5 className="font-bold mb-2 h5 mt-3">
                           Thông tin tour du lịch
                         </h5>
+
                         <ListGroup>
                           {/* Check if durations is an array and has items */}
                           {tourPackage?.durations &&
@@ -123,7 +150,6 @@ const TourDetails = () => {
                                 duration.itinerary.length > 0 ? (
                                   duration.itinerary.map((item, itemIndex) => (
                                     <div key={itemIndex}>
-                                      {/* Convert item.day and item.activity to strings if needed */}
                                       <h5>{String(item.day)}</h5>
                                       <p>
                                         {String(item.activity) ||
@@ -210,9 +236,6 @@ const TourDetails = () => {
                           const inclusionSection = tourPackage?.incAndExc
                             ?.match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
                             ?.trim();
-                          const exclusionSection = tourPackage?.incAndExc
-                            ?.match(/LOẠI TRỪ:(.*)/s)?.[1]
-                            ?.trim();
 
                           return (
                             <>
@@ -235,26 +258,6 @@ const TourDetails = () => {
                               ) : (
                                 <p>No inclusions available</p>
                               )}
-
-                              {/* Exclusions */}
-                              <h5 className="font-bold mb-3 h5 mt-3">
-                                Loại trừ
-                              </h5>
-                              {exclusionSection ? (
-                                exclusionSection
-                                  .split("\n")
-                                  .map((line, index) => (
-                                    <ListGroup.Item
-                                      className="border-0 pt-0 body-text d-flex align-items-center"
-                                      key={index}
-                                    >
-                                      <i className="bi bi-x-lg me-2 text-danger h5 m-0"></i>
-                                      {line.trim()}
-                                    </ListGroup.Item>
-                                  ))
-                              ) : (
-                                <p>No exclusions available</p>
-                              )}
                             </>
                           );
                         })()}
@@ -262,7 +265,7 @@ const TourDetails = () => {
                     </Tab.Pane>
 
                     {/* Location Tab */}
-                    <Tab.Pane eventKey="4">
+                    {/* <Tab.Pane eventKey="4">
                       <div className="tour_details">
                         <h1 className="font-bold mb-4 h3 border-bottom pb-2">
                           Vị trí
@@ -277,7 +280,7 @@ const TourDetails = () => {
                           referrerPolicy="no-referrer-when-downgrade"
                         ></iframe>
                       </div>
-                    </Tab.Pane>
+                    </Tab.Pane> */}
                   </Tab.Content>
                 </Col>
 

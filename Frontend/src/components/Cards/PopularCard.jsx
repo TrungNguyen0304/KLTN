@@ -25,14 +25,14 @@ const PopularCard = ({ val }) => {
         <Card.Title className="text-truncate" style={{ maxWidth: "270px" }}>
           <NavLink
             className="body-text text-dark text-decoration-none"
-            to={`/tour-details/${val._id}`} // Ensure the correct ID is passed here
+            to={`/tour-details/${val._id}`} 
           >
             {val.package_name}
           </NavLink>
         </Card.Title>
 
         {/* Rating and Reviews */}
-        <p className="reviwe">
+        <p className="reviwe">()
           <span>
             <i className="bi bi-star-fill me-1"></i>
           </span>

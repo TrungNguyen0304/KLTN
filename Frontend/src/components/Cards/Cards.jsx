@@ -7,7 +7,7 @@ const Cards = ({ destination }) => {
   return (
     <>
       <div className="img-box">
-        <NavLink className="body-text text-dark text-decoration-none" to={`/destinations`}>
+        <NavLink className="body-text text-dark text-decoration-none" to={`/tour-details/${destination._id}`}>
           <Card>
             <Card.Img
               variant="top"
