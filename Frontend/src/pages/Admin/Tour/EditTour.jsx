@@ -195,7 +195,7 @@ const EditTour = () => {
               />
             </div>
           </div>
-
+ 
           {/* Tour Guide and Duration */}
           <div className="row-two-items">
             <div className="form-group">

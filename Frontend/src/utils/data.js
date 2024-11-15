@@ -45,51 +45,9 @@ export const destinationsData = [
     link: "tour-name",
   },
 
-  {
-    id: 2,
-    name: "Bangkok",
-    tours: "5 tours and activities",
-    image: tour6,
-    link: "tour-name",
-  },
+  
 
-  {
-    id: 3,
-    name: "Cancun",
-    tours: "4 tours and activities",
-    image: tour7,
-    link: "tour-name",
-  },
-  {
-    id: 4,
-    name: "Nha Trang",
-    tours: "9 tours and activities ",
-    image: tour8,
-    link: "tour-name",
-  },
-  {
-    id: 5,
-    name: "Phuket",
-    tours: "4 tours and activities",
-    image: tour9,
-    link: "tour-name",
-  },
-  {
-    id: 6,
-    name: "Paris",
-    tours: "6 tours and activities",
-    image: tour10,
-    link: "tour-name",
-  },
-  {
-    id: 7,
-    name: "Malaysia",
-    tours: "4 tours and activities",
-    image: tour11,
-    link: "tour-name",
-  },
 ];
-
 export const popularsData = [
   {
     id: 0,

@@ -1,63 +1,89 @@
-import React from 'react'
+import React from "react";
 import "../Cards/card.css";
-import { Card, Stack } from 'react-bootstrap';
-import { NavLink } from 'react-router-dom';
+import { Card, Stack } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 
 const PopularCard = ({ val }) => {
   return (
-    <>
-      <Card className="rounded-2 shadow-sm popular">
-        <Card.Img
-          variant="top"
-          src={val.image}
-          className="img-fluid"
-          alt={"image"}
-        />
-        <Card.Body>
+    <Card className="rounded-2 shadow-sm popular">
+      <Card.Img
+        variant="top"
+        src={val.image || "/default-image.jpg"}
+        className="img-fluid destination-image"
+        alt={val.title || "Tour image"}
+      />
+      <Card.Body>
+        {/* Location */}
+        <Card.Text>
+          <i className="bi bi-geo-alt"></i>
+          <span className="text">
+            {val.locationId?.firstname || "Unknown Location"}
+          </span>
+        </Card.Text>
 
-          <Card.Text>
-            <i className="bi bi-geo-alt"></i>
-            <span className="text">{val.location}</span>
-          </Card.Text>
-
-          <Card.Title><NavLink className="body-text text-dark text-decoration-none" to="/tour-details"> {val.title} </NavLink></Card.Title>
-          <p className="reviwe">
-            <span>
-              <i className="bi bi-star-fill me-1"></i>
-            </span>
-            <span>{val.rating} </span>
-            <span>( {val.reviews} reviews )</span>
-          </p>
-          {val.category.map((cat, index) => {
-            return (
-              <span key={index}
-                className={cat.replace(/ .*/, "") + " badge"}>{cat}</span>
-            )
-          })}
-
-        </Card.Body>
-
-        <Card.Footer className="py-4">
-          {val.afterDiscount ? (
-            <p className="text-decoration-line-through"> ${val.price.toFixed(2)}</p>
-          ) : ""}
-
-          <Stack
-            direction="horizontal"
-            className="justify-content-between  mt-3"
+        {/* Tour Title */}
+        <Card.Title className="text-truncate" style={{ maxWidth: "270px" }}>
+          <NavLink
+            className="body-text text-dark text-decoration-none"
+            to={`/tour-details/${val._id}`} // Ensure the correct ID is passed here
           >
-            <p>
-              From <b>{val.afterDiscount ? val.afterDiscount.toFixed(2) : val.price.toFixed(2)}</b>
-            </p>
-            <p>
+            {val.package_name}
+          </NavLink>
+        </Card.Title>
 
-              <i className="bi bi-clock"></i> {val.days}
-            </p>
-          </Stack>
-        </Card.Footer>
-      </Card>
-    </>
-  )
-}
+        {/* Rating and Reviews */}
+        <p className="reviwe">
+          <span>
+            <i className="bi bi-star-fill me-1"></i>
+          </span>
+          <span>{val.rating || "N/A"}</span>
+          <span>( {val.reviews || 0} reviews )</span>
+        </p>
+        <span className="tour-guide-name">
+          Hướng dẫn viên:{" "}
+          <span className="first_name">
+            {`${val.tourGuideId.first_name || ""} ${
+              val.tourGuideId.last_name || ""
+            }`}
+          </span>
+        </span>
+        {/* Categories */}
+        {val.category &&
+          val.category.map((cat, index) => (
+            <span key={index} className={cat.replace(/ .*/, "") + " badge"}>
+              {cat}
+            </span>
+          ))}
+      </Card.Body>
 
-export default PopularCard
+      <Card.Footer className="py-4">
+        {/* Price & Discount */}
+        {val.price ? (
+          <p className="text-decoration-line-through">
+            {" "}
+            ${val.price.toFixed(2)}
+          </p>
+        ) : null}
+
+        <Stack direction="horizontal" className="justify-content-between mt-3">
+          {/* Displaying Price */}
+          <p>
+            From{" "}
+            <b>
+              {val.afterDiscount
+                ? val.afterDiscount.toFixed(2)
+                : val.price.toFixed(2)}
+            </b>
+          </p>
+          {/* Duration of Tour */}
+          <p>
+            <i className="bi bi-clock"></i>{" "}
+            {(val.durations && val.durations[0]?.durationText) || "N/A"}
+          </p>
+        </Stack>
+      </Card.Footer>
+    </Card>
+  );
+};
+
+export default PopularCard;

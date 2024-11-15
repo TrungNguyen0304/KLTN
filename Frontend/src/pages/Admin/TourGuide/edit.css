@@ -1,0 +1,51 @@
+/* Container for the form */
+.ContainerTour {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Form card styling */
+  .tour-card {
+    width: 80%;
+    max-width: 800px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+  }
+  
+  /* Two-column grid layout */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  /* Full-width fields */
+  .full-width {
+    grid-column: span 2;
+  }
+  
+  /* Button styling */
+  .buttonCreate, .buttonUpload {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    margin-top: 20px;
+  }
+  
+  /* Image preview styling */
+  .current-image, .new-image {
+    display: block;
+    margin-top: 10px;
+    border-radius: 4px;
+  }
+  
