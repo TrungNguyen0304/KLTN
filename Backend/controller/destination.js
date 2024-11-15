@@ -32,6 +32,7 @@ const createDestination = async (req, res) => {
   }
 };
 // Api delete destination
+
 const deleteDestination = async (req, res) => {
   const { id } = req.params;
   try {
@@ -95,7 +96,6 @@ const editDestination = async (req, res) => {
   }
 };
 
-
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
@@ -109,7 +109,6 @@ const getAllDestination = async (req, res) => {
   }
 };
 
-
 const getDestinationById = async (req, res) => {
   try {
     const destination = await Destination.findById(req.params.id);
@@ -122,8 +121,6 @@ const getDestinationById = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
-
-
 
 const getDestinationsCountByLocation = async (locationId) => {
   try {

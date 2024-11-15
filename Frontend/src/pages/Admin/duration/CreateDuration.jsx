@@ -5,19 +5,27 @@ import { useNavigate } from 'react-router-dom';
 const CreateDuration = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
- 
     const [itinerary, setItinerary] = useState([{ day: '', activity: '' }]);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Ensure all fields are included in the request
+        // Kiểm tra các trường start_date và end_date
+        if (!startDate || !endDate) {
+            alert("Vui lòng nhập đủ Ngày bắt đầu và Ngày kết thúc!");
+            return;
+        }
+
+        // Kiểm tra nếu có itinerary, chỉ lọc nếu có hoạt động và ngày hợp lệ
+        const validItinerary = itinerary.length > 0
+            ? itinerary.filter(item => item.day && item.activity)
+            : [];
+
         const data = {
-          
             start_date: startDate,
             end_date: endDate,
-            itinerary
+            itinerary: validItinerary, // Đảm bảo gửi một mảng rỗng nếu không có itinerary hợp lệ
         };
 
         try {
@@ -34,7 +42,8 @@ const CreateDuration = () => {
                 console.log('Thêm Khoảng thời gian thành công :', result);
                 navigate('/duration');
             } else {
-                console.error('lỗi Khoảng thời gian:', result.message);
+                console.error('Lỗi Khoảng thời gian:', result.message);
+                alert(result.message);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -59,7 +68,7 @@ const CreateDuration = () => {
     return (
         <div className='parent-container'>
             <div className="form-container">
-                <h2>Thêm người dùng</h2>
+                <h2>Thêm Khoảng Thời Gian</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group-inline">
                         <div className="form-group">
@@ -84,7 +93,6 @@ const CreateDuration = () => {
                             />
                         </div>
                     </div>
-                    
 
                     <h3>Itinerary</h3>
                     <div className="itinerary-container">
@@ -99,7 +107,6 @@ const CreateDuration = () => {
                                         placeholder="Nhập ngày"
                                         value={item.day}
                                         onChange={(e) => handleItineraryChange(index, e)}
-                                        required
                                     />
                                 </div>
 
@@ -112,7 +119,6 @@ const CreateDuration = () => {
                                         placeholder="Nhập hoạt động"
                                         value={item.activity}
                                         onChange={(e) => handleItineraryChange(index, e)}
-                                        required
                                     />
                                 </div>
 

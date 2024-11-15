@@ -129,7 +129,7 @@ const EditTour = () => {
       );
       if (response.status === 200) {
         alert("Tour updated successfully!");
-        navigate("/tourPackage");
+        navigate("/tour");  
       }
     } catch (error) {
       console.error("Error updating tour:", error);
@@ -204,7 +204,7 @@ const EditTour = () => {
                 id="tourGuideId"
                 as="select"
                 name="tourGuideId"
-                value={tourData.tourGuideId || ""} 
+                value={tourData.tourGuideId || ""}
                 onChange={handleInputChange}
                 required
               >
@@ -276,56 +276,55 @@ const EditTour = () => {
             </div>
           </div>
 
-          {/* Image and Group Images */}
-          <div className="form-group anh2">
-            <Form.Label htmlFor="image">Tour Image</Form.Label>
-            {preview && (
-              <div>
-                <p>Current Image:</p>
-                <img
-                  src={preview}
-                  alt="Preview"
-                  className="current-image"
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    marginRight: "10px",
-                  }}
-                />
-              </div>
-            )}
-            <Form.Control id="image" type="file" onChange={handleImageChange} />
-          </div>
-
-          <div className="form-group">
-            <Form.Label htmlFor="groupImages">Additional Images</Form.Label>
-            <Form.Control
-              id="groupImages"
-              type="file"
-              multiple
-              onChange={handleGroupImageChange}
-            />
-            <div className="image-previews">
-              {Array.isArray(groupImagePreviews) &&
-                groupImagePreviews.map((preview, index) => (
+          <div className="row-one-item">
+            <div className="form-group anh2">
+              <Form.Label htmlFor="image">Tour Image</Form.Label>
+              {preview && (
+                <div>
+                  <p>Current Image:</p>
                   <img
-                    key={index}
                     src={preview}
-                    alt={`Group Image ${index + 1}`}
-                    className="group-image-preview"
+                    alt="Preview"
+                    className="current-image"
                     style={{
-                      width: "100px",
-                      height: "100px",
+                      width: "200px", 
+                      height: "200px",
                       marginRight: "10px",
                     }}
                   />
-                ))}
+                </div>
+              )}
+              <Form.Control id="image" type="file" onChange={handleImageChange} />
+            </div>
+
+            <div className="form-group">
+              <Form.Label htmlFor="groupImages">Additional Images</Form.Label>
+              <Form.Control
+                id="groupImages"
+                type="file"
+                multiple
+                onChange={handleGroupImageChange}
+              />
+              <div className="image-previews">
+                {Array.isArray(groupImagePreviews) &&
+                  groupImagePreviews.map((preview, index) => (
+                    <img
+                      key={index}
+                      src={preview}
+                      alt={`Group Image ${index + 1}`}
+                      className="group-image-preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        marginRight: "10px",
+                      }}
+                    />
+                  ))}
+              </div>
             </div>
           </div>
 
-          <Button variant="primary" type="submit">
-            Update Tour
-          </Button>
+          <button className='buttonCreate' type="submit">Đăng Ký</button>
         </Form>
       </div>
     </Container>
