@@ -174,9 +174,11 @@
     font-weight: bold;
 }
 
-
-
-
-
-
+  /* Ensure the images have a consistent size and aspect ratio */
+.destination-image {
+    width: 100%; /* Full width of the card */
+    height: 200px; /* Fixed height for uniformity */
+    object-fit: cover; /* Crop the image if the aspect ratio doesn't match */
+    object-position: center; /* Center the image */
+  }
   

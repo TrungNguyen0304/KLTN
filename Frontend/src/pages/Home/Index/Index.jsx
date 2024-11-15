@@ -1,73 +1,51 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Banner from "../../../components/Banner/Banner";
 import AdvanceSearch from "../../../components/AdvanceSearch/AdvanceSearch";
 import Features from "../../../components/Features/Features";
-import { Container, Row, Col,  } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 
-import Slider from "react-slick";
+import axios from "axios";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import "./index.css";
 
-
 import Gallery from "../../../components/Gallery/Gallery";
 import Cards from "../../../components/Cards/Cards";
-import { destinationsData, popularsData } from "../../../utils/data";
 import PopularCard from "../../../components/Cards/PopularCard";
 
-
 const Home = () => {
-  var settings = {
-    dots: false,
-    infinite: true,
-    autoplay: true,
-    slidesToShow: 4,
-    slidesToScroll: 1,
+  const [destinations, setDestinations] = useState([]);
+  const [tourPackages, setTourPackages] = useState([]);
+  useEffect(() => {
+    document.title = "Destinations";
+    window.scroll(0, 0);
 
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 4,
-          slidesToScroll: 1,
-          infinite: false,
-          dots: true,
-          autoplay: true,
-        },
-      },
-      {
-        breakpoint: 991,
-        settings: {
-          slidesToShow: 3,
-          slidesToScroll: 1,
-          infinite: false,
-          dots: true,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          autoplay: true,
-          prevArrow: false,
-          nextArrow: false,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1,
-          prevArrow: false,
-          nextArrow: false,
-        },
-      },
-    ],
+    const fetchDestinations = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8001/api/destination"
+        );
+        setDestinations(response.data);
+      } catch (error) {
+        console.error("Error fetching destinations:", error);
+      }
+    };
+    const fetchTourPackages = async () => {
+      try {
+          const response = await axios.get('http://localhost:8001/api/tourPackage'); 
+          setTourPackages(response.data); 
+      } catch (error) {
+          console.error("Error fetching tour packages:", error);
+      }
   };
 
+    fetchDestinations();
+    fetchTourPackages();
+  }, []);
 
+ 
 
   return (
     <>
@@ -88,15 +66,13 @@ const Home = () => {
           </Row>
 
           <Row>
-            <Col md="12">
-              <Slider {...settings}>
-                {destinationsData.map((destination, inx) => {
-                  return (
-                    <Cards destination={destination} key={inx} />
-                  );
-                })}
-              </Slider>
-            </Col>
+            {destinations.map((destination, index) => {
+              return (
+                <Col md="3" sm="6" key={index} className="pb-4">
+                  <Cards destination={destination} key={index} />
+                </Col>
+              );
+            })}
           </Row>
         </Container>
       </section>
@@ -104,25 +80,25 @@ const Home = () => {
       {/* tour seciton start */}
 
       <section className="popular py-5">
-      <Container>
-        <Row>
-          <Col md="12">
-            <div className="main_heading">
-              <h1> Popular Activities </h1>
-            </div>
-          </Col>
-        </Row>
-        <Row>
-        {popularsData.map((val, inx)=>{
-          return(
-          <Col  md={3} sm={6} xs={12} className="mb-5" key={inx}>
-            <PopularCard val={val} />
-          </Col>
-        )
-        })}
-        </Row>
-      </Container>
-    </section>
+        <Container>
+          <Row>
+            <Col md="12">
+              <div className="main_heading">
+                <h1> Popular Activities </h1>
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            {tourPackages.map((val, inx) => {
+              return (
+                <Col md={3} sm={6} xs={12} className="mb-5" key={inx}>
+                  <PopularCard val={val} />
+                </Col>
+              );
+            })}
+          </Row>
+        </Container>
+      </section>
 
       <section className="call_us">
         <Container>

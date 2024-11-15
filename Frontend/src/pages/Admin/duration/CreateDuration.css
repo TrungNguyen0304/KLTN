@@ -71,7 +71,7 @@ input[type="text"]::placeholder {
     padding: 15px;
     border-radius: 6px;
     background-color: #f9f9f9;
-    width: calc(33% - 20px); /* Ensure 3 items per row */
+    /* width: calc(33% - 20px);  */
     box-sizing: border-box;
 }
 
