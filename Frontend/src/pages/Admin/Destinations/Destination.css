@@ -109,3 +109,12 @@
 .delete-icon:hover {
   background-color: rgba(220, 53, 69, 0.8); /* Darker red on hover */
 }
+
+
+.tour-count-container {
+  display: flex;
+  align-items: center;
+}
+.tour-count {
+  font-weight: bold;
+}

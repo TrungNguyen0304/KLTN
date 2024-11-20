@@ -28,6 +28,7 @@ const createTourGuide = async (req, res) => {
   }
 };
 // Api delete Tourguide
+
 const deleteTourGuide = async (req, res) => {
   const { id } = req.params;
   try {
@@ -44,6 +45,7 @@ const deleteTourGuide = async (req, res) => {
   }
 };
 // API edit TourGuide
+
 const editTourGuide = async (req, res) => {
   const { id } = req.params;
   const { first_name, last_name, phone_number, email } = req.body;
@@ -93,6 +95,7 @@ const getAllTourGuide = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ. " });
   }
 };
+
 const getTourGuideById = async (req, res) => {
   try {
     const tourGuides = await tourGuide.findById(req.params.id);

@@ -1,5 +1,5 @@
 import React from "react";
-import "../Cards/card.css";
+import './card.css';
 import { Card, Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
@@ -17,7 +17,9 @@ const PopularCard = ({ val }) => {
         <Card.Text>
           <i className="bi bi-geo-alt"></i>
           <span className="text">
-            {val.locationId?.firstname || "Unknown Location"}
+            <span>{val.locationId?.firstname || "Unknown Location"}</span>
+            <span>/</span>
+            <span>{val.destinationId?.DestinationName || "Unknown Location"}</span>
           </span>
         </Card.Text>
 
@@ -42,9 +44,8 @@ const PopularCard = ({ val }) => {
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.tourGuideId.first_name || ""} ${
-              val.tourGuideId.last_name || ""
-            }`}
+            {`${val.tourGuideId.first_name || ""} ${val.tourGuideId.last_name || ""
+              }`}
           </span>
         </span>
         {/* Categories */}

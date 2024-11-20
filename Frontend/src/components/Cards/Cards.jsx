@@ -7,17 +7,24 @@ const Cards = ({ destination }) => {
   return (
     <>
       <div className="img-box">
-        <NavLink className="body-text text-dark text-decoration-none" to={`/tour-details/${destination._id}`}>
+        {/* Khi nhấn vào ảnh, chuyển đến trang các tour của destination */}
+        <NavLink
+          className="body-text text-dark text-decoration-none"
+          to={`/destinations/${destination._id}`}  // Route đến các tour của destination
+        >
           <Card>
             <Card.Img
               variant="top"
-              src={destination.Images }
+              src={destination.Images}
               className="img-fluid destination-image"
               alt={destination.DestinationName}
             />
             <Card.Body>
               <Card.Title>{destination.DestinationName}</Card.Title>
-              <span className="tours">{destination.tour || 'No tours available'}</span>
+              {/* Hiển thị số lượng tour nếu có */}
+              <span className="tours">
+                {destination.tourCount ? `${destination.tourCount} tours` : 'No tours available'}
+              </span>
             </Card.Body>
           </Card>
         </NavLink>

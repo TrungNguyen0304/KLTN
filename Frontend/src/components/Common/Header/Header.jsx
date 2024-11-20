@@ -7,34 +7,36 @@ import "../Header/header.css";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext); 
+  const [destinations, setDestinations] = useState([]);  // State to store destinations
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
 
+  // Toggle offcanvas menu
   const toggleMenu = () => setOpen((prev) => !prev);
 
+  // Handle user logout
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    localStorage.removeItem("userid"); 
-    
+    localStorage.removeItem("userid");
+
     if ("caches" in window) {
       caches.keys().then((cacheNames) => {
         cacheNames.forEach((cacheName) => caches.delete(cacheName));
       });
     }
-  
-    setIsLoggedIn(false);
-  
-    navigate("/login", { replace: true });
-    window.location.reload(); 
-  };
-  
 
+    setIsLoggedIn(false);
+    navigate("/login", { replace: true });
+    window.location.reload();
+  };
+
+  // Navigate to login page
   const handleLogin = () => {
     navigate("/login");
-    
   };
 
+  // Sticky header effect
   const isSticky = () => {
     const header = document.querySelector(".header-section");
     if (header) {
@@ -44,11 +46,24 @@ const Header = () => {
     }
   };
 
-  // Listen to storage changes to update isLoggedIn
+  // Fetch destination data
   useEffect(() => {
+    const fetchDestinations = async () => {
+      try {
+        const response = await fetch("http://localhost:8001/api/destination");
+        const data = await response.json();
+        setDestinations(data); // Set fetched destinations
+      } catch (error) {
+        console.error("Error fetching destinations:", error);
+      }
+    };
+
+    fetchDestinations(); // Call the function to fetch data
+
     const handleStorageChange = () => {
       setIsLoggedIn(!!localStorage.getItem("user"));
     };
+
     window.addEventListener("storage", handleStorageChange);
     window.addEventListener("scroll", isSticky);
 
@@ -66,11 +81,7 @@ const Header = () => {
             <NavLink to="/">TRAVEL</NavLink>
           </Navbar.Brand>
 
-          <Navbar.Offcanvas
-            id={`offcanvasNavbar-expand-lg`}
-            placement="start"
-            show={open}
-          >
+          <Navbar.Offcanvas id={`offcanvasNavbar-expand-lg`} placement="start" show={open}>
             <Offcanvas.Header>
               <h1 className="logo">Weekendmonks</h1>
               <span className="navbar-toggler ms-auto" onClick={toggleMenu}>
@@ -82,21 +93,54 @@ const Header = () => {
                 <NavLink className="nav-link" to="/">Home</NavLink>
                 <NavLink className="nav-link" to="/about-us">ABOUT US</NavLink>
                 <NavLink className="nav-link" to="/tours">TOURS</NavLink>
+
+                {/* Destination Dropdown */}
                 <NavDropdown title="DESTINATION">
-                  <NavLink className="nav-link text-dark" to="/destinations">SPAIN TOURS</NavLink>
+                  {destinations.length > 0 ? (
+                    destinations.map((destination) => (
+                      <div key={destination._id}>
+                        <NavLink
+                          className="nav-link text-dark"
+                          to={`/destinations/${destination._id}`}
+                        >
+                          {destination.DestinationName}
+                        </NavLink>
+
+                        {/* Check if there are associated tours */}
+                        {destination.tours && destination.tours.length > 0 && (
+                          <div className="tour-links">
+                            {destination.tours.map((tour) => (
+                              <NavLink
+                                key={tour._id}
+                                className="nav-link text-dark"
+                                to={`/destinations/${destination._id}/tour/${tour._id}`}
+                              >
+                                {tour.TourName}
+                              </NavLink>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>Loading destinations...</p>
+                  )}
                 </NavDropdown>
+
                 <NavLink className="nav-link" to="/gallery">GALLERY</NavLink>
                 <NavLink className="nav-link" to="/contact-us">CONTACT</NavLink>
               </Nav>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
 
+          {/* Menu toggle for mobile */}
           <div className="ms-md-4 ms-2">
             <li className="d-inline-block d-lg-none ms-3 toggle_btn">
               <i className={open ? "bi bi-x-lg" : "bi bi-list"} onClick={toggleMenu}></i>
             </li>
           </div>
 
+          {/* User section with login/logout */}
           <Nav className="align-items-center">
             <li className="nav-item">
               <FaBell

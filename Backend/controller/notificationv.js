@@ -57,6 +57,7 @@ const getNotificationById = async (req, res) => {
     res.status(500).json({ success: false, message: "Lỗi máy chủ", error: err });
   }
 };
+
 const deleteAllNotificationsByUserId = async (req, res) => {
   const { userId } = req.params;
 
@@ -73,6 +74,7 @@ const deleteAllNotificationsByUserId = async (req, res) => {
     res.status(500).json({ success: false, message: "Lỗi máy chủ", error: err });
   }
 };
+
 const deleteNotificationById = async (req, res) => {
   const { notificationId } = req.params;
 
@@ -93,6 +95,7 @@ const deleteNotificationById = async (req, res) => {
     res.status(500).json({ success: false, message: "Lỗi máy chủ", error: err });
   }
 };
+
 module.exports = { 
   getNotificationsByUserId,
    getNotificationById ,

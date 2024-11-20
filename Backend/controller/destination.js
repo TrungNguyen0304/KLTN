@@ -1,4 +1,6 @@
 const Destination = require("../models/destination");
+const TourPackage = require("../models/tourPackage");
+
 const bcrypt = require("bcrypt");
 
 // API to add a new destination
@@ -32,6 +34,7 @@ const createDestination = async (req, res) => {
   }
 };
 // Api delete destination
+
 const deleteDestination = async (req, res) => {
   const { id } = req.params;
   try {
@@ -95,35 +98,60 @@ const editDestination = async (req, res) => {
   }
 };
 
-
 // API get all destination
 const getAllDestination = async (req, res) => {
   try {
+    // Lấy tất cả các Destination và populate thông tin Location
     const destinations = await Destination.find({})
-      .populate('locationId', 'firstname') 
+      .populate('locationId', 'firstname')
       .exec();
-    res.status(200).json(destinations);
+
+    // Đếm số lượng TourPackage cho mỗi Destination
+    const destinationsWithTourCount = await Promise.all(
+      destinations.map(async (destination) => {
+        const tourCount = await TourPackage.countDocuments({
+          destinationId: destination._id
+        });
+
+        return {
+          ...destination.toObject(), // Chuyển đổi Destination thành object
+          tourCount, // Thêm trường tourCount vào object
+        };
+      })
+    );
+
+    // Trả về danh sách Destinations kèm số lượng TourPackage
+    res.status(200).json(destinationsWithTourCount);
   } catch (error) {
     console.error("Lỗi lấy danh sách địa danh", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
 
-
 const getDestinationById = async (req, res) => {
   try {
+    // Lấy thông tin Destination theo ID
     const destination = await Destination.findById(req.params.id);
     if (!destination) {
       return res.status(404).json({ message: "Không tìm thấy địa danh." });
     }
-    res.status(200).json(destination);
+
+    // Lấy danh sách các TourPackage liên kết với destinationId
+    const tourPackages = await TourPackage.find({ destinationId: destination._id })
+      .select('_id'); // Chỉ lấy ID của các TourPackage
+
+    // Trả về thông tin Destination kèm theo các TourPackage ID
+    const destinationWithTourInfo = {
+      ...destination.toObject(), // Chuyển Destination thành object
+      tourPackages: tourPackages.map(tourPackage => tourPackage._id) // Lấy danh sách ID của TourPackage
+    };
+
+    res.status(200).json(destinationWithTourInfo);
   } catch (error) {
     console.error("Lỗi khi lấy địa danh:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
-
-
 
 const getDestinationsCountByLocation = async (locationId) => {
   try {

@@ -94,12 +94,13 @@ const IndexTour = () => {
                   )}
                   {/* Displaying duration as "X days Y nights" */}
                   <div className="tour-duration mt-2">
-                    🕒 {tour.durations && tour.durations[0]?.durationText || 'N/A'}
+                  🕒 { (tour.durations && tour.durations[0]?.durationText) || 'N/A' }
+                    
                   </div>
                 </div>
                 <div className="tour-price mb-2">
-                  <span className="original-price">${tour.originalPrice}</span>
-                  <span>{tour.price}</span>
+                  <span className="original-price">{(tour.originalPrice || 0).toLocaleString('vi-VN')}₫</span>
+                  <span>{(tour.price || 0).toLocaleString('vi-VN')}₫</span>
                 </div>
               </Card.Body>
             </Card>

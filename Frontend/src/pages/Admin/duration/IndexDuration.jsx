@@ -71,7 +71,7 @@ const IndexDuration = () => {
                                 <td>{new Date(duration.start_date).toLocaleDateString()}</td>
                                 <td>{new Date(duration.end_date).toLocaleDateString()}</td>
                                 <td className="itinerary">
-                                    {duration.itinerary.map((item, idx) => (
+                                    {(duration.itinerary || []).map((item, idx) => (
                                         <div key={idx}>
                                             <strong>{item.day}</strong>: {item.activity}
                                         </div>

@@ -51,7 +51,7 @@ export const destinationsData = [
 export const popularsData = [
   {
     id: 0,
-    title: "Discover Singapore",
+    title: "Discover Singaporesadasdasdasdasdasdsasad",
     image: Singapore,
     location: "European Way, Southampton, United Kingdom",
     category: ["Escorted Tour", "Rail Tour"],

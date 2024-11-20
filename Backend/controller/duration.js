@@ -2,31 +2,29 @@ const Duration = require("../models/duration");
 
 const createDuration = async (req, res) => {
   try {
-    const { itinerary, start_date, end_date } = req.body;
+    const { itinerary = [], start_date, end_date } = req.body; // Mặc định itinerary là mảng rỗng
 
-    if (!itinerary || !start_date || !end_date) {
-      return res
-        .status(400)
-        .json({ message: "Vui lòng cung cấp đầy đủ thông tin!" });
+    // Kiểm tra nếu thiếu start_date hoặc end_date
+    if (!start_date || !end_date) {
+      return res.status(400).json({ message: "Vui lòng cung cấp đầy đủ thông tin!" });
     }
 
     const startDate = new Date(start_date);
     const endDate = new Date(end_date);
 
     if (isNaN(startDate) || isNaN(endDate)) {
-      return res
-        .status(400)
-        .json({ message: "Ngày bắt đầu hoặc ngày kết thúc không hợp lệ!" });
+      return res.status(400).json({ message: "Ngày bắt đầu hoặc ngày kết thúc không hợp lệ!" });
     }
 
     if (startDate >= endDate) {
-      return res
-        .status(400)
-        .json({ message: "Ngày kết thúc phải sau ngày bắt đầu!" });
+      return res.status(400).json({ message: "Ngày kết thúc phải sau ngày bắt đầu!" });
     }
 
+    // Xử lý itinerary, nếu không hợp lệ thì thay bằng mảng rỗng
+    const validItinerary = Array.isArray(itinerary) ? itinerary.filter(item => item.day && item.activity) : [];
+
     const newDuration = new Duration({
-      itinerary,
+      itinerary: validItinerary,
       start_date: startDate,
       end_date: endDate,
     });
@@ -39,11 +37,10 @@ const createDuration = async (req, res) => {
     });
   } catch (error) {
     console.error("Lỗi khi thêm Duration:", error.message);
-    res
-      .status(500)
-      .json({ message: "Lỗi khi thêm Duration", error: error.message });
+    res.status(500).json({ message: "Lỗi khi thêm Duration", error: error.message });
   }
 };
+
 
 const deleteDuration = async (req, res) => {
   try {
@@ -69,6 +66,7 @@ const deleteDuration = async (req, res) => {
       .json({ message: "Lỗi khi xóa Duration", error: error.message });
   }
 };
+
 const getAllDurations = async (req, res) => {
   try {
     const durations = await Duration.find().populate('tourPackageId', 'package_name');

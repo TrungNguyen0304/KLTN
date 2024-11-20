@@ -85,3 +85,71 @@ table {
 .font-bold{
 	font-weight: 800 !important;
 }
+
+
+
+
+  
+  .accordion-item {
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	margin-bottom: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .accordion-body {
+	padding: 15px;
+	background-color: #fff;
+  }
+  
+  .accordion-item:hover {
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+
+  .day-item {
+	margin-bottom: 1.5rem;
+  }
+  
+  .day-item p {
+	color: #555;
+  }
+  
+  .accordion-body p {
+	font-size: 1rem;
+	line-height: 1.5;
+  }
+  
+  /* Optional: Add transitions for smooth effect */
+  .accordion-body {
+	transition: all 0.3s ease;
+  }
+
+
+
+
+
+
+  .tour_details {
+	margin-bottom: 20px;
+  }
+  
+  .table {
+	width: 100%;
+	border-collapse: collapse;
+  }
+  
+  .table th, .table td {
+	padding: 8px 12px;
+	text-align: left;
+	border: 1px solid #ddd;
+  }
+  
+  .table th {
+	background-color: #f4f4f4;
+	font-weight: bold;
+  }
+  
+  .table tbody tr:hover {
+	background-color: #f1f1f1;
+  }

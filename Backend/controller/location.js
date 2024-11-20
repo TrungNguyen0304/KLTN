@@ -1,5 +1,6 @@
 const Location = require('../models/location'); // Import model
 const Destination = require('../models/destination'); 
+
 const create = async (req, res) => {
     try {
         const { firstname } = req.body;
@@ -21,6 +22,7 @@ const create = async (req, res) => {
         res.status(400).json({ message: 'Tạo vị trí không thành công', error: error.message });
     }
 };
+
 const getAll = async (req, res) => {
     try {
       // Lấy tất cả Location
@@ -47,7 +49,8 @@ const getAll = async (req, res) => {
       console.error(error);
       res.status(500).json({ message: "Lỗi khi lấy danh sách Locations", error: error.message });
     }
-  };
+};
+
 const deleteLocation = async (req, res) => {
     try {
         const { id } = req.params; // Get the ID from the request parameters
