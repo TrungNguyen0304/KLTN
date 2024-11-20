@@ -7,11 +7,13 @@ const bcrypt = require("bcrypt");
 const createDestination = async (req, res) => {
   try {
     const { DestinationName, Description, locationId } = req.body;
-    const Images = req.files['image'] ? req.files['image'][0].path : "";
+    const Images = req.files["image"] ? req.files["image"][0].path : "";
     // Xóa khoảng trắng ở đầu và cuối DestinationName
     const trimmedDestinationName = DestinationName.trim();
 
-    const existingDestination = await Destination.findOne({ DestinationName: trimmedDestinationName });
+    const existingDestination = await Destination.findOne({
+      DestinationName: trimmedDestinationName,
+    });
     if (existingDestination) {
       return res.status(400).json({ message: "Địa danh đã tồn tại!" });
     }
@@ -30,7 +32,9 @@ const createDestination = async (req, res) => {
     });
   } catch (error) {
     console.error("Lỗi khi thêm đích:", error.message);
-    res.status(500).json({ message: "Lỗi khi thêm địa danh", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Lỗi khi thêm địa danh", error: error.message });
   }
 };
 // Api delete destination
@@ -55,7 +59,7 @@ const editDestination = async (req, res) => {
   const { DestinationName, Description, locationId } = req.body;
 
   // Lấy ảnh chính và ảnh nhóm mới (nếu có)
-  let Images = req.files['image'] ? req.files['image'][0].path : ""; // Dùng ảnh mới nếu có
+  let Images = req.files["image"] ? req.files["image"][0].path : ""; // Dùng ảnh mới nếu có
 
   try {
     // Lấy thông tin địa danh hiện tại từ DB
@@ -68,8 +72,6 @@ const editDestination = async (req, res) => {
     if (!Images) {
       Images = destination.Images;
     }
-
-     
 
     // Cập nhật thông tin địa danh
     const updatedDestination = await Destination.findByIdAndUpdate(
@@ -103,14 +105,14 @@ const getAllDestination = async (req, res) => {
   try {
     // Lấy tất cả các Destination và populate thông tin Location
     const destinations = await Destination.find({})
-      .populate('locationId', 'firstname')
+      .populate("locationId")
       .exec();
 
     // Đếm số lượng TourPackage cho mỗi Destination
     const destinationsWithTourCount = await Promise.all(
       destinations.map(async (destination) => {
         const tourCount = await TourPackage.countDocuments({
-          destinationId: destination._id
+          destinationId: destination._id,
         });
 
         return {
@@ -130,23 +132,27 @@ const getAllDestination = async (req, res) => {
 
 const getDestinationById = async (req, res) => {
   try {
-    // Lấy thông tin Destination theo ID
-    const destination = await Destination.findById(req.params.id);
+    const destination = await Destination.findById(req.params.id)
+      .populate("locationId")
+      .populate("tourPackages") 
+      .lean();
+
     if (!destination) {
       return res.status(404).json({ message: "Không tìm thấy địa danh." });
     }
 
-    // Lấy danh sách các TourPackage liên kết với destinationId
-    const tourPackages = await TourPackage.find({ destinationId: destination._id })
-      .select('_id'); // Chỉ lấy ID của các TourPackage
+    // Lấy các tour liên kết với destination
+    const tourPackages = await TourPackage.find({
+      destinationId: destination._id,
+    })
+      .populate("tourGuideId", "first_name last_name")
+    .populate("durations")  
+      .lean();
 
-    // Trả về thông tin Destination kèm theo các TourPackage ID
-    const destinationWithTourInfo = {
-      ...destination.toObject(), // Chuyển Destination thành object
-      tourPackages: tourPackages.map(tourPackage => tourPackage._id) // Lấy danh sách ID của TourPackage
-    };
+    // Gắn danh sách tour vào destination
+    destination.tourPackages = tourPackages;
 
-    res.status(200).json(destinationWithTourInfo);
+    res.status(200).json(destination);
   } catch (error) {
     console.error("Lỗi khi lấy địa danh:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
@@ -155,14 +161,13 @@ const getDestinationById = async (req, res) => {
 
 const getDestinationsCountByLocation = async (locationId) => {
   try {
-      // Đếm số lượng Destination có locationId tương ứng
-      const count = await Destination.countDocuments({ locationId });
-      return count;
+    // Đếm số lượng Destination có locationId tương ứng
+    const count = await Destination.countDocuments({ locationId });
+    return count;
   } catch (error) {
-      throw new Error('Lỗi khi đếm các Destination: ' + error.message);
+    throw new Error("Lỗi khi đếm các Destination: " + error.message);
   }
 };
-
 
 module.exports = {
   createDestination,
@@ -170,5 +175,5 @@ module.exports = {
   editDestination,
   getAllDestination,
   getDestinationById,
-  getDestinationsCountByLocation
+  getDestinationsCountByLocation,
 };
