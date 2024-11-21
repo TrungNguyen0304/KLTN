@@ -12,12 +12,11 @@ const EditTour = () => {
     durations: [],
   });
 
-
   const [image, setImage] = useState(null);
   const [groupImages, setGroupImages] = useState([]);
   const [preview, setPreview] = useState(null);
   const [groupImagePreviews, setGroupImagePreviews] = useState([]);
-  const [durations, setDurations] = useState([]); // Array of selected duration IDs
+  const [durations, setDurations] = useState([]); // Array of durations
   const [destinations, setDestinations] = useState([]);
   const [tourGuides, setTourGuides] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -46,7 +45,10 @@ const EditTour = () => {
         setPackage_name(data.package_name);
         setPrice(data.price);
         setIncAndExc(data.incAndExc);
-        setDurations(data.durations.map(duration => duration._id)); // Set selected durations
+        setTourData((prevState) => ({
+          ...prevState,
+          durations: data.durations.map((duration) => duration._id), // Set selected durations
+        }));
       } catch (error) {
         console.error("Error fetching tour data:", error);
       } finally {
@@ -224,7 +226,7 @@ const EditTour = () => {
                 as="select"
                 multiple
                 name="durations"
-                value={tourData.durations}
+                value={tourData.durations} // Ensure this value is correctly set
                 onChange={handleDurationChange}
                 required
               >
@@ -274,6 +276,7 @@ const EditTour = () => {
             </div>
           </div>
 
+          {/* Image Upload */}
           <div className="row-one-item">
             <div className="form-group anh2">
               <Form.Label htmlFor="image">Tour Image</Form.Label>
