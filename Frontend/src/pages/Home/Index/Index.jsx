@@ -116,11 +116,10 @@ const Home = () => {
             </Col>
             <Col md="4" className="text-center mt-3 mt-md-0">
               <a
-                href="tel:6398312365"
+                href="tel:0787601735"
                 className="secondary_btn bounce"
                 rel="no"
               >
-                {" "}
                 Contact Us !
               </a>
             </Col>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
 import PopularCard from "../../../components/Cards/PopularCard";
+import Cards from "../../../components/Cards/Cards";
 import Filters from "./Filters";
 import "../Tours/tour.css";
 
@@ -51,6 +52,7 @@ const Tours = () => {
                 {tours.map((tour, index) => (
                   <Col xl={4} lg={6} md={6} sm={6} className="mb-5" key={index}>
                     <PopularCard val={tour} />
+                    
                   </Col>
                 ))}
               </Row>

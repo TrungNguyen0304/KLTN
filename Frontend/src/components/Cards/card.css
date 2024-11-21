@@ -197,3 +197,12 @@
   .bi-geo-alt {
     margin-right: 5px; /* Khoảng cách giữa icon và văn bản */
   }
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+  }
+  

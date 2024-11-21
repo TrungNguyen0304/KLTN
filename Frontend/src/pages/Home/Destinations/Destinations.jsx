@@ -1,27 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import Breadcrumbs from '../../../components/Breadcrumbs/Breadcrumbs';
-import { Col, Container, Row } from 'react-bootstrap';
-import Cards from '../../../components/Cards/Cards';
+import React, { useEffect, useState } from "react";
+import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
+import { Col, Container, Row } from "react-bootstrap";
+import PopularCard from "../../../components/Cards/PopularCard";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Destinations = () => {
-  const [destinations, setDestinations] = useState([]);
+  const [tourPackages, setTourPackages] = useState([]);
 
   useEffect(() => {
     document.title = "Destinations";
     window.scroll(0, 0);
-    
-    // Fetch destinations data from API
-    const fetchDestinations = async () => {
+
+    const fetchTourPackages = async () => {
       try {
-        const response = await fetch('http://localhost:8001/api/destination');
-        const data = await response.json();
-        setDestinations(data);
+        const response = await axios.get(
+          "http://localhost:8001/api/tourPackage"
+        );
+        setTourPackages(response.data);
       } catch (error) {
-        console.error("Error fetching destinations:", error);
+        console.error("Error fetching tour packages:", error);
       }
     };
-
-    fetchDestinations();
+    fetchTourPackages();
   }, []);
 
   return (
@@ -31,11 +32,13 @@ const Destinations = () => {
       <section className="py-5">
         <Container>
           <Row>
-            {destinations.map((destination) => (
-              <Col md="3" sm="6" key={destination._id} className="pb-4">
-                <Cards destination={destination} />
-              </Col>
-            ))}
+            {tourPackages.map((val, inx) => {
+              return (
+                <Col md={3} sm={6} xs={12} className="mb-5" key={inx}>
+                    <PopularCard val={val} />
+                </Col>
+              );
+            })}
           </Row>
         </Container>
       </section>

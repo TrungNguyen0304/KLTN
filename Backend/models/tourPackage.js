@@ -8,7 +8,7 @@ const tourPackageSchema = new mongoose.Schema({
     description: { type: String },
     image: { type: String,required: false  },
     groupImages: { type: [String], required: true }, 
-    destinationId: { type: Schema.Types.ObjectId, ref: 'Destination', required: true },
+    destinationId: { type: Schema.Types.ObjectId, ref: 'Destination' },
     tourGuideId: { type: Schema.Types.ObjectId, ref: 'TourGuide', required: true },
     locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
     durations: { type: [Schema.Types.ObjectId], ref: 'Duration', required: true } 

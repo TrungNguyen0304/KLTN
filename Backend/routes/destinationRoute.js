@@ -15,7 +15,7 @@ router.post("/create", upload, createDestination);
 router.delete("/:id", deleteDestination);
 router.put("/:id", upload, editDestination);
 router.get("/", getAllDestination);
-router.get("/:id", getDestinationById);
+router.get("/:id", getDestinationById); 
 
 router.get("/count/:locationId", async (req, res) => {
   const { locationId } = req.params;
