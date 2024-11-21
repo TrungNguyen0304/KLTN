@@ -100,7 +100,6 @@ const TourDetails = () => {
                     </Nav>
                   </Col>
 
-
                   <Tab.Content className="mt-4">
                     {/* Overview Tab */}
                     <Tab.Pane eventKey="1">
@@ -124,45 +123,52 @@ const TourDetails = () => {
                           Lịch khởi hành
                         </h5>
                         <p className="body-text">
-                          {tourPackage?.durations && Array.isArray(tourPackage.durations) && tourPackage.durations.length > 0 ? (
+                          {tourPackage?.durations &&
+                          Array.isArray(tourPackage.durations) &&
+                          tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
                                   <th>Ngày bắt đầu</th>
                                   <th>Ngày kết thúc</th>
                                   <th>Đặt ngày</th>
-
                                 </tr>
                               </thead>
                               <tbody>
-                                {tourPackage.durations.map((duration, index) => (
-                                  <tr key={index}>
-                                    <td>
-                                      {new Date(duration.start_date).toLocaleDateString("vi-VN", {
-                                        weekday: "long", // Optional: Adds day of the week
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric"
-                                      })}
-                                    </td>
-                                    <td>
-                                      {new Date(duration.end_date).toLocaleDateString("vi-VN", {
-                                        weekday: "long", // Optional: Adds day of the week
-                                        year: "numeric",
-                                        month: "long",
-                                        day: "numeric"
-                                      })}
-                                    </td>
-                                    <td>
-                                      <NavLink
-                                        to="/booking"
-                                        className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-                                      >
-                                        Đặt ngay
-                                      </NavLink>
-                                    </td>
-                                  </tr>
-                                ))}
+                                {tourPackage.durations.map(
+                                  (duration, index) => (
+                                    <tr key={index}>
+                                      <td>
+                                        {new Date(
+                                          duration.start_date
+                                        ).toLocaleDateString("vi-VN", {
+                                          weekday: "long",
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })}
+                                      </td>
+                                      <td>
+                                        {new Date(
+                                          duration.end_date
+                                        ).toLocaleDateString("vi-VN", {
+                                          weekday: "long",
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })}
+                                      </td>
+                                      <td>
+                                        <NavLink
+                                          to="/booking"
+                                          className="primaryBtn w-100 d-flex justify-content-center fw-bold"
+                                        >
+                                          Đặt ngay
+                                        </NavLink>
+                                      </td>
+                                    </tr>
+                                  )
+                                )}
                               </tbody>
                             </table>
                           ) : (
@@ -172,10 +178,6 @@ const TourDetails = () => {
                       </div>
                     </Tab.Pane>
 
-
-
-
-
                     {/* Itinerary Tab */}
                     <Tab.Pane eventKey="2">
                       <div className="tour_details">
@@ -184,25 +186,38 @@ const TourDetails = () => {
                         </h1>
                         <Accordion defaultActiveKey="0" className="mt-4">
                           {tourPackage?.durations?.map((val, index) => (
-                            <Accordion.Item eventKey={String(index)} key={index} className="mb-5 shadow-sm rounded-lg">
+                            <Accordion.Item
+                              eventKey={String(index)}
+                              key={index}
+                              className="mb-5 shadow-sm rounded-lg"
+                            >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
-                                {Array.isArray(val.itinerary) && val.itinerary.length > 0 ? (
+                                {Array.isArray(val.itinerary) &&
+                                val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
-                                    <div key={itemIndex} className="day-item mb-3">
+                                    <div
+                                      key={itemIndex}
+                                      className="day-item mb-3"
+                                    >
                                       <Accordion defaultActiveKey={null}>
-                                        <Accordion.Item eventKey={String(itemIndex)}>
+                                        <Accordion.Item
+                                          eventKey={String(itemIndex)}
+                                        >
                                           <Accordion.Header className="d-flex align-items-center justify-content-between text-white rounded">
                                             <h5 className="mb-0">{item.day}</h5>
                                           </Accordion.Header>
                                           <Accordion.Body className="p-3">
-                                            <p>{item.activity || "No activity for this day."}</p>
+                                            <p>
+                                              {item.activity ||
+                                                "No activity for this day."}
+                                            </p>
                                           </Accordion.Body>
                                         </Accordion.Item>
                                       </Accordion>
                                     </div>
                                   ))
                                 ) : (
-                                  <p>No itinerary available.</p>
+                                  <p>Không có hành trình nào có sẵn.</p>
                                 )}
                               </Accordion.Body>
                             </Accordion.Item>
@@ -210,9 +225,6 @@ const TourDetails = () => {
                         </Accordion>
                       </div>
                     </Tab.Pane>
-
-
-
 
                     {/* Inclusions & Exclusions Tab */}
                     <Tab.Pane eventKey="3">
@@ -226,7 +238,6 @@ const TourDetails = () => {
                           const inclusionSection = tourPackage?.incAndExc
                             ?.match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
                             ?.trim();
-
 
                           return (
                             <>
@@ -245,7 +256,6 @@ const TourDetails = () => {
                               ) : (
                                 <p>No inclusions available</p>
                               )}
-
                             </>
                           );
                         })()}
@@ -279,7 +289,10 @@ const TourDetails = () => {
                       <Card.Body>
                         <Stack gap={2} direction="horizontal">
                           <h1 className="font-bold mb-0 h2">
-                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(tourPackage.price)}
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(tourPackage.price)}
                           </h1>
                           <span className="fs-4">/người</span>
                         </Stack>
@@ -308,12 +321,14 @@ const TourDetails = () => {
                           <h5 className="h6"> {tourPackage.reviews}</h5>
                         </div>
 
-                        <NavLink
-                          to="/booking"
-                          className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-                        >
-                          Đặt ngay
-                        </NavLink>
+                        {tourPackage && tourPackage._id && (
+                          <NavLink
+                            to={`/booking${tourPackage._id}`}
+                            className="primaryBtn w-100 d-flex justify-content-center fw-bold"
+                          >
+                            Đặt ngay
+                          </NavLink>
+                        )}
                       </Card.Body>
                     </Card>
 

@@ -46,7 +46,46 @@ const createBooking = async (req, res) => {
     res.status(500).json({ success: false, message: 'Đã xảy ra lỗi khi tạo đặt chỗ và thông báo.', error: error.message });
   }
 };
+const getTourPackageById = async (req, res) => {
+  try {
+    const {id } = req.params;
+
+    const tourPackage = await TourPackage.findById(id);
+
+    if (!tourPackage) {
+      return res.status(404).json({ success: false, message: "Tour package not found." });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: tourPackage,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "An error occurred while retrieving the tour package.", error: error.message });
+  }
+};
+const getAllTourPackages = async (req, res) => {
+  try {
+    const tourPackages = await TourPackage.find();
+
+    if (!tourPackages || tourPackages.length === 0) {
+      return res.status(404).json({ success: false, message: "No tour packages found." });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: tourPackages,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "An error occurred while retrieving all tour packages.", error: error.message });
+  }
+};
+
 
 module.exports = {
   createBooking,
+  getTourPackageById,
+  getAllTourPackages
 };
