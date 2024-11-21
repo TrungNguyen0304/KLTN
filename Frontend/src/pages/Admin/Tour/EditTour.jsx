@@ -9,25 +9,26 @@ const EditTour = () => {
   const navigate = useNavigate();
 
   const [tourData, setTourData] = useState({
-    package_name: "",
-    description: "",
-    price: "",
     durations: [],
-    destinationId: "",
-    tourGuideId: "",
-    locationId: "",
-    incAndExc: "",
   });
+
 
   const [image, setImage] = useState(null);
   const [groupImages, setGroupImages] = useState([]);
   const [preview, setPreview] = useState(null);
   const [groupImagePreviews, setGroupImagePreviews] = useState([]);
-  const [durations, setDurations] = useState([]);
+  const [durations, setDurations] = useState([]); // Array of selected duration IDs
   const [destinations, setDestinations] = useState([]);
   const [tourGuides, setTourGuides] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [locationId, setLocationId] = useState('');
+  const [destinationId, setDestinationId] = useState('');
+  const [tourGuideId, setTourGuideId] = useState('');
+  const [description, setDescription] = useState('');
+  const [package_name, setPackage_name] = useState('');
+  const [price, setPrice] = useState('');
+  const [incAndExc, setIncAndExc] = useState('');
 
   useEffect(() => {
     const fetchTourData = async () => {
@@ -35,9 +36,17 @@ const EditTour = () => {
         const response = await axios.get(
           `http://localhost:8001/api/tourPackage/${id}`
         );
-        setTourData(response.data);
+        const data = response.data;
         setPreview(response.data.image);
         setGroupImagePreviews(response.data.groupImages || []);
+        setLocationId(data.locationId ? data.locationId._id : ''); 
+        setDestinationId(data.destinationId ? data.destinationId._id : ''); 
+        setTourGuideId(data.tourGuideId ? data.tourGuideId._id : ''); 
+        setDescription(data.description);
+        setPackage_name(data.package_name);
+        setPrice(data.price);
+        setIncAndExc(data.incAndExc);
+        setDurations(data.durations.map(duration => duration._id)); // Set selected durations
       } catch (error) {
         console.error("Error fetching tour data:", error);
       } finally {
@@ -79,11 +88,6 @@ const EditTour = () => {
     return <div>Loading...</div>;
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setTourData({ ...tourData, [name]: value });
-  };
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
@@ -110,14 +114,14 @@ const EditTour = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("package_name", tourData.package_name);
-    formData.append("description", tourData.description);
-    formData.append("price", tourData.price);
+    formData.append("package_name", package_name);
+    formData.append("description", description);
+    formData.append("price", price);
     formData.append("durations", JSON.stringify(tourData.durations));
-    formData.append("destinationId", tourData.destinationId);
-    formData.append("tourGuideId", tourData.tourGuideId);
-    formData.append("locationId", tourData.locationId);
-    formData.append("incAndExc", tourData.incAndExc);
+    formData.append("destinationId", destinationId);
+    formData.append("tourGuideId", tourGuideId);
+    formData.append("locationId", locationId);
+    formData.append("incAndExc", incAndExc);
 
     if (image) formData.append("image", image);
     groupImages.forEach((img) => formData.append("groupImages", img));
@@ -129,7 +133,7 @@ const EditTour = () => {
       );
       if (response.status === 200) {
         alert("Tour updated successfully!");
-        navigate("/tour");  
+        navigate("/tour");
       }
     } catch (error) {
       console.error("Error updating tour:", error);
@@ -150,8 +154,8 @@ const EditTour = () => {
                 id="package_name"
                 type="text"
                 name="package_name"
-                value={tourData.package_name}
-                onChange={handleInputChange}
+                value={package_name}
+                onChange={(e) => setPackage_name(e.target.value)}
                 required
               />
             </div>
@@ -161,8 +165,8 @@ const EditTour = () => {
                 id="price"
                 type="number"
                 name="price"
-                value={tourData.price}
-                onChange={handleInputChange}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
                 required
               />
             </div>
@@ -176,9 +180,8 @@ const EditTour = () => {
                 id="description"
                 as="textarea"
                 rows={3}
-                name="description"
-                value={tourData.description}
-                onChange={handleInputChange}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 required
               />
             </div>
@@ -189,23 +192,21 @@ const EditTour = () => {
                 as="textarea"
                 rows={3}
                 name="incAndExc"
-                value={tourData.incAndExc}
-                onChange={handleInputChange}
+                value={incAndExc}
+                onChange={(e) => setIncAndExc(e.target.value)}
                 required
               />
             </div>
           </div>
- 
+
           {/* Tour Guide and Duration */}
           <div className="row-two-items">
             <div className="form-group">
               <Form.Label htmlFor="tourGuideId">Tour Guide</Form.Label>
-              <Form.Control
+              <select
                 id="tourGuideId"
-                as="select"
-                name="tourGuideId"
-                value={tourData.tourGuideId || ""}
-                onChange={handleInputChange}
+                value={tourGuideId}
+                onChange={(e) => setTourGuideId(e.target.value)}
                 required
               >
                 {tourGuides.map((guide) => (
@@ -213,7 +214,7 @@ const EditTour = () => {
                     {guide.first_name} {guide.last_name}
                   </option>
                 ))}
-              </Form.Control>
+              </select>
             </div>
 
             <div className="form-group">
@@ -241,12 +242,10 @@ const EditTour = () => {
           <div className="row-two-items">
             <div className="form-group">
               <Form.Label htmlFor="destinationId">Destination</Form.Label>
-              <Form.Control
+              <select
                 id="destinationId"
-                as="select"
-                name="destinationId"
-                value={tourData.destinationId}
-                onChange={handleInputChange}
+                value={destinationId}
+                onChange={(e) => setDestinationId(e.target.value)}
                 required
               >
                 {destinations.map((destination) => (
@@ -254,25 +253,24 @@ const EditTour = () => {
                     {destination.DestinationName}
                   </option>
                 ))}
-              </Form.Control>
+              </select>
             </div>
 
             <div className="form-group">
-              <Form.Label htmlFor="locationId">Location</Form.Label>
-              <Form.Control
+              <label htmlFor="locationId">Tỉnh/Thành Phố</label>
+              <select
                 id="locationId"
-                as="select"
-                name="locationId"
-                value={tourData.locationId}
-                onChange={handleInputChange}
+                value={locationId}
+                onChange={(e) => setLocationId(e.target.value)}
                 required
               >
-                {locations.map((location) => (
+                <option value="" disabled>Chọn...</option>
+                {locations.map(location => (
                   <option key={location._id} value={location._id}>
                     {location.firstname}
                   </option>
                 ))}
-              </Form.Control>
+              </select>
             </div>
           </div>
 
@@ -287,7 +285,7 @@ const EditTour = () => {
                     alt="Preview"
                     className="current-image"
                     style={{
-                      width: "200px", 
+                      width: "200px",
                       height: "200px",
                       marginRight: "10px",
                     }}
@@ -311,7 +309,7 @@ const EditTour = () => {
                     <img
                       key={index}
                       src={preview}
-                      alt={`Group Image ${index + 1}`}
+                      alt={`Group Image ${index + 1}`}  
                       className="group-image-preview"
                       style={{
                         width: "100px",

@@ -1,5 +1,5 @@
 import React from "react";
-import './card.css';
+import "./card.css";
 import { Card, Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
@@ -17,17 +17,23 @@ const PopularCard = ({ val }) => {
         <Card.Text>
           <i className="bi bi-geo-alt"></i>
           <span className="text">
+            {/* Accessing location data */}
             <span>{val.locationId?.firstname || "Unknown Location"}</span>
             <span>/</span>
-            <span>{val.destinationId?.DestinationName || "Unknown Location"}</span>
+            <span>
+              {val.destinationId?.DestinationName || "Unknown Location"}
+            </span>
           </span>
         </Card.Text>
 
         {/* Tour Title */}
-        <Card.Title className="text-truncate" style={{ maxWidth: "270px" }}>
+        <Card.Title
+          className="text-truncate line-clamp-2"
+          style={{ maxWidth: "230px" }}
+        >
           <NavLink
             className="body-text text-dark text-decoration-none"
-            to={`/tour-details/${val._id}`} // Ensure the correct ID is passed here
+            to={`/tour-details/${val._id}`}
           >
             {val.package_name}
           </NavLink>
@@ -44,10 +50,12 @@ const PopularCard = ({ val }) => {
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.tourGuideId.first_name || ""} ${val.tourGuideId.last_name || ""
-              }`}
+            {`${val.tourGuideId.first_name || ""} ${
+              val.tourGuideId.last_name || ""
+            }`}
           </span>
         </span>
+
         {/* Categories */}
         {val.category &&
           val.category.map((cat, index) => (
@@ -61,7 +69,6 @@ const PopularCard = ({ val }) => {
         {/* Price & Discount */}
         {val.price ? (
           <p className="text-decoration-line-through">
-            {" "}
             ${val.price.toFixed(2)}
           </p>
         ) : null}
@@ -76,6 +83,7 @@ const PopularCard = ({ val }) => {
                 : val.price.toFixed(2)}
             </b>
           </p>
+
           {/* Duration of Tour */}
           <p>
             <i className="bi bi-clock"></i>{" "}

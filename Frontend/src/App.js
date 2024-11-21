@@ -8,12 +8,12 @@ import Tours from "./pages/Home/Tours/Tours";
 import TourDetails from "./pages/Home/Tours/TourDetails";
 import Booking from "./pages/Home/Booking/Booking";
 import Destinations from "./pages/Home/Destinations/Destinations";
+import DestinationDetails from "./pages/Home/Destinations/DestinationDetails";
 import PhotoGallery from "./pages/Home/PhotoGallery/PhotoGallery";
 import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 import Notifications from "./components/notifications/notifications";
 import NotificationDetail from "./components/notifications/NotificationDetail";
-
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -55,9 +55,9 @@ function App() {
           <Route path="/tour-details/:id" element={<TourDetails/>} />
           <Route path="booking" element={<Booking />} />
           <Route path="destinations" element={<Destinations />} />
+          <Route path="/destination/:id" element={<DestinationDetails />} />
           
           <Route path="gallery" element={<PhotoGallery />} />
-         
   
         </Route>
         {/* Các route cho layout admin */}

@@ -1,57 +1,45 @@
-import React from 'react'
-import Lightroom from 'react-lightbox-gallery'
-import GalleryImg1 from "../../assets/images/gallery/g1.jpg"
-import GalleryImg3 from "../../assets/images/gallery/g3.jpg"
-import GalleryImg4 from "../../assets/images/gallery/g4.jpg"
-import GalleryImg6 from "../../assets/images/gallery/g6.jpg"
-import GalleryImg7 from "../../assets/images/gallery/g7.jpg"
-
+import React, { useState } from 'react';
+import GalleryImg1 from "../../assets/images/gallery/g1.jpg";
+import GalleryImg3 from "../../assets/images/gallery/g3.jpg";
+import GalleryImg4 from "../../assets/images/gallery/g4.jpg";
+import GalleryImg6 from "../../assets/images/gallery/g6.jpg";
+import GalleryImg7 from "../../assets/images/gallery/g7.jpg";
 
 const Gallery = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [photoIndex, setPhotoIndex] = useState(0);
 
-    var images = [
-        {
-            src: GalleryImg1,
-            desc: "Person wearing shoes",
-            sub: "Gift Habeshaw"
-        },
-        {
-            src: GalleryImg3,
-            desc: "Blonde woman wearing sunglasses smiling at the camera ",
-            sub: "Dmitriy Frantsev"
-        },
-        {
-            src: GalleryImg6,
-            sub: "Harry Cunningham"
-        },
-        {
-            src: GalleryImg4,
-            desc: "Jaipur , Rajasthan India",
-            sub: "Liam Baldock"
-        },
-        {
-            src: GalleryImg7,
-            sub: "Verne Ho"
-        },
-        {
-            src: GalleryImg6,
-            desc: "Rann of kutch , India",
-            sub: "Hari Nandakumar"
-        },
+    const images = [
+        GalleryImg1,
+        GalleryImg3,
+        GalleryImg4,
+        GalleryImg6,
+        GalleryImg7
     ];
 
-    var settings = {
-        columnCount: {
-            default: 3,
-            mobile: 2,
-            tab: 3
-        },
-        mode: "dark",
-        enableZoom:false,
-    };
     return (
-        <Lightroom images={images} settings={settings} />
-   );
+        <div>
+            <div className="container">
+                <div className="row">
+                    {images.map((img, index) => (
+                        <div className="col-6 col-md-4 col-lg-3 mb-4" key={index}>
+                            <img 
+                                src={img} 
+                                alt={`Gallery ${index}`} 
+                                className="img-fluid rounded"
+                                onClick={() => {
+                                    setIsOpen(true);
+                                    setPhotoIndex(index);
+                                }} 
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+           
+        </div>
+    );
 }
 
-export default Gallery
+export default Gallery;
