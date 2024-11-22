@@ -4,6 +4,9 @@ import { Card, Stack } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 
 const PopularCard = ({ val }) => {
+  // Hàm an toàn để định dạng số hoặc trả về "N/A"
+  const formatPrice = (price) => (typeof price === "number" ? price.toFixed(2) : "N/A");
+
   return (
     <Card className="rounded-2 shadow-sm popular">
       <Card.Img
@@ -17,7 +20,6 @@ const PopularCard = ({ val }) => {
         <Card.Text>
           <i className="bi bi-geo-alt"></i>
           <span className="text">
-            {/* Accessing location data */}
             <span>{val.locationId?.firstname || "Unknown Location"}</span>
             <span>/</span>
             <span>
@@ -35,7 +37,7 @@ const PopularCard = ({ val }) => {
             className="body-text text-dark text-decoration-none"
             to={`/tour-details/${val._id}`}
           >
-            {val.package_name}
+            {val.package_name || "Unnamed Package"}
           </NavLink>
         </Card.Title>
 
@@ -50,8 +52,8 @@ const PopularCard = ({ val }) => {
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.tourGuideId.first_name || ""} ${
-              val.tourGuideId.last_name || ""
+            {`${val.tourGuideId?.first_name || ""} ${
+              val.tourGuideId?.last_name || ""
             }`}
           </span>
         </span>
@@ -67,9 +69,9 @@ const PopularCard = ({ val }) => {
 
       <Card.Footer className="py-4">
         {/* Price & Discount */}
-        {val.price ? (
+        {val.adult_price ? (
           <p className="text-decoration-line-through">
-            ${val.price.toFixed(2)}
+            ${formatPrice(val.adult_price)}
           </p>
         ) : null}
 
@@ -79,8 +81,8 @@ const PopularCard = ({ val }) => {
             From{" "}
             <b>
               {val.afterDiscount
-                ? val.afterDiscount.toFixed(2)
-                : val.price.toFixed(2)}
+                ? formatPrice(val.afterDiscount)
+                : formatPrice(val.adult_price)}
             </b>
           </p>
 

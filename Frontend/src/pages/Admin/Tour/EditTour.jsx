@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import "./CreateTour.css"; // Import the same CSS file
 
 const EditTour = () => {
@@ -26,7 +26,8 @@ const EditTour = () => {
   const [tourGuideId, setTourGuideId] = useState('');
   const [description, setDescription] = useState('');
   const [package_name, setPackage_name] = useState('');
-  const [price, setPrice] = useState('');
+  const [adult_price, setAdult_price] = useState('');
+  const [pricechildren_price, setPricechildren_price] = useState('');
   const [incAndExc, setIncAndExc] = useState('');
 
   useEffect(() => {
@@ -38,12 +39,13 @@ const EditTour = () => {
         const data = response.data;
         setPreview(response.data.image);
         setGroupImagePreviews(response.data.groupImages || []);
-        setLocationId(data.locationId ? data.locationId._id : ''); 
-        setDestinationId(data.destinationId ? data.destinationId._id : ''); 
-        setTourGuideId(data.tourGuideId ? data.tourGuideId._id : ''); 
+        setLocationId(data.locationId ? data.locationId._id : '');
+        setDestinationId(data.destinationId ? data.destinationId._id : '');
+        setTourGuideId(data.tourGuideId ? data.tourGuideId._id : '');
         setDescription(data.description);
         setPackage_name(data.package_name);
-        setPrice(data.price);
+        setAdult_price(data.adult_price);
+        setPricechildren_price(data.pricechildren_price);
         setIncAndExc(data.incAndExc);
         setTourData((prevState) => ({
           ...prevState,
@@ -118,7 +120,8 @@ const EditTour = () => {
     const formData = new FormData();
     formData.append("package_name", package_name);
     formData.append("description", description);
-    formData.append("price", price);
+    formData.append("adult_price", adult_price);
+    formData.append("pricechildren_price", pricechildren_price);
     formData.append("durations", JSON.stringify(tourData.durations));
     formData.append("destinationId", destinationId);
     formData.append("tourGuideId", tourGuideId);
@@ -152,7 +155,8 @@ const EditTour = () => {
           <div className="form-row">
             <div className="form-group">
               <Form.Label htmlFor="package_name">Package Name</Form.Label>
-              <Form.Control
+              <textarea
+                rows="2"
                 id="package_name"
                 type="text"
                 name="package_name"
@@ -162,13 +166,24 @@ const EditTour = () => {
               />
             </div>
             <div className="form-group">
-              <Form.Label htmlFor="price">Price</Form.Label>
+              <Form.Label htmlFor="price">Giá người lớn</Form.Label>
               <Form.Control
-                id="price"
+                id="adult_price"
                 type="number"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                name="adult_price"
+                value={adult_price}
+                onChange={(e) => setAdult_price(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <Form.Label htmlFor="price">Giá trẻ em</Form.Label>
+              <Form.Control
+                id="pricechildren_price"
+                type="number"
+                name="pricechildren_price"
+                value={pricechildren_price}
+                onChange={(e) => setPricechildren_price(e.target.value)}
                 required
               />
             </div>
@@ -312,7 +327,7 @@ const EditTour = () => {
                     <img
                       key={index}
                       src={preview}
-                      alt={`Group Image ${index + 1}`}  
+                      alt={`Group Image ${index + 1}`}
                       className="group-image-preview"
                       style={{
                         width: "100px",

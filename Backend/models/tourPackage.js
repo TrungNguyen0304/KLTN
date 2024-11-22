@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const tourPackageSchema = new mongoose.Schema({
     package_name: { type: String, required: true },
-    price: { type: Number, required: true },
+    pricechildren_price: { type: Number, required: true },
+    adult_price: { type: Number, required: true },
     incAndExc: { type: String,required: true },
     description: { type: String },
     image: { type: String,required: false  },

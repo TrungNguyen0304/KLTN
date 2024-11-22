@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import "../Tours/tour.css";
+import "./tour.css";
 import { NavLink, useParams } from "react-router-dom";
 import ImageGallery from "react-image-gallery";
 import {
@@ -13,13 +13,19 @@ import {
   Accordion,
   Card,
   Stack,
+  Button,
 } from "react-bootstrap";
 import axios from "axios";
 
 const TourDetails = () => {
   const { id } = useParams();
   const [tourPackage, setTourPackage] = useState(null);
+  const [adults, setAdults] = useState(1); // Default 2 adults
+  const [children, setChildren] = useState(0); // Default 0 children
+  const [infants, setInfants] = useState(0); // Default 0 infants
 
+  const pricePerAdult = 5590000; // Giá cho mỗi người lớn
+  const totalPrice = (adults * pricePerAdult) + 590000; // Tổng giá tour
   useEffect(() => {
     document.title = "Tour Details";
     window.scroll(0, 0);
@@ -79,6 +85,7 @@ const TourDetails = () => {
 
             <Tab.Container id="left-tabs-example" defaultActiveKey="1">
               <Row className="py-5">
+                {/*  thông tin tour*/}
                 <Col md={8} className="mb-3 mb-md-0">
                   <Col md={12}>
                     <Nav
@@ -124,8 +131,8 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                          Array.isArray(tourPackage.durations) &&
-                          tourPackage.durations.length > 0 ? (
+                            Array.isArray(tourPackage.durations) &&
+                            tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
@@ -193,7 +200,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                val.itinerary.length > 0 ? (
+                                  val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}
@@ -282,72 +289,199 @@ const TourDetails = () => {
                   </Tab.Content>
                 </Col>
 
+
+
                 {/* Price & Booking Info */}
                 <Col md={4}>
                   <aside>
-                    <Card className="rounded-3 p-2 shadow-sm mb-4 price-info">
+
+                    {/* Card for pricing and participants */}
+                    <Card
+                      className="price-card shadow-lg p-4 mb-4"
+                      style={{
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        border: '1px solid #ddd',
+                      }}
+                    >
+                      <h1 className="text-center text-primary mb-4" style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+                        Lịch Trình và Giá Tour
+                      </h1>
                       <Card.Body>
-                        <Stack gap={2} direction="horizontal">
-                          <h1 className="font-bold mb-0 h2">
+                        {/* Date Selection */}
+                        <div className="mb-4">
+                          <div>
+                            <label htmlFor="tourDuration" style={{ fontSize: '1rem', fontWeight: '600' }}>
+                              Chọn Lịch Trình và Xem Giá:
+                            </label>
+                            <select
+                              id="tourDuration"
+                              className="form-select mt-2"
+                              style={{
+                                fontSize: '1rem',
+                                borderRadius: '8px',
+                                padding: '10px',
+                              }}
+                            >
+                              {tourPackage.durations.map((duration, index) => (
+                                <option key={index} value={index}>
+                                  {`${new Date(duration.start_date).toLocaleDateString("vi-VN", {
+                                    weekday: "long",
+                                    year: "numeric",
+                                    month: "long",
+                                    day: "numeric",
+                                  })} `}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+                        {/* Participant Types */}
+                        <div className="mb-3">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span className="fw-bold text-muted">Người lớn (>10 tuổi):
+                              <h1 className="font-bold mb-0 h2">
+                                {new Intl.NumberFormat("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                }).format(tourPackage.adult_price)}
+                              </h1>
+                            </span>
+                            <div className="d-flex align-items-center">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={() => setAdults(Math.max(adults - 1, 1))}
+                              >
+                                -
+                              </Button>
+                              <span className="mx-2">{adults}</span>
+                              <Button
+                                variant="outline-secondary"
+                                onClick={() => setAdults(adults + 1)}
+                              >
+                                +
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mb-3">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <span className="fw-bold text-muted">Trẻ em (2–10 tuổi):
+                              <h1 className="font-bold mb-0 h2">
+                                {new Intl.NumberFormat("vi-VN", {
+                                  style: "currency",
+                                  currency: "VND",
+                                }).format(tourPackage.pricechildren_price)}
+                              </h1>
+                            </span>
+                            <div className="d-flex align-items-center">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={() => setChildren(Math.max(children - 1, 0))}
+                              >
+                                -
+                              </Button>
+                              <span className="mx-2">{children}</span>
+                              <Button
+                                variant="outline-secondary"
+                                onClick={() => setChildren(children + 1)}
+                              >
+                                +
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                        {/* Total Price */}
+                        <div className="mt-4 text-center">
+                          <h5 className="text-muted mb-2" style={{ fontSize: '1rem' }}>
+                            Giá gốc
+                          </h5>
+                          <h1
+                            className="text-primary mb-3"
+                            style={{ fontSize: '2rem', fontWeight: 'bold' }}
+                          >
                             {new Intl.NumberFormat("vi-VN", {
                               style: "currency",
                               currency: "VND",
-                            }).format(tourPackage.price)}
+                            }).format(tourPackage.adult_price * adults + tourPackage.pricechildren_price * children)}
                           </h1>
-                          <span className="fs-4">/người</span>
-                        </Stack>
-
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                          <ListGroup horizontal>
-                            <ListGroup.Item className="border-0 me-2 fw-bold">
-                              {tourPackage.rating}
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-fill"></i>
-                            </ListGroup.Item>
-                            <ListGroup.Item className="border-0 me-1 text-warning">
-                              <i className="bi bi-star-half"></i>
-                            </ListGroup.Item>
-                          </ListGroup>
-                          <h5 className="h6"> {tourPackage.reviews}</h5>
                         </div>
 
-                        {tourPackage && tourPackage._id && (
-                          <NavLink
-                            to={`/booking${tourPackage._id}`}
-                            className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-                          >
-                            Đặt ngay
-                          </NavLink>
-                        )}
+                        {/* Booking Button */}
+                        <Button 
+                          className="w-100 fw-bold mt-4 mau"
+                         
+                          style={{
+                            fontSize: '1.1rem',
+                            padding: '10px',
+                          }}
+                        >
+                          Yêu cầu đặt
+                        </Button>
                       </Card.Body>
                     </Card>
 
-                    <Card className="card-info p-2 shadow-sm">
+                    {/* Card for support */}
+                    <Card
+                      className="support-card shadow-lg p-4 rounded-4"
+                      style={{
+                        backgroundColor: '#f8f9fa',
+                        borderRadius: '12px',
+                        border: '1px solid #e1e4e8',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                      }}
+                    >
                       <Card.Body>
-                        <h1 className="font-bold mb-2 h3">Cần trợ giúp?</h1>
-                        <ListGroup>
-                          <ListGroup.Item className="border-0">
-                            <i className="bi bi-telephone me-1"></i> Gọi cho
-                            chúng tôi <strong>+84 19001514</strong>
+                        <h3
+                          className="text-primary text-center mb-4"
+                          style={{
+                            fontSize: '1.4rem',
+                            fontWeight: '600',
+                            color: '#007bff',
+                            letterSpacing: '0.5px',
+                          }}
+                        >
+                          Cần trợ giúp?
+                        </h3>
+                        <ListGroup className="list-group-flush">
+                          <ListGroup.Item
+                            className="border-0 d-flex align-items-center py-3"
+                            style={{
+                              fontSize: '1rem',
+                              color: '#495057',
+                            }}
+                          >
+                            <i
+                              className="bi bi-telephone me-3"
+                              style={{
+                                color: '#007bff',
+                                fontSize: '1.5rem',
+                                transition: 'transform 0.3s ease',
+                              }}
+                            ></i>
+                            Gọi cho chúng tôi: <strong style={{ color: '#495057' }}>+84 19001514</strong>
                           </ListGroup.Item>
-                          <ListGroup.Item className="border-0">
-                            <i className="bi bi-envelope me-1"></i> Gửi email
-                            cho chúng tôi tại{" "}
-                            <strong>support@tourcompany.com</strong>
+                          <ListGroup.Item
+                            className="border-0 d-flex align-items-center py-3"
+                            style={{
+                              fontSize: '1rem',
+                              color: '#495057',
+                            }}
+                          >
+                            <i
+                              className="bi bi-envelope me-3"
+                              style={{
+                                color: '#007bff',
+                                fontSize: '1.5rem',
+                                transition: 'transform 0.3s ease',
+                              }}
+                            ></i>
+                            email: <strong style={{ color: '#495057' }}>support@tourcompany.com</strong>
                           </ListGroup.Item>
                         </ListGroup>
                       </Card.Body>
                     </Card>
+
                   </aside>
                 </Col>
               </Row>
