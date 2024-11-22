@@ -20,12 +20,11 @@ import axios from "axios";
 const TourDetails = () => {
   const { id } = useParams();
   const [tourPackage, setTourPackage] = useState(null);
-  const [adults, setAdults] = useState(1); // Default 2 adults
-  const [children, setChildren] = useState(0); // Default 0 children
-  const [infants, setInfants] = useState(0); // Default 0 infants
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0);
 
-  const pricePerAdult = 5590000; // Giá cho mỗi người lớn
-  const totalPrice = (adults * pricePerAdult) + 590000; // Tổng giá tour
+  const pricePerAdult = 5590000;
+  const totalPrice = adults * pricePerAdult + 590000;
   useEffect(() => {
     document.title = "Tour Details";
     window.scroll(0, 0);
@@ -62,12 +61,16 @@ const TourDetails = () => {
           <Row>
             <h1 className="fs-2 font-bold mb-4">{tourPackage.package_name}</h1>
 
-            {tourPackage?.groupImages?.length > 0 && (
+            {tourPackage?.image && tourPackage?.groupImages?.length > 0 && (
               <ImageGallery
-                items={tourPackage.groupImages.map((img) => ({
-                  original: img,
-                  thumbnail: img,
-                }))}
+                items={[
+                  // Thêm ảnh mặc định vào trước các ảnh nhóm
+                  { original: tourPackage.image, thumbnail: tourPackage.image },
+                  ...tourPackage.groupImages.map((img) => ({
+                    original: img,
+                    thumbnail: img,
+                  })),
+                ]}
                 showNav={false}
                 showBullets={false}
                 showPlayButton={false}
@@ -131,8 +134,8 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                            Array.isArray(tourPackage.durations) &&
-                            tourPackage.durations.length > 0 ? (
+                          Array.isArray(tourPackage.durations) &&
+                          tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
@@ -200,7 +203,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                  val.itinerary.length > 0 ? (
+                                val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}
@@ -240,92 +243,114 @@ const TourDetails = () => {
                           Bao gồm và loại trừ
                         </h1>
 
-                        {/* Extract Inclusions and Exclusions */}
-                        {(() => {
-                          const inclusionSection = tourPackage?.incAndExc
-                            ?.match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
-                            ?.trim();
+                        {/* Kiểm tra xem có trường incAndExc không */}
+                        {tourPackage?.incAndExc ? (
+                          <div>
+                            {/* Tách các phần Bao Gồm và Loại Trừ */}
+                            {(() => {
+                              const inclusionSection = tourPackage?.incAndExc
+                                .match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
+                                ?.trim();
 
-                          return (
-                            <>
-                              {inclusionSection ? (
-                                inclusionSection
-                                  .split("\n")
-                                  .map((line, index) => (
-                                    <ListGroup.Item
-                                      className="border-0 pt-0 body-text d-flex align-items-center"
-                                      key={index}
-                                    >
-                                      <i className="bi  me-2 text-success h4 m-0"></i>
-                                      {line.trim()}
-                                    </ListGroup.Item>
-                                  ))
-                              ) : (
-                                <p>No inclusions available</p>
-                              )}
-                            </>
-                          );
-                        })()}
+                              const exclusionSection = tourPackage?.incAndExc
+                                .match(/LOẠI TRỪ:(.*?)(BAO GỒM:|$)/s)?.[1]
+                                ?.trim();
+
+                              return (
+                                <>
+                                  {/* Inclusions */}
+                                  <div>
+                                    <h4 className="font-bold">Bao gồm</h4>
+                                    {inclusionSection ? (
+                                      inclusionSection
+                                        .split("\n")
+                                        .map((line, index) => (
+                                          <ListGroup.Item
+                                            className="border-0 pt-0 body-text d-flex align-items-center"
+                                            key={`inclusion-${index}`}
+                                          >
+                                            <i className="bi me-2 text-success h4 m-0"></i>
+                                            {line.trim()}
+                                          </ListGroup.Item>
+                                        ))
+                                    ) : (
+                                      <p>Không có nội dung nào được bao gồm</p>
+                                    )}
+                                  </div>
+
+                                  {/* Exclusions */}
+                                  <div>
+                                    <h4 className="font-bold">Loại trừ</h4>
+                                    {exclusionSection ? (
+                                      exclusionSection
+                                        .split("\n")
+                                        .map((line, index) => (
+                                          <ListGroup.Item
+                                            className="border-0 pt-0 body-text d-flex align-items-center"
+                                            key={`exclusion-${index}`}
+                                          >
+                                            <i className="bi me-2 text-danger h4 m-0"></i>
+                                            {line.trim()}
+                                          </ListGroup.Item>
+                                        ))
+                                    ) : (
+                                      <p>Không có nội dung nào bị loại trừ</p>
+                                    )}
+                                  </div>
+                                </>
+                              );
+                            })()}
+                          </div>
+                        ) : (
+                          <p>Không có thông tin Bao gồm và Loại trừ</p>
+                        )}
                       </div>
                     </Tab.Pane>
-
-                    {/* Location Tab */}
-                    {/* <Tab.Pane eventKey="4">
-                      <div className="tour_details">
-                        <h1 className="font-bold mb-4 h3 border-bottom pb-2">
-                          Vị trí
-                        </h1>
-                        <iframe
-                          src={`https://www.google.com/maps/embed/v1/place?q=${tourPackage?.locationId?.firstname}`}
-                          title="Location of the tour"
-                          width="100%"
-                          height="400px"
-                          allowFullScreen=""
-                          loading="lazy"
-                          referrerPolicy="no-referrer-when-downgrade"
-                        ></iframe>
-                      </div>
-                    </Tab.Pane> */}
                   </Tab.Content>
                 </Col>
-
-
 
                 {/* Price & Booking Info */}
                 <Col md={4}>
                   <aside>
-
                     {/* Card for pricing and participants */}
                     <Card
                       className="price-card shadow-lg p-4 mb-4"
                       style={{
-                        backgroundColor: '#fff',
-                        borderRadius: '8px',
-                        border: '1px solid #ddd',
+                        backgroundColor: "#fff",
+                        borderRadius: "8px",
+                        border: "1px solid #ddd",
                       }}
                     >
-                      <h1 className="text-center text-primary mb-4" style={{ fontSize: '1.8rem', fontWeight: 'bold' }}>
+                      <h1
+                        className="text-center text-primary mb-4"
+                        style={{ fontSize: "1.8rem", fontWeight: "bold" }}
+                      >
                         Lịch Trình và Giá Tour
                       </h1>
                       <Card.Body>
                         {/* Date Selection */}
                         <div className="mb-4">
                           <div>
-                            <label htmlFor="tourDuration" style={{ fontSize: '1rem', fontWeight: '600' }}>
+                            <label
+                              htmlFor="tourDuration"
+                              style={{ fontSize: "1rem", fontWeight: "600" }}
+                            >
                               Chọn Lịch Trình và Xem Giá:
                             </label>
                             <select
                               id="tourDuration"
                               className="form-select mt-2"
                               style={{
-                                fontSize: '1rem',
-                                borderRadius: '8px',
-                                padding: '10px',
+                                fontSize: "1rem",
+                                borderRadius: "8px",
+                                padding: "10px",
                               }}
                             >
                               {tourPackage.durations.map((duration, index) => (
                                 <option key={index} value={index}>
-                                  {`${new Date(duration.start_date).toLocaleDateString("vi-VN", {
+                                  {`${new Date(
+                                    duration.start_date
+                                  ).toLocaleDateString("vi-VN", {
                                     weekday: "long",
                                     year: "numeric",
                                     month: "long",
@@ -339,7 +364,8 @@ const TourDetails = () => {
                         {/* Participant Types */}
                         <div className="mb-3">
                           <div className="d-flex justify-content-between align-items-center">
-                            <span className="fw-bold text-muted">Người lớn (>10 tuổi):
+                            <span className="fw-bold text-muted">
+                              Người lớn (>10 tuổi):
                               <h1 className="font-bold mb-0 h2">
                                 {new Intl.NumberFormat("vi-VN", {
                                   style: "currency",
@@ -350,7 +376,9 @@ const TourDetails = () => {
                             <div className="d-flex align-items-center">
                               <Button
                                 variant="outline-secondary"
-                                onClick={() => setAdults(Math.max(adults - 1, 1))}
+                                onClick={() =>
+                                  setAdults(Math.max(adults - 1, 1))
+                                }
                               >
                                 -
                               </Button>
@@ -366,7 +394,8 @@ const TourDetails = () => {
                         </div>
                         <div className="mb-3">
                           <div className="d-flex justify-content-between align-items-center">
-                            <span className="fw-bold text-muted">Trẻ em (2–10 tuổi):
+                            <span className="fw-bold text-muted">
+                              Trẻ em (2–10 tuổi):
                               <h1 className="font-bold mb-0 h2">
                                 {new Intl.NumberFormat("vi-VN", {
                                   style: "currency",
@@ -377,7 +406,9 @@ const TourDetails = () => {
                             <div className="d-flex align-items-center">
                               <Button
                                 variant="outline-secondary"
-                                onClick={() => setChildren(Math.max(children - 1, 0))}
+                                onClick={() =>
+                                  setChildren(Math.max(children - 1, 0))
+                                }
                               >
                                 -
                               </Button>
@@ -393,27 +424,32 @@ const TourDetails = () => {
                         </div>
                         {/* Total Price */}
                         <div className="mt-4 text-center">
-                          <h5 className="text-muted mb-2" style={{ fontSize: '1rem' }}>
+                          <h5
+                            className="text-muted mb-2"
+                            style={{ fontSize: "1rem" }}
+                          >
                             Giá gốc
                           </h5>
                           <h1
                             className="text-primary mb-3"
-                            style={{ fontSize: '2rem', fontWeight: 'bold' }}
+                            style={{ fontSize: "2rem", fontWeight: "bold" }}
                           >
                             {new Intl.NumberFormat("vi-VN", {
                               style: "currency",
                               currency: "VND",
-                            }).format(tourPackage.adult_price * adults + tourPackage.pricechildren_price * children)}
+                            }).format(
+                              tourPackage.adult_price * adults +
+                                tourPackage.pricechildren_price * children
+                            )}
                           </h1>
                         </div>
 
                         {/* Booking Button */}
-                        <Button 
+                        <Button
                           className="w-100 fw-bold mt-4 mau"
-                         
                           style={{
-                            fontSize: '1.1rem',
-                            padding: '10px',
+                            fontSize: "1.1rem",
+                            padding: "10px",
                           }}
                         >
                           Yêu cầu đặt
@@ -425,20 +461,20 @@ const TourDetails = () => {
                     <Card
                       className="support-card shadow-lg p-4 rounded-4"
                       style={{
-                        backgroundColor: '#f8f9fa',
-                        borderRadius: '12px',
-                        border: '1px solid #e1e4e8',
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                        backgroundColor: "#f8f9fa",
+                        borderRadius: "12px",
+                        border: "1px solid #e1e4e8",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                       }}
                     >
                       <Card.Body>
                         <h3
                           className="text-primary text-center mb-4"
                           style={{
-                            fontSize: '1.4rem',
-                            fontWeight: '600',
-                            color: '#007bff',
-                            letterSpacing: '0.5px',
+                            fontSize: "1.4rem",
+                            fontWeight: "600",
+                            color: "#007bff",
+                            letterSpacing: "0.5px",
                           }}
                         >
                           Cần trợ giúp?
@@ -447,41 +483,46 @@ const TourDetails = () => {
                           <ListGroup.Item
                             className="border-0 d-flex align-items-center py-3"
                             style={{
-                              fontSize: '1rem',
-                              color: '#495057',
+                              fontSize: "1rem",
+                              color: "#495057",
                             }}
                           >
                             <i
                               className="bi bi-telephone me-3"
                               style={{
-                                color: '#007bff',
-                                fontSize: '1.5rem',
-                                transition: 'transform 0.3s ease',
+                                color: "#007bff",
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease",
                               }}
                             ></i>
-                            Gọi cho chúng tôi: <strong style={{ color: '#495057' }}>+84 19001514</strong>
+                            Gọi cho chúng tôi:{" "}
+                            <strong style={{ color: "#495057" }}>
+                              +84 19001514
+                            </strong>
                           </ListGroup.Item>
                           <ListGroup.Item
                             className="border-0 d-flex align-items-center py-3"
                             style={{
-                              fontSize: '1rem',
-                              color: '#495057',
+                              fontSize: "1rem",
+                              color: "#495057",
                             }}
                           >
                             <i
                               className="bi bi-envelope me-3"
                               style={{
-                                color: '#007bff',
-                                fontSize: '1.5rem',
-                                transition: 'transform 0.3s ease',
+                                color: "#007bff",
+                                fontSize: "1.5rem",
+                                transition: "transform 0.3s ease",
                               }}
                             ></i>
-                            email: <strong style={{ color: '#495057' }}>support@tourcompany.com</strong>
+                            email:{" "}
+                            <strong style={{ color: "#495057" }}>
+                              support@tourcompany.com
+                            </strong>
                           </ListGroup.Item>
                         </ListGroup>
                       </Card.Body>
                     </Card>
-
                   </aside>
                 </Col>
               </Row>

@@ -204,10 +204,11 @@ const getAllTourById = async (req, res) => {
 
     if (!tourPackage) {
       return res.status(404).json({ message: "Tour package not found." });
-    }
 
+    }
     res.status(200).json(tourPackage);
   } catch (error) {
+    
     console.error("Error fetching tour package by ID", error);
     res.status(500).json({ message: "Internal server error." });
   }

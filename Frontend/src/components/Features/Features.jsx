@@ -10,13 +10,12 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
 const Features = () => {
   var settings = {
     dots: false,
     infinite: true,
-    autoplay:false,
-    autoplaySpeed:1500,
+    autoplay: false,
+    autoplaySpeed: 1500,
     slidesToShow: 4,
     slidesToScroll: 1,
     
@@ -45,8 +44,8 @@ const Features = () => {
           slidesToShow: 2,
           slidesToScroll: 2,
           autoplay: true,
-          prevArrow:false,
-          nextArrow:false,
+          prevArrow: false,
+          nextArrow: false,
         },
       },
       {
@@ -54,8 +53,8 @@ const Features = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          prevArrow:false,
-          nextArrow:false,
+          prevArrow: false,
+          nextArrow: false,
         },
       },
     ],
@@ -65,33 +64,31 @@ const Features = () => {
     {
       id: 0,
       image: feature1,
-      title: "Discover the possibilities",
-      des: "With nearly half a million attractions, hotels & more, you're sure to find joy.",
+      title: "Khám phá những khả năng",
+      des: "Với gần nửa triệu điểm tham quan, khách sạn & hơn thế nữa, bạn chắc chắn sẽ tìm thấy niềm vui.",
     },
     {
       id: 1,
       image: feature2,
-      title: "Enjoy deals & delights",
-      des: "Quality activities. Great prices. Plus, earn credits to save more.",
+      title: "Tận hưởng các ưu đãi & niềm vui",
+      des: "Hoạt động chất lượng. Giá tốt. Thêm vào đó, kiếm được tín dụng để tiết kiệm thêm.",
     },
     {
       id: 2,
       image: feature3,
-      title: "Exploring made easyt",
-      des: "Book last minute, skip lines &amp; get free cancellation for easier exploring.",
+      title: "Khám phá dễ dàng",
+      des: "Đặt phòng vào phút cuối, bỏ qua hàng dài & được miễn phí hủy bỏ để khám phá dễ dàng hơn.",
     },
-
     {
       id: 3,
       image: feature4,
-      title: "Travel you can trust",
-      des: "Read reviews & get reliable customer support. We're with you at every step.",
+      title: "Du lịch đáng tin cậy",
+      des: "Đọc nhận xét và nhận sự hỗ trợ khách hàng đáng tin cậy. Chúng tôi luôn đồng hành cùng bạn từng bước.",
     },
   ];
 
   return (
     <>
-    
       <section className="feature-section">
         <Container>
           <Row>

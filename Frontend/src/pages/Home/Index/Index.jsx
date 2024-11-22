@@ -34,7 +34,9 @@ const Home = () => {
     };
     const fetchTourPackages = async () => {
       try {
-        const response = await axios.get('http://localhost:8001/api/tourPackage');
+        const response = await axios.get(
+          "http://localhost:8001/api/tourPackage"
+        );
         setTourPackages(response.data);
       } catch (error) {
         console.error("Error fetching tour packages:", error);
@@ -45,8 +47,6 @@ const Home = () => {
     fetchTourPackages();
   }, []);
 
-
-  
   return (
     <>
       <Banner />
@@ -60,7 +60,7 @@ const Home = () => {
           <Row>
             <Col md="12">
               <div className="main_heading">
-                <h1> Top Destination For Your Next Vacation </h1>
+                <h1> Điểm đến hàng đầu cho kỳ nghỉ tiếp theo của bạn </h1>
               </div>
             </Col>
           </Row>
@@ -84,7 +84,7 @@ const Home = () => {
           <Row>
             <Col md="12">
               <div className="main_heading">
-                <h1> Popular Activities </h1>
+                <h1> Tour du lịch phổ biến </h1>
               </div>
             </Col>
           </Row>
@@ -104,14 +104,14 @@ const Home = () => {
         <Container>
           <Row className="align-items-center">
             <Col md="8">
-              <h5 className="title">CALL TO ACTION</h5>
+              <h5 className="title">KÊU GỌI HÀNH ĐỘNG</h5>
               <h2 className="heading">
-                READY FOR UNFORGATABLE TRAVEL. REMEMBER US!
+                SẴN SÀNG CHO CHUYẾN DU LỊCH KHÔNG THỂ QUÊN. HÃY NHỚ CHÚNG TÔI!
               </h2>
               <p className="text">
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s,{" "}
+                Lorem Ipsum là văn bản giả được sử dụng trong ngành in ấn và tạo
+                kiểu chữ. Lorem Ipsum đã trở thành văn bản giả chuẩn của ngành
+                kể từ những năm 1500.
               </p>
             </Col>
             <Col md="4" className="text-center mt-3 mt-md-0">
@@ -120,7 +120,7 @@ const Home = () => {
                 className="secondary_btn bounce"
                 rel="no"
               >
-                Contact Us !
+                Liên hệ với chúng tôi!
               </a>
             </Col>
           </Row>
@@ -133,7 +133,7 @@ const Home = () => {
           <Row>
             <Col md="12">
               <div className="main_heading">
-                <h1>Photo Gallery </h1>
+                <h1>Thư viện ảnh</h1>{" "}
               </div>
             </Col>
           </Row>

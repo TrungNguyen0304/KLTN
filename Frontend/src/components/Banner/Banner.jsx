@@ -2,7 +2,7 @@ import React from "react";
 import { Carousel } from "react-bootstrap";
 import sliderImg from "../../assets/images/slider/1.png";
 import sliderImg1 from "../../assets/images/slider/2.png";
-import "../Banner/banner.css"
+import "../Banner/banner.css";
 
 const Banner = () => {
   return (
@@ -14,12 +14,10 @@ const Banner = () => {
             <Carousel.Caption>
               <div className="slider_des">
                 <h5 className="heading">
-                  JOURNEY TO <span>EXPLORE WORLD</span>
+                  HÀNH TRÌNH KHÁM PHÁ <span>THẾ GIỚI</span>
                 </h5>
                 <p className="sub_text">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s,
+                  Lorem Ipsum là văn bản giả được sử dụng trong ngành in ấn và tạo kiểu chữ. Lorem Ipsum đã trở thành văn bản giả chuẩn của ngành kể từ những năm 1500.
                 </p>
               </div>
             </Carousel.Caption>
@@ -30,12 +28,10 @@ const Banner = () => {
             <Carousel.Caption>
               <div className="slider_des">
                 <h5 className="heading">
-                  BEAUTIFUL PLACE <span>TO VISIT</span>
+                  ĐỊA ĐIỂM XINH ĐẸP <span>ĐỂ THAM QUAN</span>
                 </h5>
                 <p className="sub_text">
-                  Lorem Ipsum is simply dummy text of the printing and
-                  typesetting industry. Lorem Ipsum has been the industry's
-                  standard dummy text ever since the 1500s,
+                  Lorem Ipsum là văn bản giả được sử dụng trong ngành in ấn và tạo kiểu chữ. Lorem Ipsum đã trở thành văn bản giả chuẩn của ngành kể từ những năm 1500.
                 </p>
               </div>
             </Carousel.Caption>
