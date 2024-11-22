@@ -12,6 +12,8 @@ const UpdateDestination = () => {
     const [state, setState] = useState('');
     const [locationId, setLocationId] = useState('');
     const [locations, setLocations] = useState([]);
+   
+    
     const navigate = useNavigate();
 
     // Fetch data for the destination and locations
@@ -26,7 +28,7 @@ const UpdateDestination = () => {
                 setDescription(data.Description);
                 setState(data.state || '');
                 setCurrentImage(data.Images); // URL ảnh hiện tại
-                setLocationId(data.locationId || '');
+                setLocationId(data.locationId ? data.locationId._id : ''); // Set 
 
             } catch (error) {
                 console.error("Lỗi khi lấy dữ liệu địa danh:", error);

@@ -28,7 +28,6 @@ const createTourGuide = async (req, res) => {
   }
 };
 // Api delete Tourguide
-
 const deleteTourGuide = async (req, res) => {
   const { id } = req.params;
   try {

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import { Col, Container, Form, Row, Card, ListGroup } from "react-bootstrap";
 import DatePicker from "react-datepicker";
@@ -8,10 +8,10 @@ const Booking = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-  useEffect(()=>{
-    document.title ="Page Name  "
+  useEffect(() => {
+    document.title = "Page Name  "
     window.scroll(0, 0)
-  },[])
+  }, [])
 
   return (
     <>
@@ -22,7 +22,8 @@ const Booking = () => {
             <Col md="8" lg="8">
               <div className="booking-form-warp border rounded-3">
                 <div className="form-title px-4 border-bottom py-3">
-                  <h3 className="h4 font-bold m-0"> Your Details</h3>
+                  <h3 className="h4 font-bold m-0">
+                    Thông tin chi tiết của bạn</h3>
                 </div>
 
                 <Form className="p-4">
@@ -33,11 +34,11 @@ const Booking = () => {
                       controlId="firstname"
                       className="mb-4"
                     >
-                      <Form.Label>First name</Form.Label>
+                      <Form.Label>Tên</Form.Label>
                       <Form.Control
                         required
                         type="text"
-                        placeholder="First name"
+                        placeholder="Nhập tên"
                       />
                     </Form.Group>
 
@@ -47,11 +48,11 @@ const Booking = () => {
                       controlId="lastname"
                       className="mb-4"
                     >
-                      <Form.Label>Last name</Form.Label>
+                      <Form.Label>Họ</Form.Label>
                       <Form.Control
                         required
                         type="text"
-                        placeholder="Last name"
+                        placeholder="Nhập họ"
                       />
                     </Form.Group>
 
@@ -61,7 +62,7 @@ const Booking = () => {
                       as={Col}
                       md="6"
                     >
-                      <Form.Label>Email address</Form.Label>
+                      <Form.Label>Email</Form.Label>
                       <Form.Control
                         type="email"
                         placeholder="name@example.com"
@@ -74,8 +75,22 @@ const Booking = () => {
                       as={Col}
                       md="6"
                     >
-                      <Form.Label>Phone Number</Form.Label>
-                      <Form.Control type="text" placeholder="Phone Number" />
+                      <Form.Label>Số điên thoại</Form.Label>
+                      <Form.Control type="text" placeholder="Nhập số đth" />
+                    </Form.Group>
+
+                    <Form.Group
+                      as={Col}
+                      md="6"
+                      controlId="special_requests"
+                      className="mb-4"
+                    >
+                      <Form.Label>yêu cầu đặc biệt</Form.Label>
+                      <Form.Control
+                        required
+                        type="text"
+                        placeholder="VD: ăn chay, bị dị ứng, người lớn tuôi..."
+                      />
                     </Form.Group>
 
                     <Form.Group

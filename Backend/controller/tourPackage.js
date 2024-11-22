@@ -8,7 +8,7 @@ const createTour = async (req, res) => {
   try {
     const image = req.files && req.files['image'] ? req.files['image'][0].path : "";
     const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : [];
-    const { package_name, description, price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
+    const { package_name, description, adult_price,pricechildren_price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
 
     let parsedDurations = durations;
     if (typeof durations === 'string') {
@@ -28,7 +28,8 @@ const createTour = async (req, res) => {
     const newTour = new TourPackage({
       package_name,
       description,
-      price,
+      adult_price,
+      pricechildren_price,
       image,
       durations: parsedDurations,
       destinationId,
@@ -116,7 +117,7 @@ const editTour = async (req, res) => {
   try {
     const image = req.files && req.files['image'] ? req.files['image'][0].path : "";
     const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : [];
-    const { package_name, description, price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
+    const { package_name, description, adult_price, pricechildren_price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
 
     let parsedDurations = durations;
     if (typeof durations === 'string') {
@@ -139,7 +140,8 @@ const editTour = async (req, res) => {
 
     tour.package_name = package_name || tour.package_name;
     tour.description = description || tour.description;
-    tour.price = price || tour.price;
+    tour.adult_price = adult_price || tour.adult_price;
+    tour.pricechildren_price = pricechildren_price || tour.pricechildren_price;
     tour.durations = parsedDurations || tour.durations;
     tour.destinationId = destinationId || tour.destinationId;
     tour.tourGuideId = tourGuideId || tour.tourGuideId;

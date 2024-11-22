@@ -100,7 +100,7 @@ const IndexTour = () => {
                 </div>
                 <div className="tour-price mb-2">
                   <span className="original-price">{(tour.originalPrice || 0).toLocaleString('vi-VN')}₫</span>
-                  <span>{(tour.price || 0).toLocaleString('vi-VN')}₫</span>
+                  <span>{(tour.adult_price || 0).toLocaleString('vi-VN')}₫</span>
                 </div>
               </Card.Body>
             </Card>

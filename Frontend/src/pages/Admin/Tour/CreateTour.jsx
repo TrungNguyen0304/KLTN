@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 const CreateTour = () => {
     const [package_name, setPackageName] = useState('');
-    const [price, setPrice] = useState('');
+    const [adult_price, setAdult_price] = useState('');
+    const [pricechildren_price, setPricechildren_price] = useState('');
     const [incAndExc, setIncAndExc] = useState('');
     const [description, setDescription] = useState('');
     const [groupImages, setGroupImages] = useState([]); // Store group images as file objects
@@ -76,7 +77,8 @@ const CreateTour = () => {
         formData.append("package_name", package_name);
         formData.append("description", description);
         formData.append("incAndExc", incAndExc);
-        formData.append("price", price);
+        formData.append("adult_price", adult_price);
+        formData.append("pricechildren_price", pricechildren_price);
         formData.append("durations", JSON.stringify(selectedDurations)); // Send durations as JSON string
         formData.append("destinationId", destinationId);
         formData.append("tourGuideId", tourGuideId);
@@ -104,7 +106,7 @@ const CreateTour = () => {
                 alert("Gói tour đã được tạo thành công!");
                 console.log(result);
                 navigate("/tour");
-                
+
             } else {
                 alert(result.message || "Có lỗi xảy ra.");
             }
@@ -122,21 +124,32 @@ const CreateTour = () => {
                     <div className="form-row">
                         <div className="form-group">
                             <label htmlFor="packagename">Tên Tour</label>
-                            <input
+                            <textarea
                                 id="packagename"
                                 type="text"
+                                rows="2"
                                 value={package_name}
                                 onChange={(e) => setPackageName(e.target.value)}
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="price">Giá</label>
+                            <label htmlFor="price">Giá người lớn</label>
                             <input
-                                id="price"
+                                id="adult_price"
                                 type="number"
-                                value={price}
-                                onChange={(e) => setPrice(e.target.value)}
+                                value={adult_price}
+                                onChange={(e) => setAdult_price(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="price">giá trẻ em</label>
+                            <input
+                                id="pricechildren_price"
+                                type="number"
+                                value={pricechildren_price}
+                                onChange={(e) => setPricechildren_price(e.target.value)}
                                 required
                             />
                         </div>
