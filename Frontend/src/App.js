@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import Index from "./pages/Home/Index/Index"
+import Index from "./pages/Home/Index/Index";
 import Profile from "./components/Profile/Profile";
 import About from "./pages/Home/About/About";
 import Contact from "./pages/Home/Contact/Contact";
@@ -21,7 +21,7 @@ import CreateDestination from "./pages/Admin/Destinations/CreateDestination";
 import UpdateDestination from "./pages/Admin/Destinations/UpdateDestination";
 import CreateUser from "./pages/Admin/User/CreateUser";
 import EditUser from "./pages/Admin/User/EditUser";
-import IndexLocation from "./pages/Admin/Location/IndexLocation"
+import IndexLocation from "./pages/Admin/Location/IndexLocation";
 import CreateLocation from "./pages/Admin/Location/CreateLocation";
 import EditLocation from "./pages/Admin/Location/EditLocation";
 
@@ -37,12 +37,11 @@ import IndexDuration from "./pages/Admin/duration/IndexDuration";
 import CreateDuration from "./pages/Admin/duration/CreateDuration";
 import EditDuration from "./pages/Admin/duration/EditDuration";
 // </>
-import MainLayout from "./layouts/MainLayout"; 
-import AdminLayout from "./layouts/AdminLayout"; 
-import Dashboard from "./pages/Admin/Dashboard"
-import NoFooterLayout from "./layouts/NoFooterLayout"; 
+import MainLayout from "./layouts/MainLayout";
+import AdminLayout from "./layouts/AdminLayout";
+import Dashboard from "./pages/Admin/Dashboard";
+import NoFooterLayout from "./layouts/NoFooterLayout";
 function App() {
-
   return (
     <>
       <Routes>
@@ -52,13 +51,13 @@ function App() {
           <Route path="about-us" element={<About />} />
           <Route path="contact-us" element={<Contact />} />
           <Route path="tours" element={<Tours />} />
-          <Route path="/tour-details/:id" element={<TourDetails/>} />
-          <Route path="booking" element={<Booking />} />
+          <Route path="/tour-details/:id" element={<TourDetails />} />
+          <Route path="/booking/:id" element={<Booking />} />
+          <Route path="booking/:id" element={<Booking />} />
           <Route path="destinations" element={<Destinations />} />
           <Route path="/destination/:id" element={<DestinationDetails />} />
-          
+
           <Route path="gallery" element={<PhotoGallery />} />
-  
         </Route>
         {/* Các route cho layout admin */}
         <Route element={<AdminLayout />}>
@@ -68,23 +67,24 @@ function App() {
           <Route path="user/update/:id" element={<EditUser />} />
           <Route path="destination" element={<IndexDestination />} />
           <Route path="destination/create" element={<CreateDestination />} />
-          <Route path="/destination/update/:id" element={<UpdateDestination />} />
+          <Route
+            path="/destination/update/:id"
+            element={<UpdateDestination />}
+          />
           <Route path="location" element={<IndexLocation />} />
           <Route path="location/create" element={<CreateLocation />} />
           <Route path="/location/update/:id" element={<EditLocation />} />
 
           <Route path="tour" element={<IndexTour />} />
           <Route path="tour/create" element={<CreateTour />} />
-          <Route path="tour/update/:id" element={< EditTour/>} />
+          <Route path="tour/update/:id" element={<EditTour />} />
           <Route path="tourGuide" element={<IndexTourGuide />} />
           <Route path="tourGuide/create" element={<CreateTourGuide />} />
           <Route path="tourGuide/update/:id" element={<EditTourGuide />} />
           <Route path="duration" element={<IndexDuration />} />
           <Route path="duration/create" element={<CreateDuration />} />
           <Route path="/duration/update/:id" element={<EditDuration />} />
-         
         </Route>
-
 
         {/* Routes for NoFooterLayout (for login, register, and profile) */}
         <Route element={<NoFooterLayout />}>
@@ -93,10 +93,8 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="/notifications/:id" element={<NotificationDetail />} />
-
-          </Route>
+        </Route>
       </Routes>
-
     </>
   );
 }

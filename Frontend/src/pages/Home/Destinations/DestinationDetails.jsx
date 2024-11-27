@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 const DestinationDetails = () => {
   const { id } = useParams();
   const [destination, setDestination] = useState(null);
+  const formatPrice = (price) => (typeof price === "number" ? price.toFixed(2) : "N/A");
 
   // Hàm fetch data từ API
   const fetchDestinationDetails = async (destinationId) => {
@@ -32,7 +33,6 @@ const DestinationDetails = () => {
     const nights = diffDays - 1; // Số đêm sẽ ít hơn số ngày đúng 1
     return `${diffDays} ngày ${nights > 0 ? nights + " đêm" : ""}`;
   };
-  
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -72,8 +72,7 @@ const DestinationDetails = () => {
                           </span>
                           <span>/</span>
                           <span>
-                            {destination.DestinationName ||
-                              "Unknown Location"}
+                            {destination.DestinationName || "Unknown Location"}
                           </span>
                         </span>
                       </Card.Text>
@@ -122,9 +121,9 @@ const DestinationDetails = () => {
 
                     <Card.Footer className="py-4">
                       {/* Price & Discount */}
-                      {val.price ? (
+                      {val.adult_price ? (
                         <p className="text-decoration-line-through">
-                          ${val.price.toFixed(2)}
+                          ${formatPrice(val.adult_price)}
                         </p>
                       ) : null}
 
@@ -137,8 +136,8 @@ const DestinationDetails = () => {
                           From{" "}
                           <b>
                             {val.afterDiscount
-                              ? val.afterDiscount.toFixed(2)
-                              : val.price?.toFixed(2)}
+                              ? formatPrice(val.afterDiscount)
+                              : formatPrice(val.adult_price)}
                           </b>
                         </p>
 

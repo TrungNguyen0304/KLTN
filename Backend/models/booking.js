@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 const bookingSchema = new mongoose.Schema(
   {
-    userid: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    packageid: {
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    packageId: {
       type: Schema.Types.ObjectId,
       ref: "TourPackage",
       required: true,

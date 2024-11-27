@@ -2,26 +2,53 @@ const TourPackage = require("../models/tourPackage");
 const Destination = require("../models/destination");
 
 const Duration = require("../models/duration");
-const mongoose = require('mongoose');  // Make sure mongoose is imported
+const mongoose = require("mongoose"); // Make sure mongoose is imported
 
 const createTour = async (req, res) => {
   try {
-    const image = req.files && req.files['image'] ? req.files['image'][0].path : "";
-    const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : [];
-    const { package_name, description, adult_price,pricechildren_price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
+    const image =
+      req.files && req.files["image"] ? req.files["image"][0].path : "";
+    const groupImages =
+      req.files && req.files["groupImages"]
+        ? req.files["groupImages"].map((file) => file.path)
+        : [];
+    const {
+      package_name,
+      description,
+      adult_price,
+      pricechildren_price,
+      durations,
+      destinationId,
+      tourGuideId,
+      locationId,
+      incAndExc,
+    } = req.body;
 
     let parsedDurations = durations;
-    if (typeof durations === 'string') {
+    if (typeof durations === "string") {
       parsedDurations = JSON.parse(durations);
     }
 
     if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
-      return res.status(400).json({ message: "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng." });
+      return res
+        .status(400)
+        .json({
+          message:
+            "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng.",
+        });
     }
 
-    const invalidDurations = parsedDurations.filter(id => !mongoose.Types.ObjectId.isValid(id));
+    const invalidDurations = parsedDurations.filter(
+      (id) => !mongoose.Types.ObjectId.isValid(id)
+    );
     if (invalidDurations.length > 0) {
-      return res.status(400).json({ message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(', ')}` });
+      return res
+        .status(400)
+        .json({
+          message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
+            ", "
+          )}`,
+        });
     }
 
     // Tạo một instance mới của TourPackage
@@ -36,7 +63,7 @@ const createTour = async (req, res) => {
       tourGuideId,
       locationId,
       incAndExc,
-      groupImages
+      groupImages,
     });
 
     // Lưu tour mới vào cơ sở dữ liệu
@@ -61,7 +88,7 @@ const createTour = async (req, res) => {
     return res.status(201).json({
       message: "Tour package created successfully!",
       tour: {
-        _id: newTour._id,  // Bao gồm ID của tour mới
+        _id: newTour._id, // Bao gồm ID của tour mới
         package_name: newTour.package_name,
         description: newTour.description,
         price: newTour.price,
@@ -71,36 +98,35 @@ const createTour = async (req, res) => {
         destinationId: newTour.destinationId,
         tourGuideId: newTour.tourGuideId,
         locationId: newTour.locationId,
-        incAndExc: newTour.incAndExc
-      }
+        incAndExc: newTour.incAndExc,
+      },
     });
   } catch (error) {
     console.error("Error creating tour:", error);
-    return res.status(500).json({ message: "Đã xảy ra lỗi trong quá trình tạo tour.", error: error.message });
+    return res
+      .status(500)
+      .json({
+        message: "Đã xảy ra lỗi trong quá trình tạo tour.",
+        error: error.message,
+      });
   }
 };
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
   const { id } = req.params;
 
-  // Validate if the provided ID is a valid ObjectId
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(400).json({ message: "ID không hợp lệ" }); // Invalid ID
+    return res.status(400).json({ message: "ID không hợp lệ" });
   }
-
   try {
-    // Find the tour package by ID and delete it
     const deleteTour = await TourPackage.findByIdAndDelete(id);
 
     if (!deleteTour) {
-      console.log("Tour not found with ID:", id); // Add logging
+      console.log("Tour not found with ID:", id);
       return res.status(404).json({ message: "Gói tour không tồn tại" });
     }
-
-    // Success response
     res.status(200).json({ message: "Gói tour đã được xóa thành công" });
   } catch (error) {
-    // Log the error for debugging purposes
     console.error("Lỗi khi xóa gói tour:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
   }
@@ -113,24 +139,49 @@ const editTour = async (req, res) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "ID không hợp lệ" });
   }
-
   try {
-    const image = req.files && req.files['image'] ? req.files['image'][0].path : "";
-    const groupImages = req.files && req.files["groupImages"] ? req.files["groupImages"].map((file) => file.path) : [];
-    const { package_name, description, adult_price, pricechildren_price, durations, destinationId, tourGuideId, locationId, incAndExc } = req.body;
+    const image =
+      req.files && req.files["image"] ? req.files["image"][0].path : "";
+    const groupImages =
+      req.files && req.files["groupImages"]
+        ? req.files["groupImages"].map((file) => file.path)
+        : [];
+    const {
+      package_name,
+      description,
+      adult_price,
+      pricechildren_price,
+      durations,
+      destinationId,
+      tourGuideId,
+      locationId,
+      incAndExc,
+    } = req.body;
 
     let parsedDurations = durations;
-    if (typeof durations === 'string') {
+    if (typeof durations === "string") {
       parsedDurations = JSON.parse(durations);
     }
-
     if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
-      return res.status(400).json({ message: "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng." });
+      return res
+        .status(400)
+        .json({
+          message:
+            "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng.",
+        });
     }
 
-    const invalidDurations = parsedDurations.filter(id => !mongoose.Types.ObjectId.isValid(id));
+    const invalidDurations = parsedDurations.filter(
+      (id) => !mongoose.Types.ObjectId.isValid(id)
+    );
     if (invalidDurations.length > 0) {
-      return res.status(400).json({ message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(', ')}` });
+      return res
+        .status(400)
+        .json({
+          message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
+            ", "
+          )}`,
+        });
     }
 
     const tour = await TourPackage.findById(id);
@@ -157,17 +208,23 @@ const editTour = async (req, res) => {
       { $set: { tourPackageId: id } }
     );
 
-    return res.status(200).json({ message: "Gói tour đã được cập nhật thành công", tour });
+    return res
+      .status(200)
+      .json({ message: "Gói tour đã được cập nhật thành công", tour });
   } catch (error) {
     console.error("Lỗi khi cập nhật gói tour:", error);
-    return res.status(500).json({ message: "Đã xảy ra lỗi trong quá trình cập nhật gói tour", error: error.message });
+    return res
+      .status(500)
+      .json({
+        message: "Đã xảy ra lỗi trong quá trình cập nhật gói tour",
+        error: error.message,
+      });
   }
 };
 
 // API get all tourPacket
 const getAllTour = async (req, res) => {
   try {
-
     const tourpackages = await TourPackage.find({})
       .populate("destinationId", "DestinationName")
       .populate("tourGuideId")
@@ -175,7 +232,7 @@ const getAllTour = async (req, res) => {
       .populate({
         path: "durations",
         select: "itinerary start_date end_date durationText",
-        options: { virtuals: true }
+        options: { virtuals: true },
       })
       .exec();
 
@@ -198,14 +255,13 @@ const getAllTourById = async (req, res) => {
       .populate({
         path: "durations",
         select: "itinerary start_date end_date durationText",
-        options: { virtuals: true }
+        options: { virtuals: true },
       })
       .exec();
 
     if (!tourPackage) {
       return res.status(404).json({ message: "Tour package not found." });
     }
-
     res.status(200).json(tourPackage);
   } catch (error) {
     console.error("Error fetching tour package by ID", error);
@@ -237,5 +293,5 @@ module.exports = {
   editTour,
   getAllTour,
   getAllTourById,
-  countTourByDestination
+  countTourByDestination,
 };

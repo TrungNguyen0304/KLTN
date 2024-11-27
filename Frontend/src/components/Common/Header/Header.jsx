@@ -88,7 +88,7 @@ const Header = () => {
             show={open}
           >
             <Offcanvas.Header>
-              <h1 className="logo">Weekendmonks</h1>
+              <h1 className="logo"></h1>
               <span className="navbar-toggler ms-auto" onClick={toggleMenu}>
                 <i className="bi bi-x-lg"></i>
               </span>
@@ -96,13 +96,13 @@ const Header = () => {
             <Offcanvas.Body>
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 <NavLink className="nav-link" to="/">
-                  Home
+                  TRang chủ
                 </NavLink>
                 <NavLink className="nav-link" to="/about-us">
-                  ABOUT US
+                GIỚI THIỆU
                 </NavLink>
                 <NavLink className="nav-link" to="/tours">
-                  TOURS
+                DU LỊCH
                 </NavLink>
 
                 {/* Destination Dropdown */}
@@ -112,7 +112,7 @@ const Header = () => {
                       to="/destinations"
                       style={{ textDecoration: "none" }}
                     >
-                      DESTINATION
+                      ĐIỂM ĐẾN
                     </NavLink>
                   }
                 >
@@ -122,7 +122,7 @@ const Header = () => {
                         <NavLink
                           key={destination._id}
                           className="nav-link text-dark"
-                          to={`/destination/${destination._id}`} // Sử dụng destination._id
+                          to={`/destination/${destination._id}`} 
                         >
                           {destination.DestinationName}
                         </NavLink>
@@ -142,15 +142,15 @@ const Header = () => {
                       </div>
                     ))
                   ) : (
-                    <p>Loading destinations...</p>
+                    <p>Đang tải điểm đến...</p>
                   )}
                 </NavDropdown>
 
                 <NavLink className="nav-link" to="/gallery">
-                  GALLERY
+                PHÒNG TRƯNG BÀY
                 </NavLink>
                 <NavLink className="nav-link" to="/contact-us">
-                  CONTACT
+                LIÊN HỆ
                 </NavLink>
               </Nav>
             </Offcanvas.Body>
@@ -179,10 +179,10 @@ const Header = () => {
                 title={<FaUserCircle className="user-icon-header" />}
               >
                 <NavDropdown.Item onClick={() => navigate("/profile")}>
-                  <FaUserCircle className="user-icon" /> My Profile
+                  <FaUserCircle className="user-icon" /> Hồ sơ của tôi
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={() => navigate("/my-bookings")}>
-                  <FaHistory className="user-icon" /> My Bookings
+                  <FaHistory className="user-icon" /> Đặt chỗ của tôi
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>
                   <FaSignOutAlt className="user-icon" /> Đăng xuất

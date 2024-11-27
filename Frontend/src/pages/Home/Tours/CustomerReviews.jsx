@@ -4,18 +4,30 @@ const CustomerReviews = () => {
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        // Fetch reviews from the backend
         const fetchReviews = async () => {
             try {
-                const response = await fetch('http://localhost:8001/api/review'); // Adjust the URL as needed
+                const response = await fetch('http://localhost:8001/api/review'); 
                 const data = await response.json();
-                setReviews(data);
+
+                // Ensure the data is an array before setting state
+                if (Array.isArray(data)) {
+                    setReviews(data);
+                } else {
+                    console.error("Received data is not an array", data);
+                }
             } catch (error) {
                 console.error('Error fetching reviews:', error);
             }
         };
+
         fetchReviews();
     }, []);
+
+    // Format the createdAt date
+    const formatDate = (date) => {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return new Date(date).toLocaleDateString(undefined, options);
+    };
 
     return (
         <div className="tour_details">
@@ -44,14 +56,14 @@ const CustomerReviews = () => {
                             </div>
                             <div className="review-content">
                                 <p className="review-name">
-                                    {review.name} {/* Add user icon next to name */}
-                                    <span className="review-date">{review.createdAt}</span>
+                                    {review.name || 'Anonymous'} {/* Handle missing name */}
+                                    <span className="review-date">{formatDate(review.createdAt)}</span>
                                 </p>
                                 <div className="review-rating">
-                                    <span className="rating-box1">{review.rating}</span>
-                                    <span className="rating-text text-success">{review.ratingDescription}</span>
+                                    <span className="rating-box1">{review.rating || 'N/A'}</span> {/* Handle missing rating */}
+                                    <span className="rating-text text-success">{review.ratingDescription || 'No description'}</span>
                                 </div>
-                                <p className="review-comment">"{review.feedback}"</p>
+                                <p className="review-comment">"{review.feedback || 'No feedback provided'}"</p>
                             </div>
                         </li>
                     ))}

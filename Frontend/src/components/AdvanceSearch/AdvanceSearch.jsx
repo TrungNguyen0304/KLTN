@@ -11,12 +11,12 @@ const AdvanceSearch = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-  const selectedLocation =(value)=>{
-    console.log("Location", value)
+  const selectedLocation =(value)=>{ // Hàm xử lý khi chọn địa điểm
+    console.log("Địa điểm:", value)
   }
 
-  const selectedGuest =(value)=>{
-    console.log("Guest ", value)
+  const selectedGuest =(value)=>{ // Hàm xử lý khi chọn số lượng khách
+    console.log("Khách:", value)
   }
 
   return (
@@ -27,9 +27,9 @@ const AdvanceSearch = () => {
             <Col md={12} xs={12}>
               <div className="box-search shadow-sm">
                 <div className="item-search">
-                  {/*  Using Props to Pass Data */}
+                  {/*  Sử dụng Props để truyền dữ liệu */}
                   <CustomDropdown
-                    label="Location"
+                    label="Địa điểm"
                     onSelect={selectedLocation}
                     options={[
                       "USA, Turkish",
@@ -41,19 +41,18 @@ const AdvanceSearch = () => {
                   />
                 </div>
                 <div className="item-search item-search-2">
-                  <label className="item-search-label"> Check in </label>
+                  <label className="item-search-label"> Nhận phòng </label>
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
                     selectsStart
                     startDate={startDate}
                     endDate={endDate}
-                   
                     dateFormat="dd, MMMM, yyyy"
                   />
                 </div>
                 <div className="item-search item-search-2">
-                  <label className="item-search-label"> Check Out </label>
+                  <label className="item-search-label"> Trả phòng </label>
                   <DatePicker
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
@@ -65,18 +64,18 @@ const AdvanceSearch = () => {
                 </div>
                 <div className="item-search bd-none">
                   <CustomDropdown
-                    label="Guest"
+                    label="Khách"
                     onSelect={selectedGuest}
                     options={[
-                      "2 adults, 1 children",
-                      "	2 adults, 1 children",
-                      "2 adults, 3 children",
+                      "2 người lớn, 1 trẻ em",
+                      "2 người lớn, 1 trẻ em",
+                      "2 người lớn, 3 trẻ em",
                     ]}
                   />
                 </div>
                 <div className="item-search bd-none">
                     <Button className="primaryBtn flex-even d-flex justify-content-center">
-                    <i className="bi bi-search me-2"></i> Search 
+                    <i className="bi bi-search me-2"></i> Tìm kiếm
                     </Button>
 
                 </div>

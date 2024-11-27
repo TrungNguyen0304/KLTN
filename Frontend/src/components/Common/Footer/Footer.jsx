@@ -25,7 +25,7 @@ const Footer = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", toggleVisible);
-      // Cleanup the event listener on component unmount
+      // Dọn dẹp sự kiện khi component bị gỡ bỏ
       return () => window.removeEventListener("scroll", toggleVisible);
     }
   }, []);
@@ -36,58 +36,58 @@ const Footer = () => {
         <Container>
           <Row>
             <Col md="3" sm="12" className="quick_link mt-3 mt-md-0 ">
-              <h4 className="mt-lg-0 mt-sm-3">Company</h4>
+              <h4 className="mt-lg-0 mt-sm-3">Công Ty</h4>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <NavLink to="/">About Us</NavLink>
+                  <NavLink to="/">Về Chúng Tôi</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">News</NavLink>
+                  <NavLink to="/">Tin Tức</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">Faq</NavLink>
+                  <NavLink to="/">Câu Hỏi Thường Gặp</NavLink>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col md="3" sm="12" className="quick_link mt-3 mt-md-0 ">
-              <h4 className="mt-lg-0 mt-sm-3">Explore</h4>
+              <h4 className="mt-lg-0 mt-sm-3">Khám Phá</h4>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <NavLink to="/"> Faq</NavLink>
+                  <NavLink to="/">Câu Hỏi Thường Gặp</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">Tour Listings</NavLink>
+                  <NavLink to="/">Danh Sách Tour</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/"> Destination</NavLink>
+                  <NavLink to="/">Điểm Đến</NavLink>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col md="3" sm="12" className="quick_link mt-3 mt-md-0 ">
-              <h4 className="mt-lg-0 mt-sm-3">Quick Link</h4>
+              <h4 className="mt-lg-0 mt-sm-3">Liên Kết Nhanh</h4>
               <ListGroup variant="flush">
                 <ListGroup.Item>
-                  <NavLink to="/"> Home</NavLink>
+                  <NavLink to="/">Trang Chủ</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/">About Us</NavLink>
+                  <NavLink to="/">Về Chúng Tôi</NavLink>
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <NavLink to="/"> Contact Us</NavLink>
+                  <NavLink to="/">Liên Hệ</NavLink>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
             <Col md="3" sm="12" className="location mt-3 mt-md-0 ">
-              <h4 className="mt-lg-0 mt-sm-3">Contact Info</h4>
+              <h4 className="mt-lg-0 mt-sm-3">Thông Tin Liên Hệ</h4>
 
               <div className="d-flex align-items-center">
-                <p className="pb-2">Dehradun, Uttarakhand, India</p>
+                <p className="pb-2"> Thừa Thiên Huế, Viêt Nam</p>
               </div>
 
               <div className="d-flex align-items-top my-2">
                 <i className="bi bi-geo-alt me-3"></i>
-                <a target="_blank" rel="noopener noreferrer" href="mailto:rawatcoder@gmail.com" className="d-block">
-                  rawatcoder@gmail.com
+                <a target="_blank" rel="noopener noreferrer" href="mailto:Build@gmail.com" className="d-block">
+                  Build@gmail.com
                 </a>
               </div>
               <div className="d-flex align-items-top ">
@@ -100,7 +100,7 @@ const Footer = () => {
           </Row>
           <Row className="py-2 bdr mt-3">
             <Col className="col copyright">
-              <p className="text-light">@ 2024. rawatcoder All rights reserved</p>
+              <p className="text-light">@ 2024. Travel Tất cả quyền được bảo vệ</p>
             </Col>
           </Row>
         </Container>

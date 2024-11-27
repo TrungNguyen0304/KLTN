@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import { Col, Container, Row } from "react-bootstrap";
-import PopularCard from "../../../components/Cards/PopularCard";
+import Cards from "../../../components/Cards/Cards";
 import axios from "axios";
-import { Link } from "react-router-dom";
-
+  
 const Destinations = () => {
-  const [tourPackages, setTourPackages] = useState([]);
+  const [destinations, setDestinations] = useState([]);
 
   useEffect(() => {
     document.title = "Destinations";
     window.scroll(0, 0);
 
-    const fetchTourPackages = async () => {
+    const fetchDestinations = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8001/api/tourPackage"
+          "http://localhost:8001/api/destination"
         );
-        setTourPackages(response.data);
+        setDestinations(response.data);
       } catch (error) {
-        console.error("Error fetching tour packages:", error);
+        console.error("Error fetching destinations:", error);
       }
     };
-    fetchTourPackages();
+    fetchDestinations();
   }, []);
 
   return (
@@ -31,11 +30,11 @@ const Destinations = () => {
 
       <section className="py-5">
         <Container>
-          <Row>
-            {tourPackages.map((val, inx) => {
+        <Row>
+            {destinations.map((destination, index) => {
               return (
-                <Col md={3} sm={6} xs={12} className="mb-5" key={inx}>
-                    <PopularCard val={val} />
+                <Col md="3" sm="6" key={index} className="pb-4">
+                  <Cards destination={destination} key={index} />
                 </Col>
               );
             })}

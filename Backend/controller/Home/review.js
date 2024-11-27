@@ -47,10 +47,8 @@ const createReview = async (req, res) => {
 // 2. Lấy danh sách review (hiển thị tên người dùng từ User)
 const getAllReviews = async (req, res) => {
     try {
-        // Fetch all reviews and populate user data (only firstname)
         const reviews = await Review.find()
-            .populate('bookingid')  // Populate booking details if necessary
-            .populate('userid', 'firstname'); // Only populate 'firstname' of the user
+            .populate('userid', 'firstname'); 
 
         // Add rating descriptions to each review based on rating value
         const reviewsWithDescription = reviews.map(review => {
