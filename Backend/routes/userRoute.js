@@ -16,7 +16,7 @@ router.delete("/delete/:id", deleteUser);
 router.put("/update/:id", updateUser);
 // router.put("/:id", editUser);
 router.get("/", getAllUser);
-router.get("/user/:id",getUserById );
+router.get("/:id",getUserById );
 
 
 module.exports = router;

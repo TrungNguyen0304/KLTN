@@ -42,11 +42,11 @@ function Login() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userid", data.userid);
 
-        // console.log("Id người dùng mới sau khi đăng nhập:", data.userid);
-        // console.log(
-        //   "Id người dùng được lưu trữ trong localStorage:",
-        //   localStorage.getItem("userid")
-        // );
+        console.log("Id người dùng mới sau khi đăng nhập:", data.userid);
+        console.log(
+          "Id người dùng được lưu trữ trong localStorage:",
+          localStorage.getItem("userid")
+        );
 
         showCustomAlert(data.message, "success");
         setTimeout(() => {
