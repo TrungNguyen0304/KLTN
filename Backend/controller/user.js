@@ -2,7 +2,7 @@ const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-//  API Register user
+// API Register user
 const register = async (req, res) => {
   const { email, password, firstname, lastname, phoneNumber } = req.body;
   const role = req.body.role || "user";
@@ -38,24 +38,39 @@ const login = async (req, res) => {
     console.log("Thử đăng nhập bằng email:", email);
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: "Email không hợp lệ." });
+    if (!user) {
+      return res.status(401).json({ message: "Email không hợp lệ." });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (isMatch) {
-      return res.status(200).json({
-        message: "Đăng nhập thành công!",
-        userid: user._id,  
-      });
-    } else {
+    if (!isMatch) {
       return res.status(401).json({ message: "Mật khẩu không hợp lệ." });
     }
-    
+
+    // Tạo JWT token
+    const token = jwt.sign(
+      { id: user._id, firstname: user.firstname, role: user.role },
+      process.env.JWT_SECRET, // Secret key từ file .env
+      { expiresIn: "1h" } // Token hết hạn sau 1 giờ
+    );
+
+    res.status(200).json({
+      message: "Đăng nhập thành công!",
+      token, // Trả về token
+      user: {
+        id: user._id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Lỗi đăng nhập:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
-
 };
+
 // API Delete user by ID
 const deleteUser = async (req, res) => {
   const { id } = req.params;
@@ -71,6 +86,7 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
 // API Update user by ID
 const updateUser = async (req, res) => {
   const { id } = req.params;
@@ -98,10 +114,9 @@ const updateUser = async (req, res) => {
   }
 };
 
-// API get all user
+// API Get all users
 const getAllUser = async (req, res) => {
   try {
-    
     const users = await User.find({});
     res.status(200).json(users);
   } catch (error) {
@@ -109,23 +124,26 @@ const getAllUser = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
+// API Get user by ID
 const getUserById = async (req, res) => {
   try {
-      const users = await User.findById(req.params.id);
-      if (!users) {
-          return res.status(404).json({ message: 'users not found' });
-      }
-      res.status(200).json(users);
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tồn tại." });
+    }
+    res.status(200).json(user);
   } catch (error) {
-      res.status(500).json({ message: error.message });
+    console.error("Lỗi lấy thông tin người dùng:", error);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
   }
 };
+
 module.exports = {
   register,
   login,
   deleteUser,
   updateUser,
   getUserById,
-  // editUser,
-  getAllUser
+  getAllUser,
 };

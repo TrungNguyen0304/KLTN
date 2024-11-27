@@ -10,6 +10,8 @@ const locationRoutes = require("./routes/locationRoute");
 const tourGuideRoutes = require("./routes/tourGuideRoute");
 const notificationRouter = require("./routes/notificationRoute");
 const durationRoutes = require("./routes/durationRoute");
+const reviewRoute = require("./routes/reviewRoute");
+
 
 
 const app = express();
@@ -30,6 +32,9 @@ app.use("/api/location", locationRoutes);
 app.use("/api/tourGuide",tourGuideRoutes );
 app.use("/api/notifications", notificationRouter);
 app.use("/api/duration",durationRoutes );
+app.use("/api/review",reviewRoute );
+
+
 
 // Start server
 app.listen(PORT, () => {

@@ -21,7 +21,5 @@ const bookingSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-bookingSchema.pre('findOne', function () {
-  this.populate('packageId');
-});
+
 module.exports = mongoose.model("Booking", bookingSchema);

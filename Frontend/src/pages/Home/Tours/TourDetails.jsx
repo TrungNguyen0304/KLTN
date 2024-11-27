@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
-import PricingAndSupportCard from "./PricingAndSupportCard";
 import "./tour.css";
 import { NavLink, useParams } from "react-router-dom";
 import ImageGallery from "react-image-gallery";
@@ -12,20 +11,20 @@ import {
   Tab,
   ListGroup,
   Accordion,
-  Card,
-  Stack,
-  Button,
 } from "react-bootstrap";
 import axios from "axios";
+import CustomerReviews from "./CustomerReviews";
+import InclusionsExclusions from "./InclusionsExclusions";
+import PricingAndSupportCard from "./PricingAndSupportCard";
 
 const TourDetails = () => {
   const { id } = useParams();
   const [tourPackage, setTourPackage] = useState(null);
-  const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0);
+  const [adults, setAdults] = useState(1); // Default 2 adults
+  const [children, setChildren] = useState(0); // Default 0 children
 
-  const pricePerAdult = 5590000;
-  const totalPrice = adults * pricePerAdult + 590000;
+  const pricePerAdult = 5590000; // Giá cho mỗi người lớn
+  const totalPrice = (adults * pricePerAdult) + 590000; // Tổng giá tour
   useEffect(() => {
     document.title = "Tour Details";
     window.scroll(0, 0);
@@ -62,16 +61,12 @@ const TourDetails = () => {
           <Row>
             <h1 className="fs-2 font-bold mb-4">{tourPackage.package_name}</h1>
 
-            {tourPackage?.image && tourPackage?.groupImages?.length > 0 && (
+            {tourPackage?.groupImages?.length > 0 && (
               <ImageGallery
-                items={[
-                  // Thêm ảnh mặc định vào trước các ảnh nhóm
-                  { original: tourPackage.image, thumbnail: tourPackage.image },
-                  ...tourPackage.groupImages.map((img) => ({
-                    original: img,
-                    thumbnail: img,
-                  })),
-                ]}
+                items={tourPackage.groupImages.map((img) => ({
+                  original: img,
+                  thumbnail: img,
+                }))}
                 showNav={false}
                 showBullets={false}
                 showPlayButton={false}
@@ -106,7 +101,7 @@ const TourDetails = () => {
                         <Nav.Link eventKey="3">Bao gồm & Loại trừ</Nav.Link>
                       </Nav.Item>
                       <Nav.Item>
-                        <Nav.Link eventKey="4">Vị trí</Nav.Link>
+                        <Nav.Link eventKey="4">Đánh giá</Nav.Link>
                       </Nav.Item>
                     </Nav>
                   </Col>
@@ -135,8 +130,8 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                          Array.isArray(tourPackage.durations) &&
-                          tourPackage.durations.length > 0 ? (
+                            Array.isArray(tourPackage.durations) &&
+                            tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
@@ -204,7 +199,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                val.itinerary.length > 0 ? (
+                                  val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}
@@ -243,70 +238,15 @@ const TourDetails = () => {
                         <h1 className="font-bold mb-2 h3 border-bottom pb-2">
                           Bao gồm và loại trừ
                         </h1>
-
-                        {/* Kiểm tra xem có trường incAndExc không */}
-                        {tourPackage?.incAndExc ? (
-                          <div>
-                            {/* Tách các phần Bao Gồm và Loại Trừ */}
-                            {(() => {
-                              const inclusionSection = tourPackage?.incAndExc
-                                .match(/BAO GỒM:(.*?)(LOẠI TRỪ:|$)/s)?.[1]
-                                ?.trim();
-
-                              const exclusionSection = tourPackage?.incAndExc
-                                .match(/LOẠI TRỪ:(.*?)(BAO GỒM:|$)/s)?.[1]
-                                ?.trim();
-
-                              return (
-                                <>
-                                  {/* Inclusions */}
-                                  <div>
-                                    <h4 className="font-bold">Bao gồm</h4>
-                                    {inclusionSection ? (
-                                      inclusionSection
-                                        .split("\n")
-                                        .map((line, index) => (
-                                          <ListGroup.Item
-                                            className="border-0 pt-0 body-text d-flex align-items-center"
-                                            key={`inclusion-${index}`}
-                                          >
-                                            <i className="bi me-2 text-success h4 m-0"></i>
-                                            {line.trim()}
-                                          </ListGroup.Item>
-                                        ))
-                                    ) : (
-                                      <p>Không có nội dung nào được bao gồm</p>
-                                    )}
-                                  </div>
-
-                                  {/* Exclusions */}
-                                  <div>
-                                    <h4 className="font-bold">Loại trừ</h4>
-                                    {exclusionSection ? (
-                                      exclusionSection
-                                        .split("\n")
-                                        .map((line, index) => (
-                                          <ListGroup.Item
-                                            className="border-0 pt-0 body-text d-flex align-items-center"
-                                            key={`exclusion-${index}`}
-                                          >
-                                            <i className="bi me-2 text-danger h4 m-0"></i>
-                                            {line.trim()}
-                                          </ListGroup.Item>
-                                        ))
-                                    ) : (
-                                      <p>Không có nội dung nào bị loại trừ</p>
-                                    )}
-                                  </div>
-                                </>
-                              );
-                            })()}
-                          </div>
-                        ) : (
-                          <p>Không có thông tin Bao gồm và Loại trừ</p>
-                        )}
+                        <InclusionsExclusions incAndExc={tourPackage.incAndExc} />
                       </div>
                     </Tab.Pane>
+
+                    <Tab.Pane eventKey="4">
+                      <CustomerReviews /> {/* Pass no reviews data here anymore */}
+                    </Tab.Pane>
+
+
                   </Tab.Content>
                 </Col>
 
@@ -314,9 +254,10 @@ const TourDetails = () => {
                 <PricingAndSupportCard
                   tourPackage={tourPackage}
                   adults={adults}
-                  setAdults={setAdults}
+                  setAdults={setAdults} 
                   children={children}
                   setChildren={setChildren}
+                  totalPrice={totalPrice}
                 />
               </Row>
             </Tab.Container>
