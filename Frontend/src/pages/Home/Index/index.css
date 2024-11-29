@@ -126,3 +126,82 @@
   overflow: hidden;
   z-index: 9999;
 }
+
+
+
+
+
+
+.tour_card {
+  border: 1px solid #ddd;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+  display: flex;  /* Flexbox for alignment */
+  flex-direction: row;  /* Image on the left, text on the right */
+  align-items: center;  /* Center items vertically */
+  position: relative; /* To position the close button absolutely */
+  border-radius: 8px; /* Rounded corners for a more modern look */
+}
+
+.tour_card:hover {
+  transform: scale(1.05); /* Slight scale up for emphasis */
+
+}
+
+
+.tour_image {
+  flex-shrink: 0;  /* Prevent the image from shrinking */
+  margin-right: 15px;  /* Space between the image and the text */
+}
+
+.tour_image img {
+  width: 120px; /* Set a fixed width */
+  height: 120px; /* Set a fixed height */
+  object-fit: cover; /* Ensure the image covers the area properly */
+}
+
+.tour_content {
+  flex-grow: 1; /* Allow the content to take up available space */
+  padding: 15px 0;
+}
+
+.tour_title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: -webkit-box;  /* Enable multi-line truncation */
+  -webkit-line-clamp: 2; /* Limit the title to 3 lines */
+  -webkit-box-orient: vertical; /* Align content vertically */
+  overflow: hidden; /* Hide the content that overflows */
+  text-overflow: ellipsis; /* Add an ellipsis (...) when the text is too long */
+}
+
+.tour_price {
+  font-size: 14px;
+  color: #26bed6;
+}
+
+.tour_rating {
+  font-size: 12px;
+  color: #777;
+}
+
+.close_button {
+  position: absolute; /* Position the button at the top-right corner */
+  top: 0px; /* Distance from the top */
+  right: 2px; /* Distance from the right */
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.close_button:hover {
+  color: #ff0000; /* Change color when hovered */
+}
+
