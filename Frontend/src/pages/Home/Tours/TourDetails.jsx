@@ -20,11 +20,11 @@ import PricingAndSupportCard from "./PricingAndSupportCard";
 const TourDetails = () => {
   const { id } = useParams();
   const [tourPackage, setTourPackage] = useState(null);
-  const [adults, setAdults] = useState(1); // Default 2 adults
-  const [children, setChildren] = useState(0); // Default 0 children
+  const [adults, setAdults] = useState(1);
+  const [children, setChildren] = useState(0); 
 
   const pricePerAdult = 5590000; // Giá cho mỗi người lớn
-  const totalPrice = (adults * pricePerAdult) + 590000; // Tổng giá tour
+  const totalPrice = adults * pricePerAdult + 590000; // Tổng giá tour
   useEffect(() => {
     document.title = "Tour Details";
     window.scroll(0, 0);
@@ -34,7 +34,7 @@ const TourDetails = () => {
         const response = await axios.get(
           `http://localhost:8001/api/tourPackage/${id}`
         );
-        console.log(tourPackage);
+        // console.log(tourPackage);
 
         setTourPackage(response.data);
       } catch (error) {
@@ -63,10 +63,13 @@ const TourDetails = () => {
 
             {tourPackage?.groupImages?.length > 0 && (
               <ImageGallery
-                items={tourPackage.groupImages.map((img) => ({
-                  original: img,
-                  thumbnail: img,
-                }))}
+                items={[
+                  { original: tourPackage.image, thumbnail: tourPackage.image },
+                  ...tourPackage.groupImages.map((img) => ({
+                    original: img,
+                    thumbnail: img,
+                  })),
+                ]}
                 showNav={false}
                 showBullets={false}
                 showPlayButton={false}
@@ -130,8 +133,8 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                            Array.isArray(tourPackage.durations) &&
-                            tourPackage.durations.length > 0 ? (
+                          Array.isArray(tourPackage.durations) &&
+                          tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
@@ -199,7 +202,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                  val.itinerary.length > 0 ? (
+                                val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}
@@ -238,15 +241,16 @@ const TourDetails = () => {
                         <h1 className="font-bold mb-2 h3 border-bottom pb-2">
                           Bao gồm và loại trừ
                         </h1>
-                        <InclusionsExclusions incAndExc={tourPackage.incAndExc} />
+                        <InclusionsExclusions
+                          incAndExc={tourPackage.incAndExc}
+                        />
                       </div>
                     </Tab.Pane>
 
                     <Tab.Pane eventKey="4">
-                      <CustomerReviews /> {/* Pass no reviews data here anymore */}
+                      <CustomerReviews />{" "}
+                      {/* Pass no reviews data here anymore */}
                     </Tab.Pane>
-
-
                   </Tab.Content>
                 </Col>
 
@@ -254,7 +258,7 @@ const TourDetails = () => {
                 <PricingAndSupportCard
                   tourPackage={tourPackage}
                   adults={adults}
-                  setAdults={setAdults} 
+                  setAdults={setAdults}
                   children={children}
                   setChildren={setChildren}
                   totalPrice={totalPrice}

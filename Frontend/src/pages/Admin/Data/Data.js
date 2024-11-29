@@ -54,6 +54,11 @@ export const SidebarData = [
     heading: 'Duration',
     Link:'/duration'
   },
+  {
+    icon: UilPackage,
+    heading: 'Booking',
+    Link:'/booking'
+  },
 ];
 
 // Analytics Cards Data

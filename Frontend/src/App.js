@@ -36,6 +36,10 @@ import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
 import IndexDuration from "./pages/Admin/duration/IndexDuration";
 import CreateDuration from "./pages/Admin/duration/CreateDuration";
 import EditDuration from "./pages/Admin/duration/EditDuration";
+
+import IndexBooking from "./pages/Admin/Booking/indexBooking";
+import BookingDetail from "./pages/Admin/Booking/BookingDetail";
+
 // </>
 import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
@@ -84,6 +88,9 @@ function App() {
           <Route path="duration" element={<IndexDuration />} />
           <Route path="duration/create" element={<CreateDuration />} />
           <Route path="/duration/update/:id" element={<EditDuration />} />
+          <Route path="booking" element={<IndexBooking />} />
+          <Route path="/booking/detail/:code" element={<BookingDetail />} />
+
         </Route>
 
         {/* Routes for NoFooterLayout (for login, register, and profile) */}

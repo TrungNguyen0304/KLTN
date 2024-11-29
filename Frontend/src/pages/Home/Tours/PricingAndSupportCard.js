@@ -16,11 +16,9 @@ const PricingAndSupportCard = ({
     lastName: "",
     email: "",
     phone: "",
-    checkInDate: "",
-    checkOutDate: "",
     specialRequest: "",
   });
-  const [user, setUser] = useState(null); // Lưu thông tin người dùng
+  const [user, setUser] = useState(null);
 
   const adultPrice = tourPackage?.adult_price || 0;
   const childrenPrice = tourPackage?.pricechildren_price || 0;
@@ -53,19 +51,17 @@ const PricingAndSupportCard = ({
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  
 
   const handleSubmit = async () => {
     try {
       const bookingData = {
-        userId: localStorage.getItem("userid"), 
-        packageId: tourPackage._id, 
-        booking_date: new Date(), 
-        travel_date: formData.checkInDate, 
-        total: totalPrice, 
-        status: "pending", 
+        userId: localStorage.getItem("userid"),
+        packageId: tourPackage._id,
+        total: totalPrice,
+        status: "pending",
         special_requests: formData.specialRequest,
       };
+      // console.log("Booking data:", bookingData);
 
       const response = await axios.post(
         "http://localhost:8001/api/booking/create",
@@ -263,26 +259,6 @@ const PricingAndSupportCard = ({
                   value={formData.phone}
                   onChange={handleInputChange}
                   placeholder="Nhập số điện thoại"
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Ngày đến</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="checkInDate"
-                  value={formData.checkInDate}
-                  onChange={handleInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Ngày đi</Form.Label>
-                <Form.Control
-                  type="date"
-                  name="checkOutDate"
-                  value={formData.checkOutDate}
-                  onChange={handleInputChange}
                 />
               </Form.Group>
 
