@@ -5,7 +5,34 @@ import { NavLink } from "react-router-dom";
 
 const PopularCard = ({ val }) => {
   // Hàm an toàn để định dạng số hoặc trả về "N/A"
-  const formatPrice = (price) => (typeof price === "number" ? price.toFixed(2) : "N/A");
+  const formatPrice = (price) => {
+    if (typeof price === "number") {
+      // Format price as VND (Vietnamese Đồng)
+      return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+    }
+    return "N/A";
+  };
+
+  // Hàm lưu tour đã xem vào localStorage
+  const handleViewTour = (tour) => {
+    const recentTours = JSON.parse(localStorage.getItem("recentTours")) || [];
+
+    // Kiểm tra xem tour đã tồn tại trong danh sách chưa
+    const isTourAlreadyViewed = recentTours.some((existingTour) => existingTour._id === tour._id);
+
+    // Nếu chưa, thêm tour vào danh sách
+    if (!isTourAlreadyViewed) {
+      recentTours.push(tour);
+
+      // Giới hạn số lượng tour lưu trữ (tối đa 5 tour đã xem)
+      if (recentTours.length > 5) {
+        recentTours.shift();  // Xóa tour cũ nhất nếu danh sách đã đầy
+      }
+
+      // Lưu lại vào localStorage
+      localStorage.setItem("recentTours", JSON.stringify(recentTours));
+    }
+  };
 
   return (
     <Card className="rounded-2 shadow-sm popular">
@@ -22,9 +49,7 @@ const PopularCard = ({ val }) => {
           <span className="text">
             <span>{val.locationId?.firstname || "Unknown Location"}</span>
             <span>/</span>
-            <span>
-              {val.destinationId?.DestinationName || "Unknown Location"}
-            </span>
+            <span>{val.destinationId?.DestinationName || "Unknown Location"}</span>
           </span>
         </Card.Text>
 
@@ -36,6 +61,7 @@ const PopularCard = ({ val }) => {
           <NavLink
             className="body-text text-dark text-decoration-none"
             to={`/tour-details/${val._id}`}
+            onClick={() => handleViewTour(val)}  // Gọi hàm khi nhấp vào tour
           >
             {val.package_name || "Unnamed Package"}
           </NavLink>
@@ -52,9 +78,7 @@ const PopularCard = ({ val }) => {
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.tourGuideId?.first_name || ""} ${
-              val.tourGuideId?.last_name || ""
-            }`}
+            {`${val.tourGuideId?.first_name || ""} ${val.tourGuideId?.last_name || ""}`}
           </span>
         </span>
 
@@ -65,31 +89,26 @@ const PopularCard = ({ val }) => {
               {cat}
             </span>
           ))}
+        {/* Duration of Tour */}
+        <p className="mb-2 mt-2">
+          <i className="bi bi-clock"></i>{" "}
+          {(val.durations && val.durations[0]?.durationText) || "N/A"}
+        </p>
       </Card.Body>
 
-      <Card.Footer className="py-4">
-        {/* Price & Discount */}
-        {val.adult_price ? (
-          <p className="text-decoration-line-through">
-            ${formatPrice(val.adult_price)}
-          </p>
-        ) : null}
+      <Card.Footer className="">
+        {/* Stack to rearrange Duration and Price */}
+        <Stack direction="vertical" className="mt-3">
 
-        <Stack direction="horizontal" className="justify-content-between mt-3">
-          {/* Displaying Price */}
-          <p>
-            From{" "}
+
+          {/* Displaying Price aligned to the right */}
+          <p className="text-end">
+           
             <b>
               {val.afterDiscount
                 ? formatPrice(val.afterDiscount)
                 : formatPrice(val.adult_price)}
             </b>
-          </p>
-
-          {/* Duration of Tour */}
-          <p>
-            <i className="bi bi-clock"></i>{" "}
-            {(val.durations && val.durations[0]?.durationText) || "N/A"}
           </p>
         </Stack>
       </Card.Footer>

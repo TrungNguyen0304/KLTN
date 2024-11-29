@@ -1,3 +1,4 @@
+// src/pages/Home/Home.js
 import React, { useState, useEffect } from "react";
 import Banner from "../../../components/Banner/Banner";
 import AdvanceSearch from "../../../components/AdvanceSearch/AdvanceSearch";
@@ -6,18 +7,19 @@ import { Container, Row, Col } from "react-bootstrap";
 
 import axios from "axios";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
 import "./index.css";
 
 import Gallery from "../../../components/Gallery/Gallery";
 import Cards from "../../../components/Cards/Cards";
 import PopularCard from "../../../components/Cards/PopularCard";
 
+// Import the RecentTours component
+import RecentTours from "./RecentTours";
+
 const Home = () => {
   const [destinations, setDestinations] = useState([]);
   const [tourPackages, setTourPackages] = useState([]);
+
   useEffect(() => {
     document.title = "Destinations";
     window.scroll(0, 0);
@@ -53,8 +55,10 @@ const Home = () => {
       <AdvanceSearch />
       <Features />
 
-      {/* tour seciton start */}
+      {/* Import the RecentTours component */}
+      <RecentTours />
 
+      {/* tour seciton start */}
       <section className="tours_section slick_slider">
         <Container>
           <Row>
@@ -77,8 +81,7 @@ const Home = () => {
         </Container>
       </section>
 
-      {/* tour seciton start */}
-
+      {/* Popular tours section */}
       <section className="popular py-5">
         <Container>
           <Row>
