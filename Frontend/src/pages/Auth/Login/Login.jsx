@@ -40,13 +40,13 @@ function Login() {
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
-        localStorage.setItem("userid", data.userid);
-
-        console.log("Id người dùng mới sau khi đăng nhập:", data.userid);
-        console.log(
-          "Id người dùng được lưu trữ trong localStorage:",
-          localStorage.getItem("userid")
-        );
+        localStorage.setItem("userid", data.user?.id || data.user?._id);
+        // console.log("User ID trong phản hồi:", data.user?.id || data.user?._id);
+        
+        // console.log(
+        //   "Id người dùng được lưu trữ trong localStorage:",
+        //   localStorage.getItem("userid")
+        // );
 
         showCustomAlert(data.message, "success");
         setTimeout(() => {
