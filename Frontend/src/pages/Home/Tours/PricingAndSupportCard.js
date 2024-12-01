@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Col, Card, Button, Modal, Form, ListGroup } from "react-bootstrap";
+import { Col, Card, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+
 
 const PricingAndSupportCard = ({
   tourPackage,

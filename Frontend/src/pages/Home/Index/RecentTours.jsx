@@ -7,25 +7,20 @@ const RecentTours = () => {
   const [recentTours, setRecentTours] = useState([]);
 
   useEffect(() => {
-    // Get recent tours from localStorage
     const storedTours = JSON.parse(localStorage.getItem("recentTours")) || [];
 
-    // If there are recent tours, set them to state
     if (storedTours.length > 0) {
       setRecentTours(storedTours);
     }
   }, []);
 
   const handleRemoveTour = (tourId) => {
-    // Remove tour from localStorage
     const updatedTours = recentTours.filter((tour) => tour._id !== tourId);
 
-    // Update localStorage and state
     localStorage.setItem("recentTours", JSON.stringify(updatedTours));
-    setRecentTours(updatedTours); // Update the state to reflect changes
+    setRecentTours(updatedTours);
   };
 
-  // Function to format price as VND
   const formatPrice = (price) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
   };

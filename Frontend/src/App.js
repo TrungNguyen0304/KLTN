@@ -14,6 +14,7 @@ import Login from "./pages/Auth/Login/Login";
 import Register from "./pages/Auth/Register/Register";
 import Notifications from "./components/notifications/notifications";
 import NotificationDetail from "./components/notifications/NotificationDetail";
+import CustomerReviews from './pages/Home/Tours/CustomerReviews';
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -56,6 +57,7 @@ function App() {
           <Route path="contact-us" element={<Contact />} />
           <Route path="tours" element={<Tours />} />
           <Route path="/tour-details/:id" element={<TourDetails />} />
+          <Route path="/tour-details/:tourPackageId" element={<CustomerReviews />} />
           <Route path="/booking/:id" element={<Booking />} />
           <Route path="booking/:id" element={<Booking />} />
           <Route path="destinations" element={<Destinations />} />
