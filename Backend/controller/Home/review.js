@@ -4,19 +4,26 @@ const User = require('../../models/user');
 // 1. Tạo mới review (tự động lấy userid từ session)
 const createReview = async (req, res) => {
     try {
-        const { rating, feedback, bookingid } = req.body;
+        const { rating, feedback, tourPackageId } = req.body;
 
-        // Kiểm tra dữ liệu đầu vào
-        if (!rating || !bookingid) {
-            return res.status(400).json({ message: 'Rating và Booking ID là bắt buộc' });
+        // Kiểm tra đầu vào
+        if (!rating || !tourPackageId) {
+            return res.status(400).json({ message: 'Rating và Tour Package ID là bắt buộc' });
         }
 
-        // Lấy thông tin người dùng từ req.user
-        const userid = req.user._id;
+        // Kiểm tra giá trị rating
+        if (rating < 1 || rating > 10) {
+            return res.status(400).json({ message: 'Rating phải nằm trong khoảng từ 1 đến 10' });
+        }
 
-        // Xử lý đánh giá (rating) và feedback
+        // Lấy ID người dùng từ middleware xác thực
+        const userid = req.user?._id;
+        if (!userid) {
+            return res.status(401).json({ message: 'Bạn cần đăng nhập để thực hiện hành động này' });
+        }
+
+        // Xác định mô tả rating
         let ratingDescription = "";
-
         if (rating < 3) {
             ratingDescription = "Rất tệ (Dưới 3)";
         } else if (rating >= 3 && rating < 5) {
@@ -29,32 +36,45 @@ const createReview = async (req, res) => {
             ratingDescription = "Rất tuyệt (8 - 10)";
         }
 
-        // Tạo review mới
-        const newReview = new Review({ rating, feedback, bookingid, userid, ratingDescription });
+        // Tạo đánh giá mới
+        const newReview = new Review({ 
+            rating, 
+            feedback, 
+            tourPackageId, 
+            userid, 
+            ratingDescription 
+        });
+
         await newReview.save();
 
-        // Trả về kết quả cùng với mô tả rating
+        // Trả về phản hồi thành công
         res.status(201).json({
-            review: newReview,
-            message: `Đánh giá của bạn: ${ratingDescription} (${rating} điểm)`
+            message: 'Đánh giá đã được tạo thành công!',
+            review: newReview
         });
     } catch (error) {
         console.error('Lỗi khi tạo review:', error);
-        res.status(400).json({ message: 'Tạo review không thành công', error: error.message });
+        res.status(500).json({ 
+            message: 'Tạo review không thành công', 
+            error: error.message 
+        });
     }
 };
-
 // 2. Lấy danh sách review (hiển thị tên người dùng từ User)
 const getAllReviews = async (req, res) => {
     try {
-        const reviews = await Review.find()
-            .populate('userid', 'firstname'); 
+        const { tourPackageId } = req.params;  // Lấy tourPackageId từ params
 
-        // Add rating descriptions to each review based on rating value
+        if (!tourPackageId) {
+            return res.status(400).json({ message: 'Tour package ID is required' });
+        }
+
+        const reviews = await Review.find({ tourPackageId })
+            .populate('userid', 'firstname lastname email'); // Populate thông tin người dùng
+
         const reviewsWithDescription = reviews.map(review => {
             let ratingDescription = '';
 
-            // Determine rating description based on the rating value
             if (review.rating < 3) {
                 ratingDescription = 'Rất tệ';
             } else if (review.rating >= 3 && review.rating < 5) {
@@ -67,22 +87,23 @@ const getAllReviews = async (req, res) => {
                 ratingDescription = 'Rất tuyệt';
             }
 
-            // Return review with added rating description and user name
-            return { 
-                ...review.toObject(), 
-                ratingDescription, 
-                name: review.userid ? review.userid.firstname : 'Unknown' // Use `firstname` of the user
+            return {
+                ...review.toObject(),
+                ratingDescription,
+                user: review.userid ? {
+                    firstname: review.userid.firstname,
+                    lastname: review.userid.lastname,
+                    email: review.userid.email
+                } : { firstname: 'Unknown', lastname: '', email: '' }
             };
         });
 
-        // Send back the reviews with descriptions and names
         res.status(200).json(reviewsWithDescription);
     } catch (error) {
         console.error('Error fetching reviews:', error);
         res.status(500).json({ message: 'Không thể lấy danh sách reviews', error: error.message });
     }
 };
-
 // 3. Lấy chi tiết một review (hiển thị tên người dùng)
 const getReviewById = async (req, res) => {
     try {
@@ -90,7 +111,7 @@ const getReviewById = async (req, res) => {
 
         // Tìm review theo ID và populate Booking, User
         const review = await Review.findById(id)
-            .populate('bookingid')
+            .populate('tourPackageId')
             .populate('userid', 'firstname'); // Chỉ lấy firstname của người dùng
 
         if (!review) {

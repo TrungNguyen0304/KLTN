@@ -1,173 +1,173 @@
 @import "~react-image-gallery/styles/css/image-gallery.css";
 
 .filter_box {
-    padding: 20px 30px 30px;
-    border: 1px solid #e7e6e6;
+  padding: 20px 30px 30px;
+  border: 1px solid #e7e6e6;
 }
 
 .filter_box .accordion-item {
-    border-bottom: 1px solid #e7e6e6 !important;
+  border-bottom: 1px solid #e7e6e6 !important;
 }
 
 .filter_box .accordion:last-child .accordion-item {
-    border: none !important;
+  border: none !important;
 
 }
 
 .filter_box .accordion-item,
 .filter_box .accordion-item button {
-    background: none;
-    border: none;
-    border-radius: 0;
+  background: none;
+  border: none;
+  border-radius: 0;
 }
 
 .filter_box .accordion-item button {
-    border: none !important;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 16px 0px;
-    box-shadow: none !important;
+  border: none !important;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 16px 0px;
+  box-shadow: none !important;
 }
 
 .filter_box .accordion-item button:focus {
-    border: none;
-    outline: none;
-    box-shadow: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .filter_box .accordion-item .accordion-body {
-    padding: 0;
-    margin-bottom: 15px;
+  padding: 0;
+  margin-bottom: 15px;
 }
 
 .filter_box .accordion-item .accordion-body .form-check {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .filter_box .accordion-item .accordion-body .form-check-input {
-    width: 1.2em;
-    height: 1.2em;
-    margin-top: -2px;
+  width: 1.2em;
+  height: 1.2em;
+  margin-top: -2px;
 }
 
 .filter_box .accordion-item .accordion-body .form-check-label {
-    margin-left: 8px;
-    margin-top: 5px;
+  margin-left: 8px;
+  margin-top: 5px;
 }
 
 .filters {
-    position: sticky;
-    top: 55px
+  position: sticky;
+  top: 55px
 }
 
 
 /* tour detail */
 .tour_details .image-gallery-thumbnail {
-    width: 12.3%;
+  width: 12.3%;
 }
 
 .tour_details .image-gallery-thumbnail:hover,
 .tour_details .image-gallery-thumbnail.active {
-    border-color: var(--primaryClr);
+  border-color: var(--primaryClr);
 }
 
 .tour_details .nav_bars {
-    background-color: #f14b361a;
-    padding: 8px;
+  background-color: #f14b361a;
+  padding: 8px;
 }
 
 .tour_details .nav_bars .nav-link {
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 0px;
-    color: black
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0px;
+  color: black
 }
 
 .tour_details .nav_bars .nav-item {
-    flex-basis: 0;
-    flex-grow: 1;
-    text-align: center;
+  flex-basis: 0;
+  flex-grow: 1;
+  text-align: center;
 }
 
 .tour_details .nav-pills .nav-link.active,
 .tour_details .nav-pills .show>.nav-link {
-    color: white;
-    background-color: var(--primaryClr);
+  color: white;
+  background-color: var(--primaryClr);
 }
 
 .tour_details .list-group-item {
-    /* padding: 16px 0px; */
-    border: none;
-    font-size: var(--bodyText);
-    background: unset;
-    line-height: 24px;
-    border-bottom: 1px solid gainsboro;
-    padding: 16px 0px;
+  /* padding: 16px 0px; */
+  border: none;
+  font-size: var(--bodyText);
+  background: unset;
+  line-height: 24px;
+  border-bottom: 1px solid gainsboro;
+  padding: 16px 0px;
 }
 
 .tour_details .list-group-item strong {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .tour_details .accordion,
 .tour_details .accordion-item {
-    border: none;
+  border: none;
 }
 
 .tour_details .accordion-header button {
-    background: #f5f5f6;
-    border: none;
-    border-radius: 8px;
+  background: #f5f5f6;
+  border: none;
+  border-radius: 8px;
 }
 
 .tour_details .accordion-header button:focus {
-    border: none;
-    outline: none;
-    box-shadow: none !important;
+  border: none;
+  outline: none;
+  box-shadow: none !important;
 }
 
 .tour_details .card-info {
-    background: #f5f5f6;
-    border: none;
+  background: #f5f5f6;
+  border: none;
 }
 
 .tour_details .card-info i {
-    color: var(--primaryClr);
+  color: var(--primaryClr);
 }
 
 
 /* Ensure all images in the gallery are the same size */
 .gallery-image {
-    width: 100%;
-    height: 600px;
-    object-fit: cover;
-    border-radius: 10px;
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .image-gallery-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .tour_details h4 {
-    font-size: 1.5rem;
-    font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .tour_details .text-success {
-    color: #28a745 !important;
-    /* Màu xanh lá đậm */
+  color: #28a745 !important;
+  /* Màu xanh lá đậm */
 }
 
 .tour_details .text-danger {
-    color: #dc3545 !important;
-    /* Màu đỏ đậm */
+  color: #dc3545 !important;
+  /* Màu đỏ đậm */
 }
 
 .tour_details .border-bottom {
-    border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
 }
 
 
@@ -176,117 +176,215 @@
 /*Đánh giá  */
 
 .danhgia {
-    color: #003C71
+  color: #003C71
 }
 
 .rating-section {
-    display: flex;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .rating-box {
-    background-color:#9FC43A; /* Light green background */
-    border-radius: 5px;
-    width: 90px;
-    height: 50px;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-  }
-  
-  .rating-box span {
-    line-height: 1;
-  }
-  
-  .rating-text p {
-    margin: 0;
-    font-size: 14px;
-    color: #17a2b8; 
-  }
-  
-  .text-success1 {
-    color: #17a2b8; 
-    font-weight: bold;
-    font-size: 18px;
-  }
-  
-
-  /* hien binh luan*/
-  .review-item1 {
-    display: flex;
-    align-items: flex-start;
-    margin-bottom: 15px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 15px;
-  }
-  
-  .review-avatar {
-    font-size: 24px;
-    color: #333;
-    margin-right: 15px;
-  }
-  
-  .review-avatar i {
-    font-size: 36px;
-    color:#9FC43A; /* Màu của icon người dùng */
-  }
-  
-  .review-content {
-    flex: 1;
-  }
-  
-  .review-name {
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .review-date {
-    font-size: 12px;
-    color: #999;
-    margin-left: 10px;
-  }
-  
-  .review-rating {
-    display: flex;
-    align-items: center;
-    margin: 5px 0;
-  }
-  
-  .rating-box1 {
-    background-color:#9FC43A;
-    color: white;
-    border-radius: 5px;
-    padding: 3px 6px;
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  
-  .rating-text {
-    font-size: 14px;
-  }
-  
-  .review-comment {
-    font-style: italic;
-    color: #555;
-    margin: 0;
-  }
-
-  .dgganday{
-    font-weight: bold; 
-    margin-bottom: 10px;     
-  }
-
-/*form danh gia*/
-.formdgia{
+  display: flex;
+  align-items: center;
   margin-top: 20px;
 }
 
-.review-name {
-  display: flex;
-  align-items: center;
+.rating-box {
+  background-color: #9FC43A;
+  /* Light green background */
+  border-radius: 5px;
+  width: 90px;
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
 }
 
-.iconuser {
-  margin-left: 8px; /* Add space between icon and name if needed */
+.rating-box span {
+  line-height: 1;
+}
+
+.rating-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #17a2b8;
+}
+
+.text-success1 {
+  color: #17a2b8;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+/* hien binh luan*/
+.review-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+}
+
+.review-avatar {
+  font-size: 24px;
+  color: #333;
+  margin-right: 15px;
+}
+
+.review-avatar i {
+  font-size: 36px;
+  color: #9FC43A;
+  /* Màu của icon người dùng */
+}
+
+.review-content {
+  flex: 1;
+}
+
+.review-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #999;
+  margin-left: 10px;
+}
+
+.review-rating {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.rating-box1 {
+  background-color: #9FC43A;
+  color: white;
+  border-radius: 5px;
+  padding: 3px 6px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.rating-text {
+  font-size: 14px;
+}
+
+.review-comment {
+  font-style: italic;
+  color: #555;
+  margin: 0;
+}
+
+.dgganday {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/*form danh gia*/
+/* Review Summary Section */
+.review-summary {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.rating-box {
+  background-color: #9FC43A;  /* Green background */
+  color: #fff;
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+}
+
+.rating-value {
+  font-size: 22px;
+}
+
+.rating-out-of {
+  font-size: 14px;
+  margin-left: 5px;
+}
+
+.rating-description {
+  color: #17a2b8;  /* Blue color for descriptions */
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.total-reviews {
+  color: #007bff;  /* Blue color for reviews count */
+  font-weight: 600;
+  margin-left: 5px;
+}
+
+/* Review List Styling */
+.review-list {
+  list-style: none;
+  padding: 0;
+}
+
+.review-item {
+  display: flex;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.review-avatar {
+  margin-right: 10px;
+  font-size: 30px;
+  color: #007bff;
+}
+
+.review-content {
+  flex: 1;
+}
+
+.review-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.review-date {
+  color: #999;
+  font-size: 14px;
+}
+
+.review-rating {
+  margin: 10px 0;
+}
+
+.rating-box {
+  background-color: #9FC43A;  /* Yellow for review rating */
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.rating-description {
+  font-size: 14px;
+  color:#26BED6;  /* Green for review rating description */
+  margin-left: 10px;
+}
+
+.review-comment {
+  font-style: italic;
+  color: #555;
+}
+
+/* Title for reviews */
+.dgganday {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
 }

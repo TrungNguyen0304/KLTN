@@ -21,7 +21,8 @@ const TourDetails = () => {
   const { id } = useParams();
   const [tourPackage, setTourPackage] = useState(null);
   const [adults, setAdults] = useState(1);
-  const [children, setChildren] = useState(0); 
+  const [children, setChildren] = useState(0);
+
 
   const pricePerAdult = 5590000; // Giá cho mỗi người lớn
   const totalPrice = adults * pricePerAdult + 590000; // Tổng giá tour
@@ -133,8 +134,8 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                          Array.isArray(tourPackage.durations) &&
-                          tourPackage.durations.length > 0 ? (
+                            Array.isArray(tourPackage.durations) &&
+                            tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
@@ -202,7 +203,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                val.itinerary.length > 0 ? (
+                                  val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}
@@ -248,8 +249,7 @@ const TourDetails = () => {
                     </Tab.Pane>
 
                     <Tab.Pane eventKey="4">
-                      <CustomerReviews />{" "}
-                      {/* Pass no reviews data here anymore */}
+                      <CustomerReviews tourPackageId={id} />
                     </Tab.Pane>
                   </Tab.Content>
                 </Col>
