@@ -23,6 +23,7 @@ const PricingAndSupportCard = ({
   const adultPrice = tourPackage?.adult_price || 0;
   const childrenPrice = tourPackage?.pricechildren_price || 0;
   const totalPrice = adultPrice * adults + childrenPrice * children;
+  const totalPeople = adults + children;
 
   // Fetch user data khi mở modal
   const fetchUserData = async () => {
@@ -58,10 +59,10 @@ const PricingAndSupportCard = ({
         userId: localStorage.getItem("userid"),
         packageId: tourPackage._id,
         total: totalPrice,
+        quantity: totalPeople,
         status: "pending",
         special_requests: formData.specialRequest,
       };
-      // console.log("Booking data:", bookingData);
 
       const response = await axios.post(
         "http://localhost:8001/api/booking/create",
@@ -199,6 +200,19 @@ const PricingAndSupportCard = ({
                   style: "currency",
                   currency: "VND",
                 }).format(totalPrice)}
+              </h1>
+            </div>
+
+            {/* Total Number of People */}
+            <div className="mt-4 text-center">
+              <h5 className="text-muted mb-2" style={{ fontSize: "1rem" }}>
+                Tổng số người tham gia
+              </h5>
+              <h1
+                className="text-primary mb-3"
+                style={{ fontSize: "2rem", fontWeight: "bold" }}
+              >
+                {totalPeople} Người
               </h1>
             </div>
 

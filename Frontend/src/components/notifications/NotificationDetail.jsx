@@ -33,8 +33,8 @@ const NotificationDetail = () => {
 
   const {
     bookingid: booking,
-    userid: user,
-    packageid: tourPackage,
+    userId: user,
+    packageId: tourPackage,
   } = notificationDetail;
 
   return (
@@ -63,11 +63,16 @@ const NotificationDetail = () => {
         </li>
         <li>
           <strong>Thời gian tour:</strong>{" "}
-          {tourPackage?.durations?.length || "Không xác định"} ngày
+          {tourPackage?.durations?.length
+            ? `${tourPackage.durations.length} ngày ${
+                tourPackage.durations.length - 1
+              } đêm`
+            : "Không xác định"}
         </li>
+
         <li>
           <strong>Số lượng khách:</strong>{" "}
-          {booking?.numberOfTravelers || "Không xác định"}
+          {booking?.quantity || "Không xác định"} người
         </li>
         <li>
           <strong>Địa điểm lưu trú:</strong>{" "}
@@ -90,7 +95,7 @@ const NotificationDetail = () => {
               Array.isArray(duration.itinerary) &&
               duration.itinerary.length > 0 ? (
                 duration.itinerary.map((item, itemIndex) => (
-                  <div key={itemIndex}> 
+                  <div key={itemIndex}>
                     <h5>{item.day}</h5>
                     <p>{item.activity || "Không có hoạt động cho ngày này."}</p>
                   </div>
@@ -105,7 +110,7 @@ const NotificationDetail = () => {
         )}
       </div>
 
-      <p>Giá tour: {tourPackage?.price || "Chưa xác định"} VND</p>
+      <p>Giá tour: {booking?.total || "Chưa xác định"} VND</p>
       <button className="back-btn" onClick={() => navigate("/notifications")}>
         Quay lại
       </button>
@@ -114,3 +119,4 @@ const NotificationDetail = () => {
 };
 
 export default NotificationDetail;
+  

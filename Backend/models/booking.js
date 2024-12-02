@@ -11,6 +11,7 @@ const bookingSchema = new mongoose.Schema(
     },
     total: { type: Number, required: true },
     code: { type: Number, required: true },
+    quantity: { type: Number, required: true },
     status: { type: String, required: true },
     special_requests: { type: String, required: true },
     notificationid: {type: Schema.Types.ObjectId,ref: "Notification",
