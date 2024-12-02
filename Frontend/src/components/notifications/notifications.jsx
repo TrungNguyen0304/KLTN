@@ -22,14 +22,15 @@ const Notifications = () => {
 
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8001/api/notifications/${userId}`
-        );
+        const response = await axios.get(`http://localhost:8001/api/notifications/${userId}`);
+        // console.log("API Response:", response.data);
         setNotifications(response.data.notifications);
       } catch (error) {
         console.error("Lỗi tìm nạp thông báo:", error);
       }
     };
+    
+    
 
     fetchNotifications();
   }, [userId]);

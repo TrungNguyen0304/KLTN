@@ -12,7 +12,7 @@ const getNotificationsByUserId = async (req, res) => {
         .json({ success: false, message: "userId không hợp lệ" });
     }
 
-    const notifications = await Notificationv.find({ userid: userId })
+    const notifications = await Notificationv.find({ userId })
       .populate("bookingid")
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, notifications });
@@ -33,7 +33,7 @@ const getNotificationById = async (req, res) => {
     }
 
     const notification = await Notificationv.findById(notificationId)
-      .populate("userid")   
+      .populate("userId")   
       .populate("bookingid") 
       .exec(); 
 
@@ -41,12 +41,12 @@ const getNotificationById = async (req, res) => {
       return res.status(404).json({ success: false, message: "Thông báo không tìm thấy" });
     }
 
-    const packageid = notification.bookingid ? notification.bookingid.packageid : null;
+    const packageId = notification.bookingid ? notification.bookingid.packageId : null;
 
     const populatedNotification = {
       ...notification.toObject(),
-      packageid: packageid
-        ? await TourPackage.findById(packageid)
+      packageId: packageId
+        ? await TourPackage.findById(packageId)
             .populate("locationId", "firstname")  
             .populate(  "durations") : null
     };

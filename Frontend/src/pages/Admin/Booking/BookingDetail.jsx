@@ -38,6 +38,7 @@ const BookingDetail = () => {
               <th>STT</th>
               <th>Package</th>
               <th>Total</th>
+              <th>Quantity</th>
               <th>Special Requests</th>
               <th>Booking Date</th>
             </tr>
@@ -49,6 +50,7 @@ const BookingDetail = () => {
                   <td>{index + 1}</td>
                   <td>{item.packageId.package_name}</td>
                   <td>{item.total}</td>
+                  <td>{item.quantity}</td>
                   <td>{item.special_requests}</td>
                   <td>{new Date(item.createdAt).toLocaleString()}</td>
                 </tr>
@@ -58,6 +60,7 @@ const BookingDetail = () => {
                 <td>1</td>
                 <td>{booking.packageId.package_name}</td>
                 <td>{booking.total}</td>
+                <td>{booking.quantity}</td>
                 <td>{booking.special_requests}</td>
                 <td>{new Date(booking.createdAt).toLocaleString()}</td>
               </tr>
