@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 const CustomerReviews = ({ tourPackageId }) => {
     const [reviews, setReviews] = useState([]);
@@ -7,9 +7,11 @@ const CustomerReviews = ({ tourPackageId }) => {
     const [feedback, setFeedback] = useState("");
     const [message, setMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showDelete, setShowDelete] = useState({});
+    const [editReview, setEditReview] = useState(null); // Track review being edited
 
-    // Định nghĩa lại hàm fetchReviews
-    const fetchReviews = async () => {
+    // Fetch reviews
+    const fetchReviews = useCallback(async () => {
         try {
             const response = await fetch(`http://localhost:8001/api/review/${tourPackageId}`);
             const data = await response.json();
@@ -26,13 +28,13 @@ const CustomerReviews = ({ tourPackageId }) => {
         } finally {
             setLoading(false);
         }
-    };
+    }, [tourPackageId]);
 
     useEffect(() => {
         if (tourPackageId) {
-            fetchReviews(); // Gọi hàm fetchReviews để tải lại đánh giá
+            fetchReviews();
         }
-    }, [tourPackageId]);
+    }, [tourPackageId, fetchReviews]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -59,8 +61,7 @@ const CustomerReviews = ({ tourPackageId }) => {
                 setMessage("Đánh giá đã được tạo thành công!");
                 setRating(1);
                 setFeedback("");
-                // Cập nhật lại danh sách đánh giá mà không cần reload trang
-                fetchReviews();
+                fetchReviews(); // Refresh reviews
             } else {
                 setMessage(data.message || "Đã xảy ra lỗi");
             }
@@ -70,6 +71,85 @@ const CustomerReviews = ({ tourPackageId }) => {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleDeleteReview = async (id) => {
+        if (!window.confirm("Bạn có chắc chắn muốn xóa đánh giá này không?")) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`http://localhost:8001/api/review/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+
+            if (response.status === 200) {
+                setMessage("Xóa đánh giá thành công!");
+                fetchReviews(); // Refresh reviews
+            } else {
+                const data = await response.json();
+                setMessage(data.message || "Đã xảy ra lỗi khi xóa đánh giá.");
+            }
+        } catch (error) {
+            console.error("Error deleting review:", error);
+            setMessage("Đã xảy ra lỗi khi xóa đánh giá.");
+        }
+    };
+
+    const toggleDeleteVisibility = (reviewId) => {
+        setShowDelete((prevState) => ({
+            ...prevState,
+            [reviewId]: !prevState[reviewId],
+        }));
+    };
+
+    const handleEditReview = (review) => {
+        setEditReview(review); // Set review to edit
+        setRating(review.rating);
+        setFeedback(review.feedback);
+    };
+
+    const handleUpdateReview = async (reviewId) => {
+        setIsSubmitting(true);
+        setMessage("");
+
+        try {
+            const response = await fetch(`http://localhost:8001/api/review/${reviewId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+                body: JSON.stringify({
+                    rating,
+                    feedback,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (response.status === 200) {
+                setMessage("Cập nhật đánh giá thành công!");
+                setEditReview(null); // Clear edit state
+                fetchReviews(); // Refresh reviews
+            } else {
+                setMessage(data.message || "Đã xảy ra lỗi khi cập nhật đánh giá.");
+            }
+        } catch (error) {
+            console.error("Error updating review:", error);
+            setMessage("Đã xảy ra lỗi khi cập nhật đánh giá.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    const handleCancelEdit = () => {
+        setEditReview(null); // Cancel edit mode
+        setRating(1);
+        setFeedback("");
     };
 
     const totalReviews = reviews.length;
@@ -82,6 +162,9 @@ const CustomerReviews = ({ tourPackageId }) => {
 
     return (
         <div className="recent-reviews mt-4">
+            {/* Notification */}
+            {message && <p className="message">{message}</p>}
+
             <h5 className="dgganday">Đánh giá gần đây</h5>
             {totalReviews === 0 ? (
                 <p>Chưa có đánh giá nào cho gói tour này.</p>
@@ -109,12 +192,88 @@ const CustomerReviews = ({ tourPackageId }) => {
                                         </span>
                                     </p>
                                     <div className="review-rating">
-                                        <span className="rating-box1">{review.rating || "N/A"}</span>
+                                        {editReview && editReview._id === review._id ? (
+                                            <>
+                                                {/* Inline edit for rating */}
+                                                <input
+                                                    type="number"
+                                                    value={rating}
+                                                    min="1"
+                                                    max="10"
+                                                    onChange={(e) => setRating(Number(e.target.value))}
+                                                    className="form-control"
+                                                />
+                                            </>
+                                        ) : (
+                                            <span className="rating-box1">{review.rating || "N/A"}</span>
+                                        )}
                                         <span className="rating-description">
                                             {review.ratingDescription || "No description"}
                                         </span>
                                     </div>
-                                    <p className="review-comment">"{review.feedback || "No feedback provided"}</p>
+
+                                    {/* Feedback */}
+                                    {editReview && editReview._id === review._id ? (
+                                        <textarea
+                                            value={feedback}
+                                            onChange={(e) => setFeedback(e.target.value)}
+                                            className="form-control"
+                                            rows="4"
+                                        ></textarea>
+                                    ) : (
+                                        <p className="review-comment">"{review.feedback || "No feedback provided"}</p>
+                                    )}
+
+                                    {/* Edit and Delete buttons */}
+                                    <div className="more-options">
+                                        {/* Edit or Update Review Button */}
+                                        {editReview && editReview._id === review._id ? (
+                                            <>
+                                                <button
+                                                    className="btn btn-sm btn-success"
+                                                    onClick={() => handleUpdateReview(review._id)}
+                                                >
+                                                    Lưu
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm btn-secondary"
+                                                    onClick={handleCancelEdit}
+                                                >
+                                                    Hủy
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                            </>
+                                        )}
+
+                                        {/* More options button */}
+                                        <button
+                                            className="more-button"
+                                            onClick={() => toggleDeleteVisibility(review._id)}
+                                        >
+                                            ...
+                                        </button>
+
+                                        {/* Only show delete and edit buttons if the `showDelete` for this review is true and it's not being edited */}
+                                        {showDelete[review._id] && !editReview && (
+                                            <div className="action-buttonss">
+                                                <button
+                                                    className="btn btn-sm delete-button-review"
+                                                    onClick={() => handleDeleteReview(review._id)}
+                                                >
+                                                    Xóa
+                                                </button>
+                                                <button
+                                                    className="btn btn-sm edit-button-review"
+                                                    onClick={() => handleEditReview(review)}
+                                                >
+                                                    Sửa
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+
                                 </div>
                             </li>
                         ))}
@@ -148,7 +307,6 @@ const CustomerReviews = ({ tourPackageId }) => {
                             rows="4"
                         ></textarea>
                     </div>
-                    {message && <p className="message">{message}</p>}
                     <button
                         type="submit"
                         className="btn btn-primary"

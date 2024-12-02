@@ -53,7 +53,7 @@ const DestinationDetails = () => {
           {destination.tourPackages && destination.tourPackages.length > 0 ? (
             <Row>
               {destination.tourPackages.map((val, idx) => (
-                <Col md={4} key={idx}>
+                <Col md={3} key={idx}>
                   <Card className="rounded-2 shadow-sm popular">
                     <Card.Img
                       variant="top"

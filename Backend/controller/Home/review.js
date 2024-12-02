@@ -131,24 +131,56 @@ const updateReview = async (req, res) => {
         const { id } = req.params;
         const { rating, feedback } = req.body;
 
-        // Kiểm tra quyền chỉnh sửa (chỉ người tạo mới được cập nhật)
+        // Kiểm tra review có tồn tại không
         const review = await Review.findById(id);
         if (!review) {
             return res.status(404).json({ message: 'Review không tồn tại' });
         }
+
+        // Kiểm tra quyền chỉnh sửa (chỉ người tạo mới được cập nhật)
         if (review.userid.toString() !== req.user._id.toString()) {
             return res.status(403).json({ message: 'Bạn không có quyền cập nhật review này' });
         }
 
-        // Cập nhật review
-        review.rating = rating ?? review.rating;
-        review.feedback = feedback ?? review.feedback;
+        // Kiểm tra rating có hợp lệ không
+        if (rating) {
+            if (rating < 1 || rating > 10) {
+                return res.status(400).json({ message: 'Rating phải nằm trong khoảng từ 1 đến 10' });
+            }
+
+            // Cập nhật rating description dựa trên rating
+            let ratingDescription = "";
+            if (rating < 3) {
+                ratingDescription = "Rất tệ (Dưới 3)";
+            } else if (rating >= 3 && rating < 5) {
+                ratingDescription = "Tệ (3 - 5)";
+            } else if (rating >= 5 && rating < 7) {
+                ratingDescription = "Bình thường (5 - 7)";
+            } else if (rating >= 7 && rating < 8) {
+                ratingDescription = "Tuyệt (7 - 8)";
+            } else if (rating >= 8 && rating <= 10) {
+                ratingDescription = "Rất tuyệt (8 - 10)";
+            }
+
+            review.rating = rating;
+            review.ratingDescription = ratingDescription;
+        }
+
+        // Cập nhật feedback nếu có
+        if (feedback) {
+            review.feedback = feedback;
+        }
+
+        // Lưu lại review đã cập nhật
         await review.save();
 
-        res.status(200).json(review);
+        res.status(200).json({
+            message: 'Review đã được cập nhật thành công',
+            review
+        });
     } catch (error) {
         console.error('Lỗi khi cập nhật review:', error);
-        res.status(400).json({ message: 'Cập nhật review không thành công', error: error.message });
+        res.status(500).json({ message: 'Cập nhật review không thành công', error: error.message });
     }
 };
 
@@ -157,15 +189,18 @@ const deleteReview = async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Kiểm tra quyền xóa (chỉ người tạo mới được xóa)
+        // Tìm review theo ID
         const review = await Review.findById(id);
         if (!review) {
             return res.status(404).json({ message: 'Review không tồn tại' });
         }
-        if (review.userid.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ message: 'Bạn không có quyền xóa review này' });
+
+        // Kiểm tra quyền xóa (chỉ người tạo mới được xóa)
+        if (!req.user || review.userid.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: 'Bạn không có quyền xóa đánh giá này' });  // Thông báo lỗi tùy chỉnh
         }
 
+        // Xóa review
         await review.deleteOne();
         res.status(200).json({ message: 'Xóa review thành công' });
     } catch (error) {

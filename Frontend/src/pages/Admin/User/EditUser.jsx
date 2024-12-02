@@ -18,7 +18,7 @@ const EditUser = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8001/api/user/user/${id}`
+          `http://localhost:8001/api/user/${id}`
         );
         setUserData(response.data);
       } catch (error) {
