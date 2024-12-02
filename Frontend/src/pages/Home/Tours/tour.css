@@ -485,42 +485,49 @@
 }
 
 
-.action-buttonss {
-  display: flex; /* Hiển thị các nút theo hàng ngang */
-  gap: 8px; /* Khoảng cách giữa các nút */
+
+
+.more-button {
+  position: relative;
 }
 
-.btn {
-  font-size: 14px;
-  padding: 6px 12px;
-  border: none;
+/* Dropdown menu positioning */
+.dropdown-menu1 {
+  display: none; /* Hide dropdown initially */
+  position: absolute;
+  top: 100%; /* Position below the button */
+  right:  0;
+  background-color: white;
+  border: 1px solid #ddd;
   border-radius: 4px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 70px;
+  z-index: 1000;
+ 
+}
+
+/* Show the dropdown when the button is clicked */
+.action-buttonss .dropdown-menu1 {
+  display: block;
+}
+
+/* Style for dropdown items */
+.dropdown-item {
+  padding: 8px 12px;
+  background-color: white;
+  border: none;
+  text-align: left;
+  width: 100%;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+ 
 }
 
-.btn-sm {
-  font-size: 12px;
-  padding: 4px 8px;
+.dropdown-item:hover {
+  background-color: #f0f0f0;
 }
 
-.delete-button-review {
-  background-color: #f44336; /* Màu đỏ cho nút xóa */
-  color: white;
-  margin-right: 40px;
-  margin-top: -4px;
-}
 
-.delete-button-review:hover {
-  background-color: #d32f2f; /* Màu đậm hơn khi hover */
+.btn-secondary{
+  margin-top: -20px;
+  margin-right: 55px;
 }
-
-.edit-button-review {
-  background-color: #4caf50; /* Màu xanh cho nút sửa */
-  color: white;
-}
-
-.edit-button-review:hover {
-  background-color: #388e3c; /* Màu đậm hơn khi hover */
-}
-

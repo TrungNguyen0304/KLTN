@@ -16,12 +16,17 @@ const createReview = async (req, res) => {
             return res.status(400).json({ message: 'Rating phải nằm trong khoảng từ 1 đến 10' });
         }
 
+        if (feedback && feedback.length < 5) {
+            return res.status(400).json({ message: 'Feedback phải có ít nhất 10 ký tự nếu có' });
+        }
+
         // Lấy ID người dùng từ middleware xác thực
         const userid = req.user?._id;
         if (!userid) {
             return res.status(401).json({ message: 'Bạn cần đăng nhập để thực hiện hành động này' });
         }
 
+      
         // Xác định mô tả rating
         let ratingDescription = "";
         if (rating < 3) {
@@ -37,12 +42,12 @@ const createReview = async (req, res) => {
         }
 
         // Tạo đánh giá mới
-        const newReview = new Review({ 
-            rating, 
-            feedback, 
-            tourPackageId, 
-            userid, 
-            ratingDescription 
+        const newReview = new Review({
+            rating,
+            feedback,
+            tourPackageId,
+            userid,
+            ratingDescription
         });
 
         await newReview.save();
@@ -54,9 +59,9 @@ const createReview = async (req, res) => {
         });
     } catch (error) {
         console.error('Lỗi khi tạo review:', error);
-        res.status(500).json({ 
-            message: 'Tạo review không thành công', 
-            error: error.message 
+        res.status(500).json({
+            message: 'Tạo review không thành công',
+            error: error.message
         });
     }
 };
@@ -217,5 +222,5 @@ module.exports = {
     getReviewById,
     updateReview,
     deleteReview,
-  
+
 };
