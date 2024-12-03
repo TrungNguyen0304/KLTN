@@ -59,8 +59,9 @@ const NotificationDetail = () => {
         </li>
         <li>
           <strong>Ngày khởi hành:</strong>{" "}
-          {booking?.travel_date || "Ngày chưa xác định"}
+          {booking?.selectedDuration.start_date || "Ngày chưa xác định"}
         </li>
+
         <li>
           <strong>Thời gian tour:</strong>{" "}
           {tourPackage?.durations?.length
@@ -119,4 +120,3 @@ const NotificationDetail = () => {
 };
 
 export default NotificationDetail;
-  
