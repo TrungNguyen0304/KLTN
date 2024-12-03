@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Col, Card, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
 
-
 const PricingAndSupportCard = ({
   tourPackage,
   adults,
@@ -19,6 +18,7 @@ const PricingAndSupportCard = ({
     specialRequest: "",
   });
   const [user, setUser] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(null);
 
   const adultPrice = tourPackage?.adult_price || 0;
   const childrenPrice = tourPackage?.pricechildren_price || 0;
@@ -34,7 +34,6 @@ const PricingAndSupportCard = ({
           `http://localhost:8001/api/user/${id}`
         );
         setUser(response.data);
-        // Cập nhật form với thông tin người dùng
         setFormData((prevFormData) => ({
           ...prevFormData,
           firstName: response.data.firstname || "",
@@ -43,7 +42,7 @@ const PricingAndSupportCard = ({
           phone: response.data.phoneNumber || "",
         }));
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error("Lỗi khi lấy dữ liệu người dùng:", error);
       }
     }
   };
@@ -55,6 +54,11 @@ const PricingAndSupportCard = ({
 
   const handleSubmit = async () => {
     try {
+      if (!selectedDuration) {
+        alert("Vui lòng chọn lịch trình!");
+        return;
+      }
+
       const bookingData = {
         userId: localStorage.getItem("userid"),
         packageId: tourPackage._id,
@@ -62,16 +66,20 @@ const PricingAndSupportCard = ({
         quantity: totalPeople,
         status: "pending",
         special_requests: formData.specialRequest,
+        selectedDuration: {
+          start_date: selectedDuration.start_date,
+          end_date: selectedDuration.end_date,
+        },
       };
 
       const response = await axios.post(
         "http://localhost:8001/api/booking/create",
         bookingData
       );
-      console.log("Booking created:", response.data);
+      console.log("Đặt phòng đã được tạo:", response.data);
       setShowModal(false);
     } catch (error) {
-      console.error("Error submitting booking:", error);
+      console.error("Lỗi gửi đặt chỗ:", error);
     }
   };
 
@@ -109,7 +117,11 @@ const PricingAndSupportCard = ({
                     borderRadius: "8px",
                     padding: "10px",
                   }}
+                  onChange={(e) =>
+                    setSelectedDuration(tourPackage.durations[e.target.value])
+                  }
                 >
+                  <option value="">-- Chọn lịch trình --</option>
                   {tourPackage.durations.map((duration, index) => (
                     <option key={index} value={index}>
                       {`${new Date(duration.start_date).toLocaleDateString(
@@ -120,7 +132,7 @@ const PricingAndSupportCard = ({
                           month: "long",
                           day: "numeric",
                         }
-                      )} `}
+                      )}`}
                     </option>
                   ))}
                 </select>
@@ -225,6 +237,7 @@ const PricingAndSupportCard = ({
             </Button>
           </Card.Body>
         </Card>
+
         {/* Modal for Form */}
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
           <Modal.Header closeButton>
@@ -284,18 +297,17 @@ const PricingAndSupportCard = ({
                   name="specialRequest"
                   value={formData.specialRequest}
                   onChange={handleInputChange}
-                  placeholder="VD: ăn chay, bị dị ứng..."
+                  placeholder="Nhập yêu cầu"
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
-
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Đóng
+              Hủy
             </Button>
             <Button variant="primary" onClick={handleSubmit}>
-              Xác nhận
+              Xác nhận đặt tour
             </Button>
           </Modal.Footer>
         </Modal>

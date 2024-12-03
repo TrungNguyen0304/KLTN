@@ -35,7 +35,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    console.log("Thử đăng nhập bằng email:", email);
+    // console.log("Thử đăng nhập bằng email:", email);
 
     const user = await User.findOne({ email });
     if (!user) {

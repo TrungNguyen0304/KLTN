@@ -1,4 +1,3 @@
-// src/pages/Home/Home.js
 import React, { useState, useEffect } from "react";
 import Banner from "../../../components/Banner/Banner";
 import AdvanceSearch from "../../../components/AdvanceSearch/AdvanceSearch";
@@ -13,8 +12,8 @@ import Gallery from "../../../components/Gallery/Gallery";
 import Cards from "../../../components/Cards/Cards";
 import PopularCard from "../../../components/Cards/PopularCard";
 
-// Import the RecentTours component
 import RecentTours from "./RecentTours";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [destinations, setDestinations] = useState([]);
@@ -118,13 +117,13 @@ const Home = () => {
               </p>
             </Col>
             <Col md="4" className="text-center mt-3 mt-md-0">
-              <a
+              <Link
                 href="tel:0787601735"
                 className="secondary_btn bounce"
                 rel="no"
               >
                 Liên hệ với chúng tôi!
-              </a>
+              </Link>
             </Col>
           </Row>
         </Container>

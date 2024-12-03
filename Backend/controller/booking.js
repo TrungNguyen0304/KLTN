@@ -6,7 +6,8 @@ const User = require("../models/user");
 
 const createBooking = async (req, res) => {
   try {
-    const { userId, packageId, total,quantity, status, special_requests } = req.body;
+    const { userId, packageId, total,quantity, status, special_requests,  selectedDuration
+    } = req.body;
 
     const code = Math.floor(100000 + Math.random() * 900000);
 
@@ -18,6 +19,8 @@ const createBooking = async (req, res) => {
       status,
       special_requests,
       code,
+      selectedDuration,
+
     });
 
     await newBooking.save();
@@ -33,7 +36,9 @@ const createBooking = async (req, res) => {
       travel_date,
       total,
       quantity,
-      newBooking._id
+      newBooking._id,
+      selectedDuration,
+
     );
 
     // Trả về kết quả thành công
