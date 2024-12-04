@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, Form, InputGroup } from "react-bootstrap";
+import { Accordion, Form, Button, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import "../Tours/tour.css";
 
-const Filters = () => {
+const Filters = ({ onFilterChange }) => {
   const [locations, setLocations] = useState([]);
   const [destinations, setDestinations] = useState([]);
- 
-  const [tourType, setTourType] = useState(""); // State to manage the tour type filter (single-day or multi-day)
-  const [priceRange, setPriceRange] = useState([1000000, 3000000]); // State for managing the price range filter (with default range 1M - 3M)
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedDestinations, setSelectedDestinations] = useState([]);
+  const [tourType, setTourType] = useState("");
+  const [priceRange] = useState([1000000, 3000000]);
+  const [adultPriceMin, setAdultPriceMin] = useState("");
+  const [adultPriceMax, setAdultPriceMax] = useState("");
+  const [sortByPrice, setSortByPrice] = useState("asc"); // New state to manage sorting
 
   useEffect(() => {
     document.title = "Tour Details";
@@ -18,7 +22,7 @@ const Filters = () => {
     const fetchLocations = async () => {
       try {
         const response = await axios.get(`http://localhost:8001/api/location`);
-        setLocations(response.data); // Set locations state with data from API
+        setLocations(response.data);
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
@@ -28,7 +32,7 @@ const Filters = () => {
     const fetchDestinations = async () => {
       try {
         const response = await axios.get(`http://localhost:8001/api/destination`);
-        setDestinations(response.data); // Set destinations state with data from API
+        setDestinations(response.data);
       } catch (error) {
         console.error("Error fetching destinations:", error);
       }
@@ -36,23 +40,63 @@ const Filters = () => {
 
     fetchDestinations();
     fetchLocations();
-  }, []); // Runs only once when the component mounts
+  }, []);
 
+  // Handle location change (toggle selection)
+  const handleLocationChange = (e) => {
+    const selected = e.target.value;
+    setSelectedLocation((prev) => (prev === selected ? "" : selected)); // Toggle selection
+  };
 
-  // Handle the change for the tour type filter (single-day or multi-day)
+  // Handle destination checkbox changes
+  const handleDestinationChange = (e) => {
+    const { value, checked } = e.target;
+    setSelectedDestinations((prev) =>
+      checked ? [...prev, value] : prev.filter((item) => item !== value)
+    );
+  };
+
+  // Handle tour type change (toggle selection)
   const handleTourTypeChange = (e) => {
-    setTourType(e.target.value);
+    const selected = e.target.value;
+    setTourType((prev) => (prev === selected ? "" : selected)); // Toggle selection
   };
 
-  // Handle the change for the price range slider
-  const handlePriceRangeChange = (e) => {
-    const newPriceRange = e.target.value.split(",").map(Number);
-    setPriceRange(newPriceRange);
-  };
-
-  // Ensure priceRange values are valid numbers before using toLocaleString
+  // Format the price to VND with commas
   const formatPrice = (price) => {
-    return price && !isNaN(price) ? price.toLocaleString() : "0";
+    return price.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  // Handle adult price min change
+  const handleAdultPriceMinChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+    setAdultPriceMin(formatPrice(value));
+  };
+
+  // Handle adult price max change
+  const handleAdultPriceMaxChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, ""); // Remove non-numeric characters
+    setAdultPriceMax(formatPrice(value));
+  };
+
+  // Handle sorting order change
+  const handleSortByPriceChange = (e) => {
+    setSortByPrice(e.target.value); // Toggle between ascending or descending
+  };
+
+  // Submit filters to the parent component
+  const applyFilters = () => {
+    const filterData = {
+      locationId: selectedLocation, // Send single location ID
+      destinationId: selectedDestinations.join(","), // Join selected destinations
+      tourType,
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      adultPriceMin: adultPriceMin.replace(/[^0-9]/g, ""), // Send numeric value
+      adultPriceMax: adultPriceMax.replace(/[^0-9]/g, ""), // Send numeric value
+      sortByPrice, // Include sort option
+    };
+    onFilterChange(filterData); // Pass data to parent
   };
 
   return (
@@ -62,17 +106,17 @@ const Filters = () => {
           <Accordion.Item eventKey="0">
             <Accordion.Header>Quốc Gia</Accordion.Header>
             <Accordion.Body>
-              {locations.map((location, index) => {
-                return (
-                  <Form.Check
-                    key={index}
-                    type="checkbox"
-                    id={location.id || location.firstname} // Ensure the key is unique
-                    label={location.firstname || location} // Display the location name
-                    value={location.firstname || location}
-                  />
-                );
-              })}
+              {locations.map((location, index) => (
+                <Form.Check
+                  key={index}
+                  type="checkbox"
+                  id={location.id || location.firstname}
+                  label={location.firstname || location}
+                  value={location._id} // Use location ID for API
+                  checked={selectedLocation === location._id}
+                  onChange={handleLocationChange} // Toggle on click
+                />
+              ))}
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
@@ -81,17 +125,16 @@ const Filters = () => {
           <Accordion.Item eventKey="1">
             <Accordion.Header>Tỉnh/Thành Phố</Accordion.Header>
             <Accordion.Body>
-              {destinations.map((destination, index) => {
-                return (
-                  <Form.Check
-                    key={index}
-                    type="checkbox"
-                    id={destination.id || destination.DestinationName} // Ensure the key is unique
-                    label={destination.DestinationName || destination} // Display the destination name
-                    value={destination.DestinationName || destination}
-                  />
-                );
-              })}
+              {destinations.map((destination, index) => (
+                <Form.Check
+                  key={index}
+                  type="checkbox"
+                  id={destination.id || destination.DestinationName}
+                  label={destination.DestinationName || destination}
+                  value={destination._id}
+                  onChange={handleDestinationChange}
+                />
+              ))}
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
@@ -121,24 +164,67 @@ const Filters = () => {
           </Accordion.Item>
         </Accordion>
 
-        {/* Price Range Filter using slider */}
-        <Accordion defaultActiveKey="3">
-          <Accordion.Item eventKey="3">
-            <Accordion.Header>Giá Tiền</Accordion.Header>
+        {/* Adult Price Range Filter */}
+        <Accordion defaultActiveKey="4">
+          <Accordion.Item eventKey="4">
+            <Accordion.Header>Giá</Accordion.Header>
             <Accordion.Body>
-              <InputGroup>
-                <Form.Label className="me-2">Giá: {formatPrice(priceRange[0])} VND </Form.Label>
-                <Form.Range
-                  min="1000000"
-                  max="15000000"
-                  step="100000"
-                  value={priceRange.join(",")}
-                  onChange={handlePriceRangeChange}
-                />
-              </InputGroup>
+              <Form>
+                <Row className="mb-3">
+                  <Col>
+                    <Form.Label>Từ giá</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Từ giá"
+                      value={adultPriceMin}
+                      onChange={handleAdultPriceMinChange}
+                    />
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Label>Đến giá</Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="Đến giá"
+                      value={adultPriceMax}
+                      onChange={handleAdultPriceMaxChange}
+                    />
+                  </Col>
+                </Row>
+              </Form>
             </Accordion.Body>
           </Accordion.Item>
         </Accordion>
+
+        {/* Sorting Order Filter */}
+        <Accordion defaultActiveKey="5">
+          <Accordion.Item eventKey="5">
+            <Accordion.Header>Sắp Xếp Giá</Accordion.Header>
+            <Accordion.Body>
+              <Form.Check
+                type="radio"
+                id="sortAsc"
+                label="Giá Tăng Dần"
+                value="asc"
+                checked={sortByPrice === "asc"}
+                onChange={handleSortByPriceChange}
+              />
+              <Form.Check
+                type="radio"
+                id="sortDesc"
+                label="Giá Giảm Dần"
+                value="desc"
+                checked={sortByPrice === "desc"}
+                onChange={handleSortByPriceChange}
+              />
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+
+        <Button variant="primary" className="mt-3 w-100" onClick={applyFilters}>
+          Áp Dụng Bộ Lọc
+        </Button>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const tourGuideRoutes = require("./routes/tourGuideRoute");
 const notificationRouter = require("./routes/notificationRoute");
 const durationRoutes = require("./routes/durationRoute");
 const reviewRoute = require("./routes/reviewRoute");
-
+const filterRoute = require("./routes/filterRoute")
 
 
 const app = express();
@@ -33,6 +33,7 @@ app.use("/api/tourGuide",tourGuideRoutes );
 app.use("/api/notifications", notificationRouter);
 app.use("/api/duration",durationRoutes );
 app.use("/api/review",reviewRoute );
+app.use("/api/filter",filterRoute );
 
 
 
