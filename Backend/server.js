@@ -12,7 +12,7 @@ const notificationRouter = require("./routes/notificationRoute");
 const durationRoutes = require("./routes/durationRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const filterRoute = require("./routes/filterRoute")
-
+const searchdestinationRoute = require("./routes/searchdestinationRoute")
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -34,7 +34,7 @@ app.use("/api/notifications", notificationRouter);
 app.use("/api/duration",durationRoutes );
 app.use("/api/review",reviewRoute );
 app.use("/api/filter",filterRoute );
-
+app.use("/api/searchdestination",searchdestinationRoute);
 
 
 // Start server
