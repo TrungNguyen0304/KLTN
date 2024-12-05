@@ -59,7 +59,18 @@ const NotificationDetail = () => {
         </li>
         <li>
           <strong>Ngày khởi hành:</strong>{" "}
-          {booking?.selectedDuration.start_date || "Ngày chưa xác định"}
+          {booking?.selectedDuration.start_date &&
+          booking?.selectedDuration.end_date
+            ? `${
+                new Date(booking.selectedDuration.start_date)
+                  .toISOString()
+                  .split("T")[0]
+              } -> ${
+                new Date(booking.selectedDuration.end_date)
+                  .toISOString()
+                  .split("T")[0]
+              }`
+            : "Ngày chưa xác định"}
         </li>
 
         <li>
