@@ -4,10 +4,28 @@ const Notificationv = require("../models/notificationv");
 const TourPackage = require("../models/tourPackage");
 const User = require("../models/user");
 
+// Hàm tạo thông báo
+const createNotification = async (user, tourPackage, bookingId) => {
+  const travel_date = new Date(); // You can adjust this to match the actual travel date.
+  const notificationMessage = `Xin chào ${user.firstname} ${user.lastname}, 
+    đặt chỗ của bạn cho chuyến tham quan '${tourPackage.package_name}' đã được xác nhận. 
+
+    Bấm vào để xem chi tiết ngày đi du lịch.`;
+
+  const newNotification = new Notificationv({
+    userId: user._id,
+    message: notificationMessage,
+    bookingid: bookingId,
+    travel_date: travel_date, // Optional: Include travel date in notification if needed
+  });
+
+  await newNotification.save();
+};
+
+// Hàm tạo đặt chỗ
 const createBooking = async (req, res) => {
   try {
-    const { userId, packageId, total,quantity, status, special_requests,  selectedDuration
-    } = req.body;
+    const { userId, packageId, total, quantity, status, special_requests, selectedDuration } = req.body;
 
     const code = Math.floor(100000 + Math.random() * 900000);
 
@@ -20,7 +38,6 @@ const createBooking = async (req, res) => {
       special_requests,
       code,
       selectedDuration,
-
     });
 
     await newBooking.save();
@@ -28,18 +45,8 @@ const createBooking = async (req, res) => {
     const user = await User.findById(userId);
     const tourPackage = await TourPackage.findById(packageId);
 
-    // Tạo thông báo cho booking
-    const travel_date = newBooking.createdAt; 
-    await createBookingNotification(
-      user,
-      tourPackage,
-      travel_date,
-      total,
-      quantity,
-      newBooking._id,
-      selectedDuration,
-
-    );
+    // Gửi thông báo sau khi tạo đặt chỗ
+    await createNotification(user, tourPackage, newBooking._id);
 
     // Trả về kết quả thành công
     res.status(201).json({
@@ -48,34 +55,10 @@ const createBooking = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: "Lỗi khi tạo đặt chỗ", error: error.message });
+    res.status(500).json({ message: "Lỗi khi tạo đặt chỗ", error: error.message });
   }
 };
 
-// Hàm gửi thông báo
-const createBookingNotification = async (
-  user,
-  tourPackage,
-  travel_date,
-  total,
-  quantity,
-  bookingId
-) => {
-  const notificationMessage = `Xin chào ${user.firstname} ${user.lastname}, 
-    đặt chỗ của bạn cho chuyến tham quan '${tourPackage.package_name}' đã được xác nhận. 
-
-    Bấm vào để xem chi tiết ngày đi du lịch.`;
-
-  const newNotification = new Notificationv({
-    userId: user._id, 
-    message: notificationMessage,
-    bookingid: bookingId,
-  });
-
-  await newNotification.save();
-};
 
 const getAll = async (req, res) => {
   try {

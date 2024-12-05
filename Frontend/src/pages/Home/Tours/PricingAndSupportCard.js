@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Col, Card, Button, Modal, Form } from "react-bootstrap";
 import axios from "axios";
+import momoImage from "../../../assets/images/icons/momo.png";
+import { toast } from "react-toastify";
 
 const PricingAndSupportCard = ({
   tourPackage,
@@ -25,7 +27,6 @@ const PricingAndSupportCard = ({
   const totalPrice = adultPrice * adults + childrenPrice * children;
   const totalPeople = adults + children;
 
-  // Fetch user data khi mở modal
   const fetchUserData = async () => {
     const id = localStorage.getItem("userid");
     if (id) {
@@ -52,36 +53,60 @@ const PricingAndSupportCard = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
+  const checkPaymentStatus = async (id) => {
     try {
-      if (!selectedDuration) {
-        alert("Vui lòng chọn lịch trình!");
-        return;
-      }
-
-      const bookingData = {
-        userId: localStorage.getItem("userid"),
-        packageId: tourPackage._id,
-        total: totalPrice,
-        quantity: totalPeople,
-        status: "pending",
-        special_requests: formData.specialRequest,
-        selectedDuration: {
-          start_date: selectedDuration.start_date,
-          end_date: selectedDuration.end_date,
-        },
-      };
-
-      const response = await axios.post(
-        "http://localhost:8001/api/booking/create",
-        bookingData
+      const response = await axios.get(
+        `http://localhost:8001/check-payment-status/${id}`
       );
-      console.log("Đặt phòng đã được tạo:", response.data);
-      setShowModal(false);
+
+      if (response.data.success) {
+        return response.data.status;
+      }
     } catch (error) {
-      console.error("Lỗi gửi đặt chỗ:", error);
+      console.error("Error checking payment status:", error);
+      return false;
     }
   };
+
+  const handlePayment = async (id, total) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8001/api/booking/payment/${id}`,
+        { total },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
+
+      if (response.data.resultCode === 0) {
+        const shortLink = response.data.payUrl;
+        window.location.href = shortLink;
+      } else {
+        console.error("Payment failed:", response.data);
+        toast.error("Payment initiation failed.");
+      }
+    } catch (error) {
+      console.error("Error making payment:", error);
+
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+        console.error("Error status:", error.response.status);
+        console.error("Error headers:", error.response.headers);
+        toast.error(
+          `Có lỗi xảy ra khi thực hiện thanh toán: ${
+            error.response.data.error || error.message
+          }`
+        );
+      } else {
+        console.error("No response received:", error.message);
+        toast.error(`Có lỗi xảy ra khi thực hiện thanh toán: ${error.message}`);
+      }
+    }
+  };
+ 
 
   useEffect(() => {
     if (showModal) {
@@ -252,10 +277,8 @@ const PricingAndSupportCard = ({
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  placeholder="Nhập họ"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label>Tên</Form.Label>
                 <Form.Control
@@ -263,32 +286,26 @@ const PricingAndSupportCard = ({
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  placeholder="Nhập tên"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
-                <Form.Label>Địa chỉ email</Form.Label>
+                <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  placeholder="Nhập email"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label>Số điện thoại</Form.Label>
                 <Form.Control
-                  type="text"
+                  type="tel"
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  placeholder="Nhập số điện thoại"
                 />
               </Form.Group>
-
               <Form.Group className="mb-3">
                 <Form.Label>Yêu cầu đặc biệt</Form.Label>
                 <Form.Control
@@ -297,19 +314,29 @@ const PricingAndSupportCard = ({
                   name="specialRequest"
                   value={formData.specialRequest}
                   onChange={handleInputChange}
-                  placeholder="Nhập yêu cầu"
                 />
               </Form.Group>
+
+              {/* Momo Payment */}
             </Form>
+            <div
+              onClick={() => handlePayment(tourPackage._id, totalPrice)}
+              className="w-100 d-flex justify-content-center align-items-center mt-3 custom-button"
+              style={{
+                cursor: "pointer",
+                border: "1px solid #28a745",
+                padding: "10px",
+                borderRadius: "5px",
+              }}
+            >
+              <img
+                src={momoImage}
+                alt="Momo Payment"
+                style={{ width: "30px", marginRight: "10px" }}
+              />
+              Thanh toán qua Momo
+            </div>
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
-              Hủy
-            </Button>
-            <Button variant="primary" onClick={handleSubmit}>
-              Xác nhận đặt tour
-            </Button>
-          </Modal.Footer>
         </Modal>
       </aside>
     </Col>

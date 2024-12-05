@@ -176,7 +176,7 @@ const CustomerReviews = ({ tourPackageId }) => {
 
     const totalReviews = reviews.length;
     const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-    const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+    const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
 
     // Tính toán dữ liệu dựa trên phân trang
     const indexOfLastReview = currentPage * reviewsPerPage;

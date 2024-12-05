@@ -229,6 +229,7 @@ const getAllTour = async (req, res) => {
       .populate("destinationId", "DestinationName")
       .populate("tourGuideId")
       .populate("locationId", "firstname")
+      .populate("reviewId")
       .populate({
         path: "durations",
         select: "itinerary start_date end_date durationText",
