@@ -1,3 +1,6 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
 .tours_section {
   padding: 50px 0px;
   background: var(--secondaryClr);
@@ -205,3 +208,27 @@
   color: #ff0000; /* Change color when hovered */
 }
 
+
+.primary_btn {
+  background-color: #ff5a5f; /* Màu nền nổi bật */
+  color: #ffffff; /* Màu chữ trắng */
+  padding: 10px 20px; /* Khoảng cách bên trong */
+  font-size: 16px; /* Kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+  border: none; /* Bỏ viền */
+  border-radius: 5px; /* Góc bo tròn */
+  cursor: pointer; /* Hiệu ứng trỏ tay */
+  transition: all 0.3s ease; /* Hiệu ứng chuyển đổi mượt */
+  width: 170px;
+  height: 50px;
+}
+
+.primary_btn:hover {
+  background-color: #ff7b81; /* Màu nền khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Đổ bóng khi hover */
+}
+
+.primary_btn:active {
+  transform: scale(0.95); /* Hiệu ứng nhấn nút */
+}

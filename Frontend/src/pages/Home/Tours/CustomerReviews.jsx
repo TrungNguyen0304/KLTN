@@ -10,6 +10,10 @@ const CustomerReviews = ({ tourPackageId }) => {
     const [showDelete, setShowDelete] = useState({});
     const [editReview, setEditReview] = useState(null);
 
+    const [currentPage, setCurrentPage] = useState(1); // Phân trang
+    const reviewsPerPage = 5; // Số đánh giá trên mỗi trang
+    const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+
     // Fetch reviews
     const fetchReviews = useCallback(async () => {
         try {
@@ -35,6 +39,10 @@ const CustomerReviews = ({ tourPackageId }) => {
             fetchReviews();
         }
     }, [tourPackageId, fetchReviews]);
+
+    useEffect(() => {
+        setCurrentPage(1); // Reset về trang đầu khi reviews thay đổi
+    }, [reviews]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
@@ -168,7 +176,12 @@ const CustomerReviews = ({ tourPackageId }) => {
 
     const totalReviews = reviews.length;
     const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-    const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+    const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
+
+    // Tính toán dữ liệu dựa trên phân trang
+    const indexOfLastReview = currentPage * reviewsPerPage;
+    const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
+    const currentReviews = reviews.slice(indexOfFirstReview, indexOfLastReview);
 
     if (loading) {
         return <p>Loading reviews...</p>;
@@ -192,7 +205,7 @@ const CustomerReviews = ({ tourPackageId }) => {
                         <span className="total-reviews">| {totalReviews} đánh giá</span>
                     </div>
                     <ul className="review-list">
-                        {reviews.map((review) => (
+                        {currentReviews.map((review) => (
                             <li key={review._id} className="review-item">
                                 <div className="review-avatar">
                                     <i className="fa fa-user"></i>
@@ -264,6 +277,49 @@ const CustomerReviews = ({ tourPackageId }) => {
                             </li>
                         ))}
                     </ul>
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                            <button
+                                className="btn"
+                                disabled={currentPage === 1}
+                                onClick={() => setCurrentPage(currentPage - 1)}
+                            >
+                                Previous
+                            </button>
+
+                            {Array.from({ length: totalPages }, (_, index) => index + 1)
+                                .filter(
+                                    (page) =>
+                                        page === 1 || // Hiển thị trang đầu
+                                        page === totalPages || // Hiển thị trang cuối
+                                        (page >= currentPage - 1 && page <= currentPage + 1) // Hiển thị các trang xung quanh trang hiện tại
+                                )
+                                .map((page, index, array) => (
+                                    <>
+                                        {index > 0 && page !== array[index - 1] + 1 && (
+                                            <span key={`dots-${index}`} className="dots">
+                                                ...
+                                            </span>
+                                        )}
+                                        <button
+                                            key={page}
+                                            className={`btn ${page === currentPage ? "active" : ""}`}
+                                            onClick={() => setCurrentPage(page)}
+                                        >
+                                            {page}
+                                        </button>
+                                    </>
+                                ))}
+
+                            <button
+                                className="btn"
+                                disabled={currentPage === totalPages}
+                                onClick={() => setCurrentPage(currentPage + 1)}
+                            >
+                                Next
+                            </button>
+                        </div>
+                    )}
                 </>
             )}
 
@@ -279,7 +335,6 @@ const CustomerReviews = ({ tourPackageId }) => {
                             max="10"
                             onChange={(e) => setRating(Number(e.target.value))}
                             className="form-control"
-                          
                             required
                         />
                     </div>
@@ -290,7 +345,6 @@ const CustomerReviews = ({ tourPackageId }) => {
                             onChange={(e) => setFeedback(e.target.value)}
                             className="form-control"
                             rows="4"
-                          
                             required
                         ></textarea>
                     </div>

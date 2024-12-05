@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
+import Slider from "react-slick"; // Import slider
 import Banner from "../../../components/Banner/Banner";
 import AdvanceSearch from "../../../components/AdvanceSearch/AdvanceSearch";
 import Features from "../../../components/Features/Features";
 import { Container, Row, Col } from "react-bootstrap";
-
 import axios from "axios";
-
 import "./index.css";
-
-import Gallery from "../../../components/Gallery/Gallery";
 import Cards from "../../../components/Cards/Cards";
 import PopularCard from "../../../components/Cards/PopularCard";
-
 import RecentTours from "./RecentTours";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Gallery from "../../../components/Gallery/Gallery";
 
 const Home = () => {
   const [destinations, setDestinations] = useState([]);
   const [tourPackages, setTourPackages] = useState([]);
+  const [visiblePackages, setVisiblePackages] = useState(8); // Số lượng hiển thị ban đầu
+  const navigate = useNavigate(); // Điều hướng qua các trang
 
   useEffect(() => {
     document.title = "Destinations";
@@ -48,16 +47,47 @@ const Home = () => {
     fetchTourPackages();
   }, []);
 
+  // Cấu hình slider
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <Banner />
       <AdvanceSearch />
       <Features />
 
-      {/* Import the RecentTours component */}
       <RecentTours />
 
-      {/* tour seciton start */}
+      {/* Tour section with slider */}
       <section className="tours_section slick_slider">
         <Container>
           <Row>
@@ -67,20 +97,20 @@ const Home = () => {
               </div>
             </Col>
           </Row>
-
           <Row>
-            {destinations.map((destination, index) => {
-              return (
-                <Col md="3" sm="6" key={index} className="pb-4">
-                  <Cards destination={destination} key={index} />
-                </Col>
-              );
-            })}
+            <Col md="12">
+              <Slider {...sliderSettings}>
+                {destinations.map((destination, index) => (
+                  <div key={index} className="p-3">
+                    <Cards destination={destination} />
+                  </div>
+                ))}
+              </Slider>
+            </Col>
           </Row>
         </Container>
       </section>
 
-      {/* Popular tours section */}
       <section className="popular py-5">
         <Container>
           <Row>
@@ -91,7 +121,7 @@ const Home = () => {
             </Col>
           </Row>
           <Row>
-            {tourPackages.map((val, inx) => {
+            {tourPackages.slice(0, visiblePackages).map((val, inx) => {
               return (
                 <Col md={3} sm={6} xs={12} className="mb-5" key={inx}>
                   <PopularCard val={val} />
@@ -99,6 +129,18 @@ const Home = () => {
               );
             })}
           </Row>
+          {tourPackages.length > visiblePackages && (
+            <Row>
+            <Col md="12" className="text-center">
+              <button
+                className="primary_btn"
+                onClick={() => navigate("/tours")}
+              >
+                Xem thêm
+              </button>
+            </Col>
+          </Row>
+          )}
         </Container>
       </section>
 

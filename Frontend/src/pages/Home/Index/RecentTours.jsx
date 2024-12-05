@@ -26,7 +26,7 @@ const RecentTours = () => {
   };
 
   return (
-    <section className="recent_tours py-5">
+    <section className="recent_tours">
       <Container>
         {recentTours.length > 0 ? (
           <>
