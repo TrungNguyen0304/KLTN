@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom"; // Import useSearchParams
 import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import { Container, Row, Col, Offcanvas } from "react-bootstrap";
 import PopularCard from "../../../components/Cards/PopularCard";
@@ -6,15 +7,19 @@ import Filters from "./Filters";
 import "../Tours/tour.css";
 
 const Tours = () => {
-  const [show, setShow] = useState(false); // For Offcanvas toggle
-  const [tours, setTours] = useState([]); // Store tour data
-  const [filters, setFilters] = useState({}); // Store active filter conditions
-  const [loading, setLoading] = useState(false); // Loading state for API calls
+  const [show, setShow] = useState(false); 
+  const [tours, setTours] = useState([]); 
+  const [filters, setFilters] = useState({});
+  const [loading, setLoading] = useState(false); 
+  const [searchParams, setSearchParams] = useSearchParams(); 
+
+  const toursPerPage = 9; 
+  const currentPage = parseInt(searchParams.get("page")) || 1;
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  // Fetch tours based on filters
+  
   const fetchTours = async (filterData = {}) => {
     setLoading(true);
     try {
@@ -22,26 +27,42 @@ const Tours = () => {
         `http://localhost:8001/api/filter?${new URLSearchParams(filterData)}`
       );
       const data = await response.json();
-      setTours(Array.isArray(data) ? data : []); // Ensure tours is always an array
+      setTours(Array.isArray(data) ? data : []); 
     } catch (error) {
       console.error("Lỗi khi lấy tour:", error);
-      setTours([]); // Fallback to empty array if error occurs
+      setTours([]); 
     } finally {
       setLoading(false);
     }
   };
 
-  // Apply filters
+  
   const handleFilterChange = (filterData) => {
-    setFilters(filterData); // Update filter state
-    fetchTours(filterData); // Fetch filtered data
+    setFilters(filterData); 
+    setSearchParams({ page: 1 }); 
+    fetchTours(filterData); 
   };
 
   useEffect(() => {
     document.title = "Tours";
     window.scroll(0, 0);
-    fetchTours(); // Initial fetch without filters
+    fetchTours(); 
   }, []);
+
+  
+  const indexOfLastTour = currentPage * toursPerPage;
+  const indexOfFirstTour = indexOfLastTour - toursPerPage;
+  const currentTours = tours.slice(indexOfFirstTour, indexOfLastTour);
+
+  
+  const totalPages = Math.ceil(tours.length / toursPerPage);
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setSearchParams({ page });
+      window.scrollTo(0, 0); 
+    }
+  };
 
   return (
     <>
@@ -65,13 +86,42 @@ const Tours = () => {
             <Col xl="9" lg="8" md="12" sm="12">
               <Row>
                 {loading && <p>Loading...</p>}
-                {Array.isArray(tours) && tours.length === 0 && <p>Không tìm thấy tour nào.</p>}
-                {Array.isArray(tours) && !loading && tours.map((tour, index) => (
+                {currentTours.length === 0 && !loading && <p>Không tìm thấy tour nào.</p>}
+                {currentTours.map((tour, index) => (
                   <Col xl={4} lg={6} md={6} sm={6} className="mb-5" key={index}>
                     <PopularCard val={tour} />
                   </Col>
                 ))}
               </Row>
+              {/* Pagination */}
+              <div className="pagination-container mt-4 d-flex justify-content-center align-items-center">
+                <button
+                  className={`pagination-btn ${currentPage === 1 ? "disabled" : ""}`}
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    className={`pagination-number ${currentPage === index + 1 ? "active" : ""
+                      }`}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+
+                <button
+                  className={`pagination-btn ${currentPage === totalPages ? "disabled" : ""}`}
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
             </Col>
           </Row>
         </Container>

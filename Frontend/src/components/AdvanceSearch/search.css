@@ -12,10 +12,10 @@
 }
 
 .box-search-advance .box-search .item-search {
-    width: 36%;
+    width: 40%;
     position: relative;
-    padding: 0px 12px;
-    margin: auto;
+    padding: 0px 12px 12px 120px;
+    
 }
 
 .box-search-advance .box-search .item-search::before{
@@ -112,7 +112,7 @@
     background-color: var(--primaryClr);
 }
 
-@media (max-width : 1199px){
+@media (max-width : 990px){
     .box-search-advance .box-search {
         flex-wrap: wrap;
     }

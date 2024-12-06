@@ -207,9 +207,6 @@ const CustomerReviews = ({ tourPackageId }) => {
                     <ul className="review-list">
                         {currentReviews.map((review) => (
                             <li key={review._id} className="review-item">
-                                <div className="review-avatar">
-                                    <i className="fa fa-user"></i>
-                                </div>
                                 <div className="review-content">
                                     <p className="review-name">
                                         {review.user?.firstname || "Anonymous"} {review.user?.lastname}
