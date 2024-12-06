@@ -14,6 +14,14 @@ const CustomerReviews = ({ tourPackageId }) => {
     const reviewsPerPage = 5; // Số đánh giá trên mỗi trang
     const totalPages = Math.ceil(reviews.length / reviewsPerPage);
 
+    // Function to calculate total and average ratings
+    const calculateRatings = (reviews) => {
+        const totalReviews = reviews.length;
+        const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
+        const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0;
+        return { totalReviews, totalRating, averageRating };
+    };
+
     // Fetch reviews
     const fetchReviews = useCallback(async () => {
         try {
@@ -41,14 +49,16 @@ const CustomerReviews = ({ tourPackageId }) => {
     }, [tourPackageId, fetchReviews]);
 
     useEffect(() => {
-        setCurrentPage(1); // Reset về trang đầu khi reviews thay đổi
+        setCurrentPage(1);
     }, [reviews]);
 
     const handleSubmitReview = async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
         setMessage("");
-
+    
+        const { totalReviews, totalRating, averageRating } = calculateRatings(reviews);
+    
         try {
             const response = await fetch(`http://localhost:8001/api/review/create`, {
                 method: "POST",
@@ -60,12 +70,16 @@ const CustomerReviews = ({ tourPackageId }) => {
                     rating,
                     feedback,
                     tourPackageId,
+                    totalReviews, 
+                    totalRating, 
+                    averageRating,
                 }),
             });
-
-            const data = await response.json();
-
-            if (response.status === 201) {
+    
+            const data = await response.json(); 
+    
+            if (response.status === 201 && data.review) {
+                setReviews((prevReviews) => [data.review, ...prevReviews]); 
                 setMessage("Đánh giá đã được tạo thành công!");
                 setRating(1);
                 setFeedback("");
@@ -73,6 +87,7 @@ const CustomerReviews = ({ tourPackageId }) => {
             } else {
                 setMessage(data.message || "Đã xảy ra lỗi");
             }
+    
         } catch (error) {
             console.error("Error submitting review:", error);
             setMessage("Đã xảy ra lỗi khi tạo đánh giá.");
@@ -80,6 +95,9 @@ const CustomerReviews = ({ tourPackageId }) => {
             setIsSubmitting(false);
         }
     };
+    
+  
+  
 
     const handleDeleteReview = async (id) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa đánh giá này không?")) {
@@ -174,9 +192,7 @@ const CustomerReviews = ({ tourPackageId }) => {
         }
     };
 
-    const totalReviews = reviews.length;
-    const totalRating = reviews.reduce((sum, review) => sum + (review.rating || 0), 0);
-    const averageRating = totalReviews > 0 ? (totalRating / totalReviews).toFixed(1) : 0
+    const { totalReviews, averageRating } = calculateRatings(reviews);
 
     // Tính toán dữ liệu dựa trên phân trang
     const indexOfLastReview = currentPage * reviewsPerPage;

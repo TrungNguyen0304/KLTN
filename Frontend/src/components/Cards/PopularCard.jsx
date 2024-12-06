@@ -72,8 +72,8 @@ const PopularCard = ({ val }) => {
           <span>
             <i className="bi bi-star-fill me-1"></i>
           </span>
-          <span>{val.rating || "N/A"}</span>
-          <span>( {val.reviews || 0} reviews )</span>
+          <span>{val.averageRating || "N/A"}</span>
+          {/* <span>( {val.totalReviews || 0} reviews )</span> */}
         </p>
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
