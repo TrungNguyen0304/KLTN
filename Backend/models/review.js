@@ -6,6 +6,7 @@ const reviewSchema = new mongoose.Schema({
     feedback: { type: String },
     tourPackageId: { type: Schema.Types.ObjectId, ref: 'TourPackage', required: true },
     userid: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    ratingDescription: { type: String },
   },
   {
     timestamps: true,
