@@ -3,26 +3,26 @@ import Breadcrumbs from "../../../components/Breadcrumbs/Breadcrumbs";
 import { Col, Container, Row } from "react-bootstrap";
 import Cards from "../../../components/Cards/Cards";
 import axios from "axios";
-import { FaSearch } from "react-icons/fa"; // Import the search icon
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { FaSearch } from "react-icons/fa"; 
+import { useLocation } from "react-router-dom"; 
 import "./Destination.css";
 
 const Destinations = () => {
   const [destinations, setDestinations] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
+  const [searchQuery, setSearchQuery] = useState(""); 
   const location = useLocation();
-  const initialQuery = location.state?.searchQuery || ""; // Get query from router state
+  const initialQuery = location.state?.searchQuery || ""; 
 
   useEffect(() => {
     document.title = "Destinations";
     window.scroll(0, 0);
-    fetchDestinations(initialQuery); // Fetch destinations on component mount
+    fetchDestinations(initialQuery); 
   }, [initialQuery]);
 
   const fetchDestinations = async (query) => {
     try {
       const response = await axios.get(
-        `http://localhost:8001/api/searchdestination/search?searchQuery=${query || ""}` // Fallback to empty query
+        `http://localhost:8001/api/searchdestination/search?searchQuery=${query || ""}` 
       );
       setDestinations(response.data);
     } catch (error) {
@@ -31,17 +31,17 @@ const Destinations = () => {
   };
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value); // Update searchQuery when user types
+    setSearchQuery(event.target.value); 
   };
 
   const handleSearchKeyPress = (event) => {
-    if (event.key === "Enter") { // Check if Enter key is pressed
-      fetchDestinations(searchQuery); // Fetch destinations when Enter is pressed
+    if (event.key === "Enter") { 
+      fetchDestinations(searchQuery);
     }
   };
 
   const handleSearchClick = () => {
-    fetchDestinations(searchQuery); // Fetch destinations when search button is clicked
+    fetchDestinations(searchQuery);
   };
 
   return (
@@ -55,15 +55,15 @@ const Destinations = () => {
               <div className="input-container position-relative">
                 <input
                   type="text1"
-                  className="form-control11 pe-5" // Add padding to the right for the icon
+                  className="form-control11 pe-5" 
                   placeholder="Tìm kiếm điểm đến..."
-                  value={searchQuery} // Bind the input value to the searchQuery state
-                  onChange={handleSearchChange} // Update searchQuery on input change
-                  onKeyDown={handleSearchKeyPress} // Trigger search on Enter key press
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  onKeyDown={handleSearchKeyPress}
                 />
                 <FaSearch
                   className="search-icon position-absolute top-50 end-0 translate-middle-y me-3"
-                  onClick={handleSearchClick} // Trigger search on icon click
+                  onClick={handleSearchClick} 
                 />
               </div>
             </Col>

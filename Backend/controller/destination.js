@@ -169,6 +169,42 @@ const getDestinationsCountByLocation = async (locationId) => {
   }
 };
 
+const searchDestination = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+
+    // Áp dụng bộ lọc tìm kiếm
+    const filter = searchQuery
+      ? {
+          DestinationName: { $regex: searchQuery, $options: "i" }, // Tìm theo DestinationName
+        }
+      : {};
+
+    // Lấy danh sách các destinations đã lọc
+    const destinations = await Destination.find(filter).populate("locationId").exec();
+
+    // Đếm số lượng TourPackage cho mỗi Destination
+    const destinationsWithTourCount = await Promise.all(
+      destinations.map(async (destination) => {
+        const tourCount = await TourPackage.countDocuments({
+          destinationId: destination._id,
+        });
+
+        return {
+          ...destination.toObject(), // Chuyển destination thành object
+          tourCount, // Thêm trường tourCount vào object
+        };
+      })
+    );
+
+    // Trả về danh sách destinations kèm số lượng tour
+    res.status(200).json(destinationsWithTourCount);
+  } catch (error) {
+    console.error("Lỗi khi tìm kiếm các địa danh:", error);
+    res.status(500).json({ message: "Lỗi máy chủ nội bộ." });
+  }
+};
+
 module.exports = {
   createDestination,
   deleteDestination,
@@ -176,4 +212,5 @@ module.exports = {
   getAllDestination,
   getDestinationById,
   getDestinationsCountByLocation,
+  searchDestination
 };

@@ -5,6 +5,9 @@
   transition: transform 0.3s;
   position: relative;
 }
+.Destination{
+  font-size: 20px;
+}
 
 .destination-card:hover {
  
@@ -117,4 +120,8 @@
 }
 .tour-count {
   font-weight: bold;
+}
+
+.index-destination{
+  margin-top: 20px;
 }

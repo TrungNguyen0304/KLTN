@@ -54,7 +54,6 @@ const Tours = () => {
   const indexOfFirstTour = indexOfLastTour - toursPerPage;
   const currentTours = tours.slice(indexOfFirstTour, indexOfLastTour);
 
-  
   const totalPages = Math.ceil(tours.length / toursPerPage);
 
   const handlePageChange = (page) => {

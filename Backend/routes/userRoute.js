@@ -8,6 +8,7 @@ const {
   updateUser,
   getAllUser,
   getUserById,
+  searchUser,
 } = require("../controller/user");
 
 router.post("/register", register);
@@ -16,7 +17,7 @@ router.delete("/delete/:id", deleteUser);
 router.put("/update/:id", updateUser);
 // router.put("/:id", editUser);
 router.get("/", getAllUser);
-router.get("/:id",getUserById );
-
+router.post("/:id",getUserById );
+router.get("/search", searchUser);
 
 module.exports = router;

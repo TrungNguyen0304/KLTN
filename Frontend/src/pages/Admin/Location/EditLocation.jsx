@@ -13,7 +13,7 @@ const EditLocation = () => {
     useEffect(() => {
         const fetchLocation = async () => {
             try {
-                const response = await axios.get(`http://localhost:8001/api/location/location/${id}`);
+                const response = await axios.post(`http://localhost:8001/api/location/location/${id}`);
                 setFirstname(response.data.firstname);
             } catch (error) {
                 setError(error.response ? error.response.data.message : error.message);

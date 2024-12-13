@@ -139,6 +139,28 @@ const getUserById = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+    const filter = searchQuery
+      ? {
+          $or: [
+            { email: { $regex: searchQuery, $options: "i" } }, 
+            { firstname: { $regex: searchQuery, $options: "i" } }, 
+            { lastname: { $regex: searchQuery, $options: "i" } }, 
+          ],
+        }
+      : {};
+
+    const users = await User.find(filter);
+
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -146,4 +168,5 @@ module.exports = {
   updateUser,
   getUserById,
   getAllUser,
+  searchUser
 };

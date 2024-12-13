@@ -1,26 +1,48 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Card, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaMapMarkerAlt, FaUserAlt, FaTrash } from 'react-icons/fa';
+import { FaMapMarkerAlt, FaUserAlt, FaTrash, FaSearch } from 'react-icons/fa';
 import './Tour.css';
+import { useLocation } from "react-router-dom";
 import axios from 'axios';
 
 const IndexTour = () => {
   const [tours, setTours] = useState([]); // State to store tours data
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const tour = useLocation();
+  const initialQuery = tour.state?.searchQuery || "";
+
+  const toursPerPage = 8;
+
 
   // Fetch tours data from API
   useEffect(() => {
     const fetchTours = async () => {
       try {
-        const response = await axios.get('http://localhost:8001/api/tourPackage');
-        setTours(response.data); // Set the fetched data to the state
+        const response = await axios.get(
+          `http://localhost:8001/api/tourPackage/search?searchQuery=${initialQuery}`
+        );
+        setTours(response.data);
       } catch (error) {
-        console.error("Error fetching tours:", error);
+        console.error("Error fetching destinations:", error);
       }
     };
 
     fetchTours();
-  }, []);
+  }, [initialQuery]);
+
+  const fetchTours = async (query) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8001/api/tourPackage/search?searchQuery=${query || ""}`
+      );
+      setTours(response.data);
+      setCurrentPage(1); // Reset to the first page on new search
+    } catch (error) {
+      console.error("Error fetching tours:", error);
+    }
+  };
 
   // Delete tour function
   const handleDelete = async (id) => {
@@ -37,19 +59,54 @@ const IndexTour = () => {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchKeyPress = (event) => {
+    if (event.key === "Enter") {
+      fetchTours(searchQuery);
+    }
+  };
+
+  const handleSearchClick = () => {
+    fetchTours(searchQuery);
+  };
+
+  const totalPages = Math.ceil(tours.length / toursPerPage);
+  const indexOfLasttour = currentPage * toursPerPage;
+  const indexOfFirsttour = indexOfLasttour - toursPerPage;
+  const currenttours = tours.slice(indexOfFirsttour, indexOfLasttour);
+
   return (
     <Container className="ContainerTour">
       <Row className="align-items-center mb-3">
-        <Col md={6}>
-          <div className="Tour">Tour</div>
+        <div className="Destination">Tour du lịch</div>
+        <Col md={6} className="mt-3">
+          <div className="input-container position-relative">
+            <input
+              type="text1"
+              className="form-control11"
+              placeholder="Tìm kiếm người dùng..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyPress}
+            />
+            <FaSearch
+              className="search-icon position-absolute top-50 end-0 translate-middle-y me-3"
+              onClick={handleSearchClick}
+            />
+          </div>
         </Col>
         <Col md={6} className="text-end">
-          <Link className="btn btn-primary" to="create">Thêm Tour Du lịch</Link>
+          <Link className="btn btn-primary" to="create">
+            Thêm quốc gia
+          </Link>
         </Col>
       </Row>
 
       <Row className="d-flex">
-        {tours.map((tour) => (
+        {currenttours.map((tour) => (
           <Col md={4} key={tour._id} className="mb-4">
             <Card className="tour-card">
               <div className="delete-icon" onClick={() => handleDelete(tour._id)}>
@@ -70,9 +127,7 @@ const IndexTour = () => {
                 </div>
 
                 <Card.Title className="tour-title">{tour.package_name}</Card.Title>
-                <div className="tour-rating mb-2">
-                  <span className="tour-rating-text">★ {tour.rating || 0} ({tour.reviews || 0} reviews)</span>
-                </div>
+
                 <div className="tour-types mb-2">
                   {tour.types?.map((type, index) => (
                     <Badge key={index} bg={type === "Rail Tour" ? "warning" : "secondary"} className="me-1">
@@ -81,21 +136,20 @@ const IndexTour = () => {
                   ))}
                   {tour.tourGuideId && (
                     <div className="tour-guide mt-3">
-                    <FaUserAlt className="tour-guide-icon" />
-                    <span className="tour-guide-name">
-                      Hướng dẫn viên:{" "}
-                      <span className="first_name">
-                        {`${tour.tourGuideId.first_name || ""} ${
-                          tour.tourGuideId.last_name || ""
-                        }`}
+                      <FaUserAlt className="tour-guide-icon" />
+                      <span className="tour-guide-name">
+                        Hướng dẫn viên:{" "}
+                        <span className="first_name">
+                          {`${tour.tourGuideId.first_name || ""} ${tour.tourGuideId.last_name || ""
+                            }`}
+                        </span>
                       </span>
-                    </span>
-                  </div>
+                    </div>
                   )}
                   {/* Displaying duration as "X days Y nights" */}
                   <div className="tour-duration mt-2">
-                  🕒 { (tour.durations && tour.durations[0]?.durationText) || 'N/A' }
-                    
+                    🕒 {(tour.durations && tour.durations[0]?.durationText) || 'N/A'}
+
                   </div>
                 </div>
                 <div className="tour-price mb-2">
@@ -107,6 +161,37 @@ const IndexTour = () => {
           </Col>
         ))}
       </Row>
+      <div className="pagination">
+        {tours.length > toursPerPage && (
+          <>
+            <button
+              className="btn"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+            >
+              Trước
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+              <button
+                key={page}
+                className={`btn ${page === currentPage ? "active" : ""}`}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              className="btn"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              Sau
+            </button>
+          </>
+        )}
+      </div>
     </Container>
   );
 };

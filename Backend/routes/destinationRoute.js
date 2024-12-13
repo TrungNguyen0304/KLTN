@@ -8,6 +8,7 @@ const {
   getAllDestination,
   getDestinationById,
   getDestinationsCountByLocation,
+  searchDestination,
 } = require("../controller/destination");
 
 router.post("/create", upload, createDestination);
@@ -15,7 +16,7 @@ router.post("/create", upload, createDestination);
 router.delete("/:id", deleteDestination);
 router.put("/:id", upload, editDestination);
 router.get("/", getAllDestination);
-router.get("/:id", getDestinationById); 
+router.post("/:id", getDestinationById); 
 
 router.get("/count/:locationId", async (req, res) => {
   const { locationId } = req.params;
@@ -27,5 +28,6 @@ router.get("/count/:locationId", async (req, res) => {
     res.status(500).json({ message: "Error fetching destinations count", error: error.message });
   }
 });
+router.get("/search", searchDestination);
 
 module.exports = router;

@@ -20,7 +20,7 @@ const UpdateDestination = () => {
     useEffect(() => {
         const fetchDestination = async () => {
             try {
-                const response = await axios.get(`http://localhost:8001/api/destination/${id}`);
+                const response = await axios.post(`http://localhost:8001/api/destination/${id}`);
                 const data = response.data;
 
                 // Cập nhật các trường thông tin
