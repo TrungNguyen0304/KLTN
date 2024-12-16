@@ -1,63 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { SidebarData } from "../Data/Data";
 import { UilBars } from "@iconscout/react-unicons";
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
+import { useNavigate } from "react-router-dom";
+import Logo from '../../../assets/admin/imgs/logo.png';
 const Sidebar = () => {
-  const [selected, setSelected] = useState(0);
-  const [expanded, setExpanded] = useState(true);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [collapsed, setCollapsed] = useState(false);
+  const [activeItem, setActiveItem] = useState(null); // State để theo dõi mục được chọn
+  const navigate = useNavigate();
 
-  const sidebarVariants = {
-    true: {
-      left: "0",
-    },
-    false: {
-      left: "-60%",
-    },
+  // Kiểm tra localStorage khi trang tải lại
+  useEffect(() => {
+    const storedActiveItem = localStorage.getItem("activeItem");
+    if (storedActiveItem) {
+      setActiveItem(storedActiveItem);
+    }
+  }, []);
+
+  const handleMenuItemClick = (item) => {
+    setActiveItem(item.heading); // Cập nhật mục đang được chọn
+    localStorage.setItem("activeItem", item.heading); // Lưu mục được chọn vào localStorage
+    navigate(item.Link); // Điều hướng đến trang tương ứng
   };
 
   return (
-    <>
-      <div
-        className="bars"
-        style={expanded ? { left: "60%" } : { left: "5%" }}
-        onClick={() => setExpanded(!expanded)}
-      >
-        <UilBars />
-      </div>
-      <motion.div
-        className="sidebar"
-        variants={sidebarVariants}
-        animate={window.innerWidth <= 768 ? `${expanded}` : ""}
-      >
-        <div className="menu">
-          {SidebarData.map((item, index) => {
-            return (
-              <div
-                className={selected === index ? "menuItem active1" : "menuItem"}
-                key={index}
-                onClick={() => {
-                  setSelected(index);
-                  if (item.Link) {
-                    navigate(item.Link); // Use navigate instead of Navigate
-                  }
-                }}
-              >
-                <item.icon />
-                <span>{item.heading}</span>
-              </div>
-            );
-          })}
-          {/* signoutIcon */}
-          <div className="menuItem">
-            {/* <UilSignOutAlt /> */}
-          </div>
+    <div className="app">
+      {/* Sidebar */}
+      <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+        {/* Logo */}
+        <div className="logo1">
+          <img src={Logo} alt="logo" />
+          <span>
+            AD<span>MIN</span>
+          </span>
         </div>
-      </motion.div>
-    </>
+        <div className="menu">
+          {SidebarData.map((item, index) => (
+            <div
+              className={`menuItem ${activeItem === item.heading ? "active" : ""}`} // Thêm class active khi mục được chọn
+              key={index}
+              onClick={() => handleMenuItemClick(item)} // Cập nhật activeItem khi click
+            >
+              <item.icon />
+              <span>{item.heading}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Nội dung chính */}
+      <div className={`main-content ${collapsed ? "collapsed" : ""}`}>
+        <h1>Welcome to Dashboard</h1>
+        {/* Nội dung chính ở đây */}
+      </div>
+    </div>
   );
 };
 

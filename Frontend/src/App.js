@@ -15,6 +15,7 @@ import Register from "./pages/Auth/Register/Register";
 import Notifications from "./components/notifications/notifications";
 import NotificationDetail from "./components/notifications/NotificationDetail";
 import CustomerReviews from './pages/Home/Tours/CustomerReviews';
+import Dashboard from "./pages/Admin/Dashboard";
 // admin
 import IndexUser from "./pages/Admin/User/IndexUser";
 import IndexDestination from "./pages/Admin/Destinations/IndexDestination";
@@ -41,11 +42,14 @@ import EditDuration from "./pages/Admin/duration/EditDuration";
 import IndexBooking from "./pages/Admin/Booking/indexBooking";
 import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 
+/* huong dan vienn */
+import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
+
 // </>
 import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
-import Dashboard from "./pages/Admin/Dashboard";
 import NoFooterLayout from "./layouts/NoFooterLayout";
+import TourGuideLayout from "./layouts/TourGuideLayout";
 function App() {
   return (
     <>
@@ -102,6 +106,10 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="/notifications/:id" element={<NotificationDetail />} />
+        </Route>
+        {/* huong dan vien*/}
+        <Route element={<TourGuideLayout />}>
+          <Route path="Indextourguide" element={<AdminTourGuide />} />
         </Route>
       </Routes>
     </>

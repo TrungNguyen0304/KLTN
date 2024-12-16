@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Navbar.css'; 
-import Logo from '../../../assets/admin/imgs/logo.png';
+
 import { FaBell, FaEnvelope, FaCog, FaUser, FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {
@@ -13,13 +13,14 @@ const Navbar = () => {
 
     return (
         <nav className="navbaradmin">
-            {/* Logo Section */}
-            <div className="logo">
-                <img src={Logo} alt="logo" />
-                <span>
-                    AD<span>MIN</span>
-                </span>
+    
+         
+
+            {/* Search Bar */}
+            <div className="search-container">
+                <input type="text" placeholder="Search..." className="search-input" />
             </div>
+
             {/* Notification and User Section */}
             <div className="user-icons">
                 <Link to="#" className="icon">
@@ -35,7 +36,7 @@ const Navbar = () => {
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
                             <Link to="#" className="dropdown-item">
-                                <FaCog /> Setting
+                                <FaCog /> Settings
                             </Link>
                             <Link to="#" className="dropdown-item">
                                 <FaUser /> Profile

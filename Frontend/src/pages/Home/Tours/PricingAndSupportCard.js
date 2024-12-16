@@ -31,9 +31,9 @@ const PricingAndSupportCard = ({
     const id = localStorage.getItem("userid");
     if (id) {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           `http://localhost:8001/api/user/${id}`
-        );
+        );  
         setUser(response.data);
         setFormData((prevFormData) => ({
           ...prevFormData,

@@ -1,47 +1,4 @@
-.navbaradmin {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-   
-}
-
-
-
-.logo span span {
-    color: #ffcc00; /* Highlight "MIN" in a different color */
-}
-
-.search-container {
-    display: flex;
-    align-items: center;
-    margin-left: auto; /* Push search container to the right */
-  
-}
-
-.search-container input {
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    width: 700px; /* Adjust width as needed */
-    border-radius: 20px;
-    border: 1px solid black;
-}
-
-.user-icon1 {
-    display: flex;
-    align-items: center;
-    color: black;
-    font-size: 30px; /* Adjust icon size */
-    cursor: pointer;
-    margin-left: 30px; /* Space between search and user icon */
-}
-
-.user-icon1:hover {
-    color: #ffcc00; /* Change color on hover */
-}
-
-
+/* Basic Navbar Styling */
 .navbaradmin {
     display: flex;
     justify-content: space-between;
@@ -62,36 +19,54 @@
 }
 
 .logo span {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: bold;
     color: #333;
 }
 
-.search-container .search-input {
-    width: 250px;
+.logo span span {
+    color: #ffcc00; /* Highlight "MIN" in a different color */
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search-container input {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 20px;
     outline: none;
+    width: 250px;
     transition: all 0.3s ease;
 }
 
-.search-container .search-input:focus {
+.search-container input:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
+/* User Icons */
 .user-icons {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
 }
 
+/* Notification Icons */
 .icon {
     position: relative;
     color: #555;
     font-size: 20px;
     text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.icon:hover {
+    color: #007bff;
 }
 
 .icon .badge {
@@ -105,6 +80,7 @@
     padding: 2px 6px;
 }
 
+/* Profile Dropdown */
 .profile {
     position: relative;
     cursor: pointer;
@@ -117,6 +93,11 @@
     border: 2px solid #007bff;
 }
 
+.profile:hover .profile-pic {
+    border-color: #0056b3;
+}
+
+/* Dropdown Menu */
 .dropdown-menu {
     position: absolute;
     top: 50px;
@@ -127,6 +108,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px 0;
     z-index: 1000;
+    min-width: 160px;
 }
 
 .dropdown-item {
@@ -137,10 +119,37 @@
     font-size: 14px;
     color: #333;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .dropdown-item:hover {
     background-color: #f8f9fa;
     color: #007bff;
+}
+
+/* Hover Effects for Dropdown */
+.dropdown-item:hover .fa-cog,
+.dropdown-item:hover .fa-user,
+.dropdown-item:hover .fa-envelope,
+.dropdown-item:hover .fa-sign-out-alt {
+    color: #007bff; /* Change icon color on hover */
+}
+
+/* Mobile Responsive Styling */
+@media (max-width: 768px) {
+    .navbaradmin {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-container {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .user-icons {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-start;
+    }
 }
