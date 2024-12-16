@@ -13,12 +13,28 @@
 .notification-item {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 1rem;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 1rem;
-  align-items: center;  /* Ensures the button aligns with the content */
+}
+
+.notification-content {
+  flex-grow: 1;
+}
+
+.options-btn {
+  color: #555;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+}
+
+.options-btn:hover {
+  color: #007bff;
 }
 
 .notification-message {
@@ -54,24 +70,27 @@
 }
 
 .delete-all-btn {
-  margin-bottom: 1rem;
-  background-color: #007bff;
+  color: #dc3545; /* Màu đỏ cho nút */
+  font-size: 1.5rem; /* Kích thước lớn hơn */
+  padding: 0.2rem;
   border: none;
-  color: white;
-  padding: 8px 16px;
-  font-size: 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-.delete-btn{
-  margin-bottom: 1rem;
-
+  outline: none;
 }
 
 .delete-all-btn:hover {
-  background-color: #0056b3;
+  color: #a71d2a; /* Màu đỏ đậm hơn khi hover */
+  background-color: transparent;
 }
+
+.delete-all-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.delete-all-icon:hover {
+  transform: scale(1.2); /* Hiệu ứng phóng to */
+}
+
 
 .no-notifications {
   font-size: 1.1rem;

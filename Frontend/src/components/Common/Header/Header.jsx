@@ -181,7 +181,7 @@ const Header = () => {
                 <NavDropdown.Item onClick={() => navigate("/profile")}>
                   <FaUserCircle className="user-icon" /> Hồ sơ của tôi
                 </NavDropdown.Item>
-                <NavDropdown.Item onClick={() => navigate("/my-bookings")}>
+                <NavDropdown.Item onClick={() => navigate("/OrderStatus")}>
                   <FaHistory className="user-icon" /> Đặt chỗ của tôi
                 </NavDropdown.Item>
                 <NavDropdown.Item onClick={handleLogout}>

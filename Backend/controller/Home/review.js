@@ -66,7 +66,7 @@ const createReview = async (req, res) => {
       });
 
       await newReview.save();
-
+ 
       // Cập nhật tổng điểm, số lượng đánh giá cho tourPackageId
       const updatedAverageRating = ((totalRating + rating) / (totalReviews + 1)).toFixed(1); // Làm tròn đến 2 chữ số thập phân
 
