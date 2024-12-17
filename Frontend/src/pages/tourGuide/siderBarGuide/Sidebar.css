@@ -1,0 +1,134 @@
+/* Sidebar container */
+.sidebar {
+  width: 250px; /* Độ rộng cố định cho sidebar */
+  height: 100vh; /* Chiều cao full viewport */
+  position: fixed; /* Cố định vị trí */
+  top: 0;
+  left: 0;
+  background-color: #1e2633; /* Nền màu xanh đậm */
+  color: #b3b8c4; /* Màu chữ nhẹ */
+  overflow-y: auto; /* Cuộn khi nội dung quá dài */
+  z-index: 1000; /* Đảm bảo sidebar nằm trên các thành phần khác */
+  transition: left 0.3s ease; /* Hiệu ứng mượt khi ẩn/hiện */
+}
+.logo1 {
+  display: flex;
+  justify-content: center;  /* Căn giữa theo chiều ngang */
+  align-items: center;      /* Căn giữa theo chiều dọc */
+  height: 100px;            /* Tăng chiều cao của khu vực chứa logo */
+ 
+ 
+}
+
+.logo1 img {
+  width: 70px;             /* Tăng kích thước logo */
+  height: auto;
+}
+
+.logo1 span {
+  font-size: 24px;          /* Tăng kích thước font chữ */
+  font-weight: bold;
+  margin-top: 10px;         /* Khoảng cách giữa logo và text */
+}
+
+.logo1 span span {
+  color: #007bff;           /* Màu sắc cho chữ "ADMIN" */
+}
+
+/* Menu container */
+.menu {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+/* Sidebar toggle button */
+.bars {
+  position: fixed;
+  top: 20px;
+  left: 20px; /* Đặt toggle icon ở góc trái trên */
+  background-color: #1e2633;
+  color: #b3b8c4;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1100; /* Nằm trên sidebar */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.bars:hover {
+  background-color: #2d3445;
+}
+
+/* Individual menu items */
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+  font-size: 15px;
+  color: #b3b8c4;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+.menuItem:hover,
+.menuItem.active1 {
+  background-color: #2d3445; /* Nền tối hơn khi hover hoặc active */
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.menuItem.active1 {
+  border-left: 4px solid #00b4d8; /* Viền trái nổi bật */
+  padding-left: 16px; /* Căn chỉnh padding để không xô lệch */
+}
+
+/* Responsive: Sidebar ẩn trên màn hình nhỏ */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    left: -100%; /* Ẩn sidebar mặc định */
+  }
+
+  .sidebar.expanded {
+    left: 0; /* Hiển thị sidebar khi được mở */
+  }
+
+  .bars {
+    left: 10px; /* Căn lại icon toggle */
+  }
+}
+
+/* Individual menu items */
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+  font-size: 15px;
+  color: #b3b8c4;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Khi hover hoặc mục đang được chọn */
+.menuItem:hover,
+.menuItem.active {
+  background-color: #2d3445; /* Nền tối hơn khi hover hoặc active */
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ để làm nổi bật */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ khi chọn */
+}
+
+/* Mục menu đang được chọn */
+.menuItem.active {
+  background-color: #00b4d8; /* Nền màu khác khi mục được chọn */
+  color: #ffffff; /* Màu chữ sáng hơn khi được chọn */
+  border-left: 4px solid #ffffff; /* Viền trái sáng nổi bật */
+  font-weight: bold; /* Đậm chữ để nhấn mạnh */
+}

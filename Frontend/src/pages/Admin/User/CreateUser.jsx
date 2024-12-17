@@ -105,8 +105,9 @@ const CreateUser = () => {
               name="role"
               required
             >
-              <option value="admin">Admin</option>
+              <option value="admin">Quản trị viên</option>
               <option value="user">Người dùng</option>
+              <option value="tourguide">Hướng dẫn viên </option>
             </select>
           </div>
           <button className='buttonCreate' type="submit">Đăng Ký</button>

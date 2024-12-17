@@ -110,6 +110,7 @@ function App() {
         {/* huong dan vien*/}
         <Route element={<TourGuideLayout />}>
           <Route path="Indextourguide" element={<AdminTourGuide />} />
+           <Route path="login" element={<Login />} />
         </Route>
       </Routes>
     </>

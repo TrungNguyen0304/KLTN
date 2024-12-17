@@ -1,0 +1,164 @@
+/* Basic Navbar Styling */
+.navbaradmin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+}
+
+.logo span span {
+    color: #ffcc00;
+    /* Highlight "MIN" in a different color */
+}
+
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+.search-container input {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.search-container input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* User Icons */
+.user-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Notification Icons */
+.icon {
+    position: relative;
+    color: #555;
+    font-size: 20px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.icon:hover {
+    color: #007bff;
+}
+
+.icon .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #ff3b30;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+
+/* Profile Dropdown */
+.profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-pic {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    border: 2px solid #007bff;
+}
+
+.profile:hover .profile-pic {
+    border-color: #0056b3;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 1000;
+    min-width: 160px;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    font-size: 14px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+/* Hover Effects for Dropdown */
+.dropdown-item:hover .fa-cog,
+.dropdown-item:hover .fa-user,
+.dropdown-item:hover .fa-envelope,
+.dropdown-item:hover .fa-sign-out-alt {
+    color: #007bff;
+    /* Change icon color on hover */
+}
+
+/* Mobile Responsive Styling */
+@media (max-width: 768px) {
+    .navbaradmin {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .search-container {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .user-icons {
+        margin-top: 10px;
+        width: 100%;
+        justify-content: flex-start;
+    }
+}
+
+.user-icon-header1 {
+    color: black;
+    font-size: 24px;
+
+    transition: color 0.3s;
+}

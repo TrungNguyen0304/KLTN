@@ -14,6 +14,14 @@ const IndexUser = () => {
   const initialQuery = user.state?.searchQuery || "";
   const UsersPerPage = 8;
 
+  // Role translation map
+  const roleMap = {
+    admin: "Quản trị viên",
+    user: "Người dùng",
+    tourguide: "Hướng dẫn viên",
+    // Add more roles as necessary
+  };
+
   // Fetch users based on initial query
   useEffect(() => {
     const fetchUsers = async () => {
@@ -56,6 +64,7 @@ const IndexUser = () => {
       console.error("Error deleting user:", error);
     }
   };
+
   // Pagination logic
   const totalPages = Math.ceil(users.length / UsersPerPage);
   const indexOfLastUser = currentPage * UsersPerPage;
@@ -107,13 +116,13 @@ const IndexUser = () => {
         <thead>
           <tr>
             <th>STT</th>
-            <th>First Name</th>
-            <th>Last Name</th>
+            <th>Tên</th>
+            <th>Họ</th>
             <th>Email</th>
-            <th>Role</th>
-            <th>Phone Number</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>Vai trò</th>
+            <th>Số điện thoại</th>
+            <th>Sửa</th>
+            <th>Xóa</th>
           </tr>
         </thead>
         <tbody>
@@ -123,7 +132,7 @@ const IndexUser = () => {
               <td>{user.firstname}</td>
               <td>{user.lastname}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
+              <td>{roleMap[user.role] || user.role}</td> {/* Map role to Vietnamese */}
               <td>{user.phoneNumber}</td>
               <td>
                 <div className="edit2">

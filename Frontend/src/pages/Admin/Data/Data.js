@@ -61,6 +61,20 @@ export const SidebarData = [
   },
 ];
 
+export const SidebarGuideData = [
+  {
+    icon: UilEstate,
+    heading: "Dashboard",
+    Link:"/Indextourguide"
+  },
+  {
+    icon: UilClipboardAlt,
+    heading: "Destination",
+    Link: "#",
+  },
+
+];
+
 // Analytics Cards Data
 export const cardsData = [
   {

@@ -12,7 +12,11 @@ const userSchema = new mongoose.Schema(
     firstname: { type: String, required: true },
     lastname: { type: String, required: true },
     phoneNumber: { type: String, required: true },
-    role: { type: String, default: "user" },
+    role: {
+      type: String,
+      enum: ["admin", "user", "tourguide"], 
+      default: "user",
+    },
   },
   {
     timestamps: true,
