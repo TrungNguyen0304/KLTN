@@ -69,10 +69,14 @@ const PricingAndSupportCard = ({
   };
 
   const handlePayment = async (id, total) => {
+    const userId = localStorage.getItem("userid");
     try {
       const response = await axios.post(
         `http://localhost:8001/api/booking/payment/${id}`,
-        { total },
+        { total, 
+          userId: userId, 
+        },
+        
         {
           headers: {
             "Content-Type": "application/json",

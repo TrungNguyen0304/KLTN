@@ -1,0 +1,102 @@
+/* Tour History Section */
+.tour-history {
+    text-align: center;
+    padding: 90px;
+    background-color: #f5f5f5;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tour-history h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .tour-history p {
+    margin-top: 10px;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Tour Grid Container */
+  .tour-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* Individual Tour Card */
+  .tour-card {
+    flex: 0 0 calc(33.33% - 20px);
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+  }
+  
+  
+  /* Image Container */
+  .tour-image {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+  }
+  
+  .tour-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .tour-image.image-error {
+    background-color: #f0f0f0;
+    color: #aaa;
+    font-size: 16px;
+  }
+  
+  /* Tour Information */
+  .tour-info {
+    padding: 10px 15px;
+  }
+  
+  .tour-location {
+    color: #777;
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  .tour-title {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  .tour-guide,
+  .tour-days {
+    color: #444;
+    margin: 5px 0;
+    font-size: 14px;
+  }
+  
+  .tour-price {
+    color: #ff5722;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px 0 0;
+    text-align: right;
+  }
+  

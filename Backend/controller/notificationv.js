@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Notificationv = require("../models/notificationv");
 const TourPackage = require("../models/tourPackage");  
+const notificationv = require("../models/notificationv");
 
 const getNotificationsByUserId = async (req, res) => {
   const { userId } = req.params;
@@ -12,8 +13,8 @@ const getNotificationsByUserId = async (req, res) => {
         .json({ success: false, message: "userId không hợp lệ" });
     }
 
-    const notifications = await Notificationv.find({ userId })
-      .populate("bookingid")
+    const notifications = await notificationv.find({ userId })
+      .populate("paymentid")
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, notifications });
   } catch (err) {
@@ -34,14 +35,14 @@ const getNotificationById = async (req, res) => {
 
     const notification = await Notificationv.findById(notificationId)
       .populate("userId")   
-      .populate("bookingid") 
+      .populate("paymentid") 
       .exec(); 
 
     if (!notification) {
       return res.status(404).json({ success: false, message: "Thông báo không tìm thấy" });
     }
 
-    const packageId = notification.bookingid ? notification.bookingid.packageId : null;
+    const packageId = notification.paymentid ? notification.paymentid.packageId : null;
 
     const populatedNotification = {
       ...notification.toObject(),
@@ -63,17 +64,24 @@ const deleteAllNotificationsByUserId = async (req, res) => {
 
   try {
     if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ success: false, message: "userId không hợp lệ" });
+      return res
+        .status(400)
+        .json({ success: false, message: "userId không hợp lệ" });
     }
 
-    const notifications = await Notificationv.deleteMany({ userid: userId });
-
-    res.status(200).json({ success: true, message: `${notifications.deletedCount} thông báo đã được xóa` });
+    const result = await Notificationv.deleteMany({  userId });
+    res.status(200).json({
+      success: true,
+      message: `${result.deletedCount} thông báo đã được xóa`,
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: "Lỗi máy chủ", error: err });
+    res
+      .status(500)
+      .json({ success: false, message: "Lỗi máy chủ", error: err });
   }
 };
+
 
 const deleteNotificationById = async (req, res) => {
   const { notificationId } = req.params;

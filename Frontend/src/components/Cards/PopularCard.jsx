@@ -61,7 +61,7 @@ const PopularCard = ({ val }) => {
           <NavLink
             className="body-text text-dark text-decoration-none"
             to={`/tour-details/${val._id}`}
-            onClick={() => handleViewTour(val)}  // Gọi hàm khi nhấp vào tour
+            onClick={() => handleViewTour(val)}  
           >
             {val.package_name || "Unnamed Package"}
           </NavLink>
@@ -73,7 +73,7 @@ const PopularCard = ({ val }) => {
             <i className="bi bi-star-fill me-1"></i>
           </span>
           <span>{val.averageRating || "N/A"}</span>
-          {/* <span>( {val.totalReviews || 0} reviews )</span> */}
+          <span>( {val.totalReviews || 0} reviews )</span>
         </p>
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}

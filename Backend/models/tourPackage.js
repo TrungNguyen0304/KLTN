@@ -9,9 +9,9 @@ const tourPackageSchema = new mongoose.Schema({
     description: { type: String },
     image: { type: String,required: false  },
     groupImages: { type: [String], required: true },  
-    totalReviews: { type: Number, default: 0 },   // Tổng số đánh giá
-    totalRating: { type: Number, default: 0 },    // Tổng điểm đánh giá
-    averageRating: { type: Number, default: 0 },  // Điểm trung bình đánh giá
+    totalReviews: { type: Number, default: 0 },   
+    totalRating: { type: Number, default: 0 },    
+    averageRating: { type: Number, default: 0 }, 
     reviewId: { type: Schema.Types.ObjectId, ref: 'Review' },
     destinationId: { type: Schema.Types.ObjectId, ref: 'Destination' },
     tourGuideId: { type: Schema.Types.ObjectId, ref: 'TourGuide', required: true },
