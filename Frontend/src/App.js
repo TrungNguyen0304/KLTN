@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Index from "./pages/Home/Index/Index";
 import Profile from "./components/Profile/Profile";
+import OrderStatus from "./components/OrderDetails/OrderStatus";
 import About from "./pages/Home/About/About";
 import Contact from "./pages/Home/Contact/Contact";
 import Tours from "./pages/Home/Tours/Tours";
@@ -104,6 +105,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="OrderStatus" element={<OrderStatus />} />
           <Route path="notifications" element={<Notifications />} />
           <Route path="/notifications/:id" element={<NotificationDetail />} />
         </Route>
