@@ -106,10 +106,47 @@ const getTourGuideById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+const searchTourGuide = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+    let filter = {};
+
+    if (searchQuery) {
+      const searchTerms = searchQuery.trim().split(" ");
+      if (searchTerms.length === 1) {
+      
+        filter = {
+          $or: [
+            { first_name: { $regex: searchTerms[0], $options: "i" } },
+            { last_name: { $regex: searchTerms[0], $options: "i" } },
+            { email: { $regex: searchTerms[0], $options: "i" } },
+          ],
+        };
+      } else if (searchTerms.length > 1) {
+      
+        filter = {
+          $and: [
+            { first_name: { $regex: searchTerms[0], $options: "i" } },
+            { last_name: { $regex: searchTerms[1], $options: "i" } },
+          ],
+        };
+      }
+    }
+
+    const tourGuides = await tourGuide.find(filter);
+    res.status(200).json(tourGuides);
+  } catch (error) {
+    console.error("Error fetching tour guides:", error);
+    res.status(500).json({ message: "Error fetching tour guides" });
+  }
+};
+
 module.exports = {
   createTourGuide,
   deleteTourGuide,
   editTourGuide,
   getAllTourGuide,
   getTourGuideById,
+  searchTourGuide
 };

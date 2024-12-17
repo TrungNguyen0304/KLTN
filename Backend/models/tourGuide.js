@@ -6,7 +6,6 @@ const tourGuideSchema = new mongoose.Schema({
   images:{type: String, require: true},
   phone_number: { type: String, required: true },
   email: { type: String, required: true },
-  
 },
 {
   timestamps: true,

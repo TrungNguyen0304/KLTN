@@ -574,3 +574,53 @@
   font-size: 14px;
   cursor: default;
 }
+/*phan trang*/
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.pagination-btn,
+.pagination-number {
+  border: none;
+  background-color: #f8f9fa;
+  color: #007bff;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination-number.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
+
+.pagination-btn.disabled,
+.pagination-number.disabled {
+  cursor: not-allowed;
+  color: #6c757d;
+}
+
+.pagination-btn:hover:not(.disabled),
+.pagination-number:hover:not(.active):not(.disabled) {
+  background-color: #e9ecef;
+}
+
+.pagination-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-number {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

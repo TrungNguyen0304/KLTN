@@ -33,7 +33,7 @@ const EditTour = () => {
   useEffect(() => {
     const fetchTourData = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           `http://localhost:8001/api/tourPackage/${id}`
         );
         const data = response.data;

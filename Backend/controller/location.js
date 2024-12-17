@@ -95,10 +95,44 @@ const getLocationById = async (req, res) => {
     }
 };
 
+const searchLocation = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+
+    // Modify the filter to use firstname (you can change this to another field if needed)
+    const filter = searchQuery
+      ? {
+          firstname: { $regex: searchQuery, $options: "i" }, // Search by firstname (or any other field)
+        }
+      : {};
+
+    // Lấy danh sách locations đã lọc
+    const locations = await Location.find(filter);
+
+    // Tính toán số lượng destinations cho mỗi location
+    const locationsWithDestinationsCount = await Promise.all(
+      locations.map(async (location) => {
+        // Tính số lượng destinations liên quan đến location này
+        const destinationsCount = await Destination.countDocuments({ locationId: location._id });
+        return {
+          ...location.toObject(),
+          destinationsCount,  // Thêm trường destinationsCount vào mỗi location
+        };
+      })
+    );
+
+    // Trả về danh sách locations với destinationsCount
+    res.status(200).json(locationsWithDestinationsCount);
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+    res.status(500).json({ message: "Error fetching locations" });
+  }
+};
 module.exports = {
     create,
     getAll,
     deleteLocation,
     updateLocation,
-    getLocationById
+    getLocationById,
+    searchLocation
 };

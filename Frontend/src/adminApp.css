@@ -11,7 +11,6 @@
 
 .App {
   color: var(--black);
- 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,10 +20,10 @@
 .AppGlass {
   display: grid;
   height: 97%;
-  width: 97%;
+  width: 93%;
   background: var(--glass);
   gap: 16px;
-  grid-template-columns: 11rem auto ;
+  grid-template-columns: 14rem auto ;
   overflow: hidden;
 }
 

@@ -15,7 +15,7 @@ const DestinationDetails = () => {
   // Hàm fetch data từ API
   const fetchDestinationDetails = async (destinationId) => {
     try {
-      const response = await axios.get(
+      const response = await axios.post(
         `http://localhost:8001/api/destination/${destinationId}`
       );
       return response.data;

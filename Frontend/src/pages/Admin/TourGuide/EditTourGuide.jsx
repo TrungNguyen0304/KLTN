@@ -19,7 +19,7 @@ const EditTourGuide = () => {
   useEffect(() => {
     const fetchTourGuide = async () => {
       try {
-        const response = await axios.get(`http://localhost:8001/api/tourGuide/${id}`);
+        const response = await axios.post(`http://localhost:8001/api/tourGuide/${id}`);
         const data = response.data;
 
         setTourGuideData({

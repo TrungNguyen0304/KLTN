@@ -15,7 +15,7 @@ import Gallery from "../../../components/Gallery/Gallery";
 const Home = () => {
   const [destinations, setDestinations] = useState([]);
   const [tourPackages, setTourPackages] = useState([]);
-  const [visiblePackages, setVisiblePackages] = useState(8); // Số lượng hiển thị ban đầu
+  const [visiblePackages] = useState(8); // Số lượng hiển thị ban đầu
   const navigate = useNavigate(); // Điều hướng qua các trang
 
   useEffect(() => {

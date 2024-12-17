@@ -9,14 +9,10 @@ import CustomDropdown from "../CustomDropdown/CustomDropdown";
 
 const AdvanceSearch = () => {
   const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [endDate] = useState(new Date());
 
-  const selectedLocation =(value)=>{ // Hàm xử lý khi chọn địa điểm
+  const selectedLocation = (value) => { // Hàm xử lý khi chọn địa điểm
     console.log("Địa điểm:", value)
-  }
-
-  const selectedGuest =(value)=>{ // Hàm xử lý khi chọn số lượng khách
-    console.log("Khách:", value)
   }
 
   return (
@@ -41,7 +37,7 @@ const AdvanceSearch = () => {
                   />
                 </div>
                 <div className="item-search item-search-2">
-                  <label className="item-search-label"> Nhận phòng </label>
+                  <label className="item-search-label"> Ngày khởi hành </label>
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
@@ -51,35 +47,14 @@ const AdvanceSearch = () => {
                     dateFormat="dd, MMMM, yyyy"
                   />
                 </div>
-                <div className="item-search item-search-2">
-                  <label className="item-search-label"> Trả phòng </label>
-                  <DatePicker
-                    selected={endDate}
-                    onChange={(date) => setEndDate(date)}
-                    selectsEnd
-                    startDate={endDate}
-                    endDate={startDate}
-                    dateFormat="dd, MMMM, yyyy"
-                  />
-                </div>
-                <div className="item-search bd-none">
-                  <CustomDropdown
-                    label="Khách"
-                    onSelect={selectedGuest}
-                    options={[
-                      "2 người lớn, 1 trẻ em",
-                      "2 người lớn, 1 trẻ em",
-                      "2 người lớn, 3 trẻ em",
-                    ]}
-                  />
-                </div>
-                <div className="item-search bd-none">
+                  <div className="item-search bd-none">
                     <Button className="primaryBtn flex-even d-flex justify-content-center">
-                    <i className="bi bi-search me-2"></i> Tìm kiếm
+                      <i className="bi bi-search me-2"></i> Tìm kiếm
                     </Button>
 
-                </div>
+                  </div>
               </div>
+
             </Col>
           </Row>
         </Container>

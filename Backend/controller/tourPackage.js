@@ -287,6 +287,37 @@ const countTourByDestination = async (req, res) => {
   }
 };
 
+const searchTour = async (req, res) => {
+  try {
+    const { searchQuery } = req.query;
+
+    // Modify the filter to use package_name
+    const filter = searchQuery
+      ? {
+          package_name: { $regex: searchQuery, $options: "i" },
+        }
+      : {};
+
+    // Lấy danh sách tour đã lọc và populate các trường liên quan
+    const tourpackages = await TourPackage.find(filter)
+      .populate("destinationId", "DestinationName")
+      .populate("tourGuideId")
+      .populate("locationId", "firstname")
+      .populate({
+        path: "durations",
+        select: "itinerary start_date end_date durationText",
+        options: { virtuals: true },
+      })
+      .exec();
+
+    // Trả về danh sách tour đã lọc
+    res.status(200).json(tourpackages);
+  } catch (error) {
+    console.error("Error searching tours:", error);
+    res.status(500).json({ message: "Error searching tours" });
+  }
+};
+
 module.exports = {
   createTour,
   deleteTour,
@@ -294,4 +325,5 @@ module.exports = {
   getAllTour,
   getAllTourById,
   countTourByDestination,
+  searchTour
 };

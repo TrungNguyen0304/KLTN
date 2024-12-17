@@ -5,15 +5,16 @@ const { createTour,
     editTour,
     getAllTour,
     getAllTourById,
-    countTourByDestination } = require("../controller/tourPackage");
+    countTourByDestination, 
+    searchTour} = require("../controller/tourPackage");
 const upload = require("../middlewares/upload");
 
 router.post("/create", upload, createTour);
 router.get("/", getAllTour);
-router.get("/:id", getAllTourById);
+router.post("/:id", getAllTourById);
 router.put("/update/:id", upload, editTour);
 router.delete("/delete/:id", deleteTour);
 router.get("/count/:destinationId", countTourByDestination);
-
+router.get("/search", searchTour);
 module.exports = router;
 

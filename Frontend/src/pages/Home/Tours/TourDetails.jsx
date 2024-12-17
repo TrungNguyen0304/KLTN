@@ -32,7 +32,7 @@ const TourDetails = () => {
 
     const fetchTourDetails = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           `http://localhost:8001/api/tourPackage/${id}`
         );
         // console.log(tourPackage);

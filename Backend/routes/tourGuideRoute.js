@@ -7,12 +7,15 @@ const {
   editTourGuide,
   getAllTourGuide,
   getTourGuideById,
+  searchTourGuide,
 } = require("../controller/tourGuide");
 
 router.delete("/delete/:id", deleteTourGuide);
 router.post("/create",upload, createTourGuide);
 router.put("/update/:id", upload,editTourGuide);
 router.get("/getAll", getAllTourGuide);
-router.get("/:id", getTourGuideById);
+router.post("/:id", getTourGuideById);
+router.get("/search", searchTourGuide);
+
 
 module.exports = router;
