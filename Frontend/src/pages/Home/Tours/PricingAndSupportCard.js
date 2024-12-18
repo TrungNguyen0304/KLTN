@@ -68,13 +68,14 @@ const PricingAndSupportCard = ({
     }
   };
 
-  const handlePayment = async (id, total) => {
+  const handlePayment = async (id, totalPrice,totalPeople) => {
     const userId = localStorage.getItem("userid");
     try {
       const response = await axios.post(
         `http://localhost:8001/api/booking/payment/${id}`,
-        { total, 
+        { totalPrice, 
           userId: userId, 
+          totalPeople
         },
         
         {
@@ -324,7 +325,7 @@ const PricingAndSupportCard = ({
               {/* Momo Payment */}
             </Form>
             <div
-              onClick={() => handlePayment(tourPackage._id, totalPrice)}
+              onClick={() => handlePayment(tourPackage._id, totalPrice,totalPeople)}
               className="w-100 d-flex justify-content-center align-items-center mt-3 custom-button"
               style={{
                 cursor: "pointer",

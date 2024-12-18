@@ -13,6 +13,8 @@ const paymentSchema = new Schema(
     notificationid: { type: Schema.Types.ObjectId, ref: "Notification" },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     method: { type: String, required: true },
+    code: { type: String, unique: true, required: true },
+    totalPeople: { type: Number, required: true },
     status: {
       type: String,
       enum: ["pending", "complete", "failed"],
