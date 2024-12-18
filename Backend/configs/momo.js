@@ -10,10 +10,11 @@ var secretKey = process.env.MOMO_SECRET_KEY;
 
 const payment = async (req, res) => {
   const { id } = req.params;
-  const { total, userId } = req.body;
+  const { totalPrice, userId, totalPeople } = req.body; // Thêm totalPeople vào đây
 
   console.log("tourPackage ID:", id);
-  console.log("Total:", total);
+  console.log("Total:", totalPrice);
+  console.log("Total People:", totalPeople); // Kiểm tra totalPeople
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res
@@ -37,7 +38,7 @@ const payment = async (req, res) => {
     const ipnUrl =
       "https://195f-2001-ee0-4c25-9f20-7d04-d7d6-97a5-c36c.ngrok-free.app/callback";
     const requestType = "payWithMethod";
-    const amount = total;
+    const amount = totalPrice;
     const orderId = partnerCode + new Date().getTime();
     const requestId = orderId;
     const extraData = "";
@@ -48,13 +49,13 @@ const payment = async (req, res) => {
     const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
 
     // Tạo signature
-
     var signature = crypto
       .createHmac("sha256", secretKey)
       .update(rawSignature)
       .digest("hex");
     console.log("--------------------SIGNATURE----------------");
     console.log(signature);
+
     // Tạo body gửi API MoMo
     const requestBody = JSON.stringify({
       partnerCode: partnerCode,
@@ -85,18 +86,23 @@ const payment = async (req, res) => {
     };
 
     const result = await axios(options);
+    const code = `ORDER-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
     if (result.data.resultCode === 0) {
       const newPayment = new Payment({
         packageId: id,
-        amount: total,
+        amount: totalPrice,
         status: "complete",
         order_id: orderId,
         method: "MoMo",
         userId: userId,
+        totalPeople: totalPeople, // Lưu totalPeople vào database
+        code: code,
       });
 
       await newPayment.save();
       console.log("Payment saved successfully:", newPayment);
+
       // Gửi thông báo khi thanh toán thành công
       const notification = new Notificationv({
         userId,
@@ -119,6 +125,7 @@ const payment = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 const callback = async (req, res) => {
   try {
@@ -282,11 +289,71 @@ const getBookingByCode = async (req, res) => {
     });
   }
 };
+
+const getPaymentsByUser = async (req, res) => {
+  try {
+    const { userid } = req.params;
+
+    // Kiểm tra tính hợp lệ của userId
+    if (!mongoose.Types.ObjectId.isValid(userid)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "userId không hợp lệ" });
+    }
+
+    // Truy vấn payments theo userId
+    const payments = await Payment.find({ userId: userid })
+      .populate("userId")
+      .populate("packageId");
+
+    if (!payments.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy lịch sử thanh toán cho user này.",
+      });
+    }
+
+    // Xử lý mỗi payment trong payments
+    const populatedPayments = await Promise.all(
+      payments.map(async (payment) => {
+        const packageId = payment.packageId ? payment.packageId : null;
+
+        const populatedPayment = {
+          ...payment.toObject(),
+          packageId: packageId
+            ? await tourPackage.findById(packageId)
+                .populate("locationId", "firstname")  
+                .populate("durations")
+            : null,
+        };
+
+        return populatedPayment;
+      })
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy lịch sử thanh toán thành công!",
+      payments: populatedPayments,
+    });
+  } catch (error) {
+    console.error("Lỗi khi tải lịch sử thanh toán:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi tải lịch sử thanh toán",
+      error: error.message,
+    });
+  }
+};
+
+
+
 module.exports = {
   payment,
   callback,
   checkPaymentStatus,
   getAll,
   deleteBooking ,
-  getBookingByCode
+  getBookingByCode,
+  getPaymentsByUser
 };

@@ -4,34 +4,34 @@ import axios from "axios";
 
 const BookingDetail = () => {
   const { code } = useParams();
-  const [booking, setBooking] = useState(null);
+  const [payment, setpayment] = useState(null);
 
   useEffect(() => {
-    const fetchBookingDetail = async () => {
+    const fetchpaymentDetail = async () => {
       try {
         const response = await axios.get(
           `http://localhost:8001/api/booking/code/${code}`
         );
-        console.log(response.data.booking); 
-        setBooking(response.data.booking);  
+        console.log(response.data.payment); 
+        setpayment(response.data.payment);  
       } catch (error) {
         console.error("Lỗi khi lấy chi tiết đặt phòng:", error);
       }
     };
 
-    fetchBookingDetail();
+    fetchpaymentDetail();
   }, [code]);
 
-  if (!booking) {
+  if (!payment) {
     return <div>Loading...</div>;
   }
 
-  const isArray = Array.isArray(booking);
+  const isArray = Array.isArray(payment);
 
   return (
-    <div className="HeaderBookings">
-      <h1>Booking Detail</h1>
-      <div className="TableBookings">
+    <div className="Headerpayments">
+      <h1>payment Detail</h1>
+      <div className="Tablepayments">
         <table>
           <thead>
             <tr>
@@ -40,29 +40,29 @@ const BookingDetail = () => {
               <th>Total</th>
               <th>Quantity</th>
               <th>Special Requests</th>
-              <th>Booking Date</th>
+              <th>payment Date</th>
             </tr>
           </thead>
           <tbody>
             {isArray ? (
-              booking.map((item, index) => (
+              payment.map((item, index) => (
                 <tr key={item._id}>
                   <td>{index + 1}</td>
                   <td>{item.packageId.package_name}</td>
                   <td>{item.total}</td>
-                  <td>{item.quantity}</td>
+                  <td>{item.totalPeople}</td>
                   <td>{item.special_requests}</td>
                   <td>{new Date(item.createdAt).toLocaleString()}</td>
                 </tr>
               ))
             ) : (
-              <tr key={booking._id}>
+              <tr key={payment._id}>
                 <td>1</td>
-                <td>{booking.packageId.package_name}</td>
-                <td>{booking.total}</td>
-                <td>{booking.quantity}</td>
-                <td>{booking.special_requests}</td>
-                <td>{new Date(booking.createdAt).toLocaleString()}</td>
+                <td>{payment.packageId.package_name}</td>
+                <td>{payment.amount}</td>
+                <td>{payment.totalPeople}</td>
+                <td>{payment.special_requests}</td>
+                <td>{new Date(payment.createdAt).toLocaleString()}</td>
               </tr>
             )}
           </tbody>

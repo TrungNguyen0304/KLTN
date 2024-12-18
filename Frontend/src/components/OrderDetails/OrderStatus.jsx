@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './OrderStatus.css';
 
 function TourCard({ imageSrc, title, guide, days, price, location }) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    
     <div className="tour-card">
-        
       {/* Image */}
       <div className={`tour-image ${imageError ? 'image-error' : ''}`}>
         {!imageError ? (
@@ -38,46 +36,53 @@ function TourCard({ imageSrc, title, guide, days, price, location }) {
 }
 
 export default function TourGrid() {
-  const tours = [
-    {
-      imageSrc: '/image.png',
-      title: 'Tour Miền Bắc 5N4Đ: HCM - Hà Nội - Lũng Cú...',
-      guide: 'Tran huu thai',
-      days: '4 Ngày 3 Đêm',
-      price: '10.000.000',
-      location: 'Việt Nam / Vịnh Hạ Long',
-    },
-    {
-      imageSrc: '/image.png',
-      title: 'Tour Đà Lạt 3N2Đ: Thác Datanla - Hồ Xuân Hương...',
-      guide: 'Nguyen Van A',
-      days: '3 Ngày 2 Đêm',
-      price: '8.500.000',
-      location: 'Việt Nam / Đà Lạt',
-    },
-    {
-      imageSrc: '/image.png',
-      title: 'Tour Huế - Hội An - Đà Nẵng 5N4Đ...',
-      guide: 'Le Thi B',
-      days: '5 Ngày 4 Đêm',
-      price: '12.000.000',
-      location: 'Việt Nam / Hội An',
-    },
-  ];
+  const [payments, setPayments] = useState([]);
+  const userId = localStorage.getItem("userid");
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      try {
+        const response = await fetch(`http://localhost:8001/api/booking/${userId}`);
+        const data = await response.json();
+        if (data.success) {
+          setPayments(data.payments);
+        } else {
+          console.log(data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching payments:', error);
+      }
+    };
+
+    fetchPayments();
+  }, [userId]);
 
   return (
     <div>
-
       {/* Tour History Section */}
       <section className="tour-history">
         <h2>Lịch sử đặt</h2>
         <p>Khám phá các chuyến du lịch đã từng tổ chức với những kỷ niệm đáng nhớ và hành trình thú vị.</p>
       </section>
-    <div className="tour-grid">
-      {tours.map((tour, index) => (
-        <TourCard key={index} {...tour} />
-      ))}
-    </div>
+
+      <div className="tour-grid">
+        {payments.length ? (
+          payments.map((payment, index) => (
+            <TourCard
+            key={index}
+            imageSrc={payment.packageId?.image || 'default-image.jpg'}  // Provide a fallback image if none exists
+            title={payment.packageId?.package_name || 'No title available'}
+            guide={payment.packageId?.tourGuideId?.first_name || 'No guide available'}
+            days={payment.packageId?.days || 0}
+            price={payment.amount || 'Not available'}
+            location={payment.packageId?.locationId?.firstname || 'No location available'}
+          />
+          
+          ))
+        ) : (
+          <p>No payment history available</p>
+        )}
+      </div>
     </div>
   );
 }
