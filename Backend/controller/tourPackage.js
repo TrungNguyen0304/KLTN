@@ -1,7 +1,8 @@
 const TourPackage = require("../models/tourPackage");
 const Destination = require("../models/destination");
-
+const tourGuide = require("../models/tourGuide");
 const Duration = require("../models/duration");
+const user = require("../models/user");
 const mongoose = require("mongoose"); // Make sure mongoose is imported
 
 const createTour = async (req, res) => {
@@ -20,6 +21,7 @@ const createTour = async (req, res) => {
       durations,
       destinationId,
       tourGuideId,
+      userGuideId,
       locationId,
       incAndExc,
     } = req.body;
@@ -30,25 +32,18 @@ const createTour = async (req, res) => {
     }
 
     if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng.",
-        });
+      return res.status(400).json({
+        message: "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng.",
+      });
     }
 
     const invalidDurations = parsedDurations.filter(
       (id) => !mongoose.Types.ObjectId.isValid(id)
     );
     if (invalidDurations.length > 0) {
-      return res
-        .status(400)
-        .json({
-          message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
-            ", "
-          )}`,
-        });
+      return res.status(400).json({
+        message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(", ")}`,
+      });
     }
 
     // Tạo một instance mới của TourPackage
@@ -61,6 +56,7 @@ const createTour = async (req, res) => {
       durations: parsedDurations,
       destinationId,
       tourGuideId,
+      userGuideId,
       locationId,
       incAndExc,
       groupImages,
@@ -84,33 +80,55 @@ const createTour = async (req, res) => {
       );
     }
 
-    // Trả về phản hồi với ID của tour mới và các thông tin cần thiết khác
+    if (tourGuideId) {
+      await tourGuide.findByIdAndUpdate(
+        tourGuideId,
+        { $push: { tourPackageId: newTour._id } },
+        { new: true }
+      );
+    }
+    if (userGuideId) {
+      await user.findByIdAndUpdate(
+        userGuideId,
+        { $push: { tourPackageId: newTour._id } },
+        { new: true }
+      );
+    }
+
+    // Truy vấn tất cả các tourPackage của userId được chọn
+    const userTourPackages = await TourPackage.find({ userGuideId: userGuideId });
+
+    // Trả về phản hồi với ID của tour mới và toàn bộ dữ liệu liên quan của user
     return res.status(201).json({
       message: "Tour package created successfully!",
       tour: {
-        _id: newTour._id, // Bao gồm ID của tour mới
+        _id: newTour._id,
         package_name: newTour.package_name,
         description: newTour.description,
-        price: newTour.price,
+        adult_price: newTour.adult_price,
+        pricechildren_price: newTour.pricechildren_price,
         durations: newTour.durations,
         image: newTour.image,
         groupImages: newTour.groupImages,
         destinationId: newTour.destinationId,
         tourGuideId: newTour.tourGuideId,
+        userGuideId: newTour.userGuideId,
         locationId: newTour.locationId,
         incAndExc: newTour.incAndExc,
       },
+      userTours: userTourPackages, // Trả về toàn bộ danh sách tour của user
     });
   } catch (error) {
     console.error("Error creating tour:", error);
-    return res
-      .status(500)
-      .json({
-        message: "Đã xảy ra lỗi trong quá trình tạo tour.",
-        error: error.message,
-      });
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi trong quá trình tạo tour.",
+      error: error.message,
+    });
   }
 };
+
+
+
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
   const { id } = req.params;
@@ -136,16 +154,21 @@ const deleteTour = async (req, res) => {
 const editTour = async (req, res) => {
   const { id } = req.params;
 
+  // Kiểm tra ID hợp lệ
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "ID không hợp lệ" });
   }
+
   try {
+    // Kiểm tra và lấy dữ liệu hình ảnh nếu có
     const image =
       req.files && req.files["image"] ? req.files["image"][0].path : "";
     const groupImages =
       req.files && req.files["groupImages"]
         ? req.files["groupImages"].map((file) => file.path)
         : [];
+
+    // Lấy dữ liệu từ req.body
     const {
       package_name,
       description,
@@ -154,73 +177,88 @@ const editTour = async (req, res) => {
       durations,
       destinationId,
       tourGuideId,
+      userGuideId,
       locationId,
       incAndExc,
     } = req.body;
 
-    let parsedDurations = durations;
-    if (typeof durations === "string") {
-      parsedDurations = JSON.parse(durations);
+    // Kiểm tra và parse durations (phải là mảng ObjectId)
+    let parsedDurations = [];
+    if (durations) {
+      try {
+        parsedDurations =
+          typeof durations === "string" ? JSON.parse(durations) : durations;
+      } catch (parseError) {
+        return res
+          .status(400)
+          .json({ message: "Durations phải là một mảng JSON hợp lệ." });
+      }
     }
-    if (!Array.isArray(parsedDurations) || parsedDurations.length === 0) {
+
+    if (!Array.isArray(parsedDurations)) {
       return res
         .status(400)
-        .json({
-          message:
-            "Durations phải là một mảng các ObjectId hợp lệ và không được rỗng.",
-        });
+        .json({ message: "Durations phải là một mảng các ObjectId." });
     }
 
     const invalidDurations = parsedDurations.filter(
-      (id) => !mongoose.Types.ObjectId.isValid(id)
+      (durId) => !mongoose.Types.ObjectId.isValid(durId)
     );
+
     if (invalidDurations.length > 0) {
-      return res
-        .status(400)
-        .json({
-          message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
-            ", "
-          )}`,
-        });
+      return res.status(400).json({
+        message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
+          ", "
+        )}`,
+      });
     }
 
+    // Tìm tour cần cập nhật
     const tour = await TourPackage.findById(id);
     if (!tour) {
       return res.status(404).json({ message: "Gói tour không tồn tại" });
     }
 
+    // Cập nhật các trường
     tour.package_name = package_name || tour.package_name;
     tour.description = description || tour.description;
     tour.adult_price = adult_price || tour.adult_price;
     tour.pricechildren_price = pricechildren_price || tour.pricechildren_price;
-    tour.durations = parsedDurations || tour.durations;
+    tour.durations = parsedDurations.length > 0 ? parsedDurations : tour.durations;
     tour.destinationId = destinationId || tour.destinationId;
     tour.tourGuideId = tourGuideId || tour.tourGuideId;
+    tour.userGuideId = userGuideId || tour.userGuideId;
     tour.locationId = locationId || tour.locationId;
     tour.incAndExc = incAndExc || tour.incAndExc;
-    tour.image = image || tour.image;
-    tour.groupImages = groupImages.length > 0 ? groupImages : tour.groupImages;
 
+    // Cập nhật hình ảnh nếu có
+    tour.image = image || tour.image;
+    tour.groupImages =
+      groupImages.length > 0 ? groupImages : tour.groupImages;
+
+    // Lưu thay đổi
     await tour.save();
 
-    await Duration.updateMany(
-      { _id: { $in: parsedDurations } },
-      { $set: { tourPackageId: id } }
-    );
+    // Cập nhật Duration nếu có durations mới
+    if (parsedDurations.length > 0) {
+      await Duration.updateMany(
+        { _id: { $in: parsedDurations } },
+        { $set: { tourPackageId: id } }
+      );
+    }
 
     return res
       .status(200)
       .json({ message: "Gói tour đã được cập nhật thành công", tour });
   } catch (error) {
     console.error("Lỗi khi cập nhật gói tour:", error);
-    return res
-      .status(500)
-      .json({
-        message: "Đã xảy ra lỗi trong quá trình cập nhật gói tour",
-        error: error.message,
-      });
+    return res.status(500).json({
+      message: "Đã xảy ra lỗi trong quá trình cập nhật gói tour.",
+      error: error.message,
+    });
   }
 };
+
 
 // API get all tourPacket
 const getAllTour = async (req, res) => {
@@ -228,6 +266,7 @@ const getAllTour = async (req, res) => {
     const tourpackages = await TourPackage.find({})
       .populate("destinationId", "DestinationName")
       .populate("tourGuideId")
+      .populate("userGuideId")
       .populate("locationId", "firstname")
       .populate({
         path: "durations",
@@ -251,6 +290,7 @@ const getAllTourById = async (req, res) => {
     const tourPackage = await TourPackage.findById(tourPackageId)
       .populate("destinationId", "DestinationName")
       .populate("tourGuideId")
+      .populate("userGuideId")
       .populate("locationId", "firstname")
       .populate({
         path: "durations",
@@ -294,8 +334,8 @@ const searchTour = async (req, res) => {
     // Modify the filter to use package_name
     const filter = searchQuery
       ? {
-          package_name: { $regex: searchQuery, $options: "i" },
-        }
+        package_name: { $regex: searchQuery, $options: "i" },
+      }
       : {};
 
     // Lấy danh sách tour đã lọc và populate các trường liên quan

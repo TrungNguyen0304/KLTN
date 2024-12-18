@@ -14,10 +14,11 @@ const userSchema = new mongoose.Schema(
     phoneNumber: { type: String, required: true },
     role: {
       type: String,
-      enum: ["admin", "user", "tourguide"], 
+      enum: ["admin", "user", "tourguide"],
       default: "user",
     },
   },
+
   {
     timestamps: true,
   }
