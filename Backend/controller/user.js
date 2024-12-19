@@ -1,7 +1,7 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const Payment = require("../models/payment");
 // API Register user
 const register = async (req, res) => {
   const { email, password, firstname, lastname, phoneNumber } = req.body;
@@ -35,8 +35,6 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // console.log("Thử đăng nhập bằng email:", email);
-
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Email không hợp lệ." });
@@ -47,16 +45,27 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Mật khẩu không hợp lệ." });
     }
 
-    // Tạo JWT token
     const token = jwt.sign(
       { id: user._id, firstname: user.firstname, role: user.role },
-      process.env.JWT_SECRET, // Secret key từ file .env
-      { expiresIn: "1h" } // Token hết hạn sau 1 giờ
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // Tìm các thanh toán liên quan
+    const payments = await Payment.find({})
+      .populate("packageId")
+      .populate("userId");
+
+    const matchingPayments = payments.filter(
+      (payment) =>
+        payment.packageId &&
+        payment.packageId.userGuideId &&
+        payment.packageId.userGuideId.toString() === user._id.toString()
     );
 
     res.status(200).json({
       message: "Đăng nhập thành công!",
-      token, // Trả về token
+      token,
       user: {
         id: user._id,
         firstname: user.firstname,
@@ -64,6 +73,7 @@ const login = async (req, res) => {
         email: user.email,
         role: user.role,
       },
+      payments: matchingPayments,
     });
   } catch (error) {
     console.error("Lỗi đăng nhập:", error);
@@ -141,16 +151,19 @@ const getUserById = async (req, res) => {
 
 const searchUser = async (req, res) => {
   try {
-    const { searchQuery } = req.query;
-    const filter = searchQuery
-      ? {
-          $or: [
-            { email: { $regex: searchQuery, $options: "i" } }, 
-            { firstname: { $regex: searchQuery, $options: "i" } }, 
-            { lastname: { $regex: searchQuery, $options: "i" } }, 
-          ],
-        }
-      : {};
+    const { searchQuery, role } = req.query; // Thêm `role` vào query parameters
+
+    // Xây dựng bộ lọc
+    const filter = {
+      ...(searchQuery && {
+        $or: [
+          { email: { $regex: searchQuery, $options: "i" } },
+          { firstname: { $regex: searchQuery, $options: "i" } },
+          { lastname: { $regex: searchQuery, $options: "i" } },
+        ],
+      }),
+      ...(role && { role: role }), // Nếu `role` được cung cấp, thêm điều kiện lọc theo role
+    };
 
     const users = await User.find(filter);
 
@@ -159,7 +172,7 @@ const searchUser = async (req, res) => {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Error fetching users" });
   }
-};
+}; 
 
 module.exports = {
   register,

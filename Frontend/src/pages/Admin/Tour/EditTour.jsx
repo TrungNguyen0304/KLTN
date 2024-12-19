@@ -18,13 +18,13 @@ const EditTour = () => {
   const [groupImagePreviews, setGroupImagePreviews] = useState([]);
   const [durations, setDurations] = useState([]); // Array of durations
   const [destinations, setDestinations] = useState([]);
-  const [tourGuides, setTourGuides] = useState([]);
+  // const [tourGuides, setTourGuides] = useState([]);
   const [userGuides, setUserGuides] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationId, setLocationId] = useState('');
   const [destinationId, setDestinationId] = useState('');
-  const [tourGuideId, setTourGuideId] = useState('');
+  // const [tourGuideId, setTourGuideId] = useState('');
   const [userGuideId, setUserGuideId] = useState('');
   const [description, setDescription] = useState('');
   const [package_name, setPackage_name] = useState('');
@@ -44,7 +44,7 @@ const EditTour = () => {
         setGroupImagePreviews(response.data.groupImages || []);
         setLocationId(data.locationId ? data.locationId._id : '');
         setDestinationId(data.destinationId ? data.destinationId._id : '');
-        setTourGuideId(data.tourGuideId ? data.tourGuideId._id : '');
+        // setTourGuideId(data.tourGuideId ? data.tourGuideId._id : '');
         setUserGuideId(data.userGuideId ? data.userGuideId._id : '');  
         setDescription(data.description);
         setPackage_name(data.package_name);
@@ -74,10 +74,10 @@ const EditTour = () => {
         );
         setUserGuides(userGuidesRes.data);
 
-        const tourGuidesRes = await axios.get(
-          "http://localhost:8001/api/tourGuide/getAll"
-        );
-        setTourGuides(tourGuidesRes.data);
+        // const tourGuidesRes = await axios.get(
+        //   "http://localhost:8001/api/tourGuide/getAll"
+        // );
+        // setTourGuides(tourGuidesRes.data);
 
         const locationsRes = await axios.get(
           "http://localhost:8001/api/location"
@@ -134,7 +134,7 @@ const EditTour = () => {
     formData.append("pricechildren_price", pricechildren_price);
     formData.append("durations", JSON.stringify(tourData.durations)); // Convert durations to string
     formData.append("destinationId", destinationId);
-    formData.append("tourGuideId", tourGuideId);
+    // formData.append("tourGuideId", tourGuideId);
     formData.append("userGuideId", userGuideId);
     formData.append("locationId", locationId);
     formData.append("incAndExc", incAndExc);
@@ -237,7 +237,7 @@ const EditTour = () => {
 
           {/* Tour Guide and Duration */}
           <div className="row-two-items">
-            <div className="form-group">
+            {/* <div className="form-group">
               <Form.Label htmlFor="tourGuideId">Tour Guide</Form.Label>
               <select
                 id="tourGuideId"
@@ -251,10 +251,10 @@ const EditTour = () => {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
 
             <div className="form-group">
-              <Form.Label htmlFor="userGuideId">Hướng dẫn viên User</Form.Label>
+              <Form.Label htmlFor="userGuideId">Hướng dẫn viên</Form.Label>
               <select
                 id="userGuideId"
                 value={userGuideId}

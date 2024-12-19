@@ -110,3 +110,7 @@ td {
    
 }
 
+.form-control-role{
+    width: 170px;
+    border: 1px solid black;
+}

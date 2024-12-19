@@ -20,7 +20,7 @@ const createTour = async (req, res) => {
       pricechildren_price,
       durations,
       destinationId,
-      tourGuideId,
+      // tourGuideId,
       userGuideId,
       locationId,
       incAndExc,
@@ -55,7 +55,7 @@ const createTour = async (req, res) => {
       image,
       durations: parsedDurations,
       destinationId,
-      tourGuideId,
+      // tourGuideId,
       userGuideId,
       locationId,
       incAndExc,
@@ -80,13 +80,14 @@ const createTour = async (req, res) => {
       );
     }
 
-    if (tourGuideId) {
-      await tourGuide.findByIdAndUpdate(
-        tourGuideId,
-        { $push: { tourPackageId: newTour._id } },
-        { new: true }
-      );
-    }
+    // if (tourGuideId) {
+    //   await tourGuide.findByIdAndUpdate(
+    //     tourGuideId,
+    //     { $push: { tourPackageId: newTour._id } },
+    //     { new: true }
+    //   );
+    // }
+
     if (userGuideId) {
       await user.findByIdAndUpdate(
         userGuideId,
@@ -111,7 +112,7 @@ const createTour = async (req, res) => {
         image: newTour.image,
         groupImages: newTour.groupImages,
         destinationId: newTour.destinationId,
-        tourGuideId: newTour.tourGuideId,
+        // tourGuideId: newTour.tourGuideId,
         userGuideId: newTour.userGuideId,
         locationId: newTour.locationId,
         incAndExc: newTour.incAndExc,
@@ -126,8 +127,6 @@ const createTour = async (req, res) => {
     });
   }
 };
-
-
 
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
@@ -176,7 +175,7 @@ const editTour = async (req, res) => {
       pricechildren_price,
       durations,
       destinationId,
-      tourGuideId,
+      // tourGuideId,
       userGuideId,
       locationId,
       incAndExc,
@@ -226,7 +225,7 @@ const editTour = async (req, res) => {
     tour.pricechildren_price = pricechildren_price || tour.pricechildren_price;
     tour.durations = parsedDurations.length > 0 ? parsedDurations : tour.durations;
     tour.destinationId = destinationId || tour.destinationId;
-    tour.tourGuideId = tourGuideId || tour.tourGuideId;
+    // tour.tourGuideId = tourGuideId || tour.tourGuideId;
     tour.userGuideId = userGuideId || tour.userGuideId;
     tour.locationId = locationId || tour.locationId;
     tour.incAndExc = incAndExc || tour.incAndExc;
@@ -259,13 +258,12 @@ const editTour = async (req, res) => {
   }
 };
 
-
 // API get all tourPacket
 const getAllTour = async (req, res) => {
   try {
     const tourpackages = await TourPackage.find({})
       .populate("destinationId", "DestinationName")
-      .populate("tourGuideId")
+      // .populate("tourGuideId")
       .populate("userGuideId")
       .populate("locationId", "firstname")
       .populate({
@@ -289,7 +287,7 @@ const getAllTourById = async (req, res) => {
 
     const tourPackage = await TourPackage.findById(tourPackageId)
       .populate("destinationId", "DestinationName")
-      .populate("tourGuideId")
+      // .populate("tourGuideId")
       .populate("userGuideId")
       .populate("locationId", "firstname")
       .populate({
@@ -341,7 +339,7 @@ const searchTour = async (req, res) => {
     // Lấy danh sách tour đã lọc và populate các trường liên quan
     const tourpackages = await TourPackage.find(filter)
       .populate("destinationId", "DestinationName")
-      .populate("tourGuideId")
+      .populate("userGuideId")
       .populate("locationId", "firstname")
       .populate({
         path: "durations",

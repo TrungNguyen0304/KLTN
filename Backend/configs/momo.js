@@ -10,11 +10,7 @@ var secretKey = process.env.MOMO_SECRET_KEY;
 
 const payment = async (req, res) => {
   const { id } = req.params;
-  const { totalPrice, userId, totalPeople } = req.body; // Thêm totalPeople vào đây
-
-  console.log("tourPackage ID:", id);
-  console.log("Total:", totalPrice);
-  console.log("Total People:", totalPeople); // Kiểm tra totalPeople
+  const { totalPrice, userId, totalPeople } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res
@@ -30,8 +26,6 @@ const payment = async (req, res) => {
         .json({ success: false, message: "Tour package not found" });
     }
 
-    console.log("Tour Package found:", tourPackageData);
-
     const orderInfo = `Payment for ${tourPackageData.package_name}`;
     const partnerCode = "MOMO";
     const redirectUrl = "http://localhost:3000/";
@@ -42,37 +36,29 @@ const payment = async (req, res) => {
     const orderId = partnerCode + new Date().getTime();
     const requestId = orderId;
     const extraData = "";
-    const orderGroupId = "";
     const autoCapture = true;
     const lang = "vi";
 
     const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
 
-    // Tạo signature
-    var signature = crypto
+    const signature = crypto
       .createHmac("sha256", secretKey)
       .update(rawSignature)
       .digest("hex");
-    console.log("--------------------SIGNATURE----------------");
-    console.log(signature);
 
-    // Tạo body gửi API MoMo
     const requestBody = JSON.stringify({
-      partnerCode: partnerCode,
-      partnerName: "Test",
-      storeId: "MomoTestStore",
-      requestId: requestId,
-      amount: amount,
-      orderId: orderId,
-      orderInfo: orderInfo,
-      redirectUrl: redirectUrl,
-      ipnUrl: ipnUrl,
-      lang: lang,
-      requestType: requestType,
-      autoCapture: autoCapture,
-      extraData: extraData,
-      orderGroupId: orderGroupId,
-      signature: signature,
+      partnerCode,
+      requestId,
+      amount,
+      orderId,
+      orderInfo,
+      redirectUrl,
+      ipnUrl,
+      lang,
+      requestType,
+      autoCapture,
+      extraData,
+      signature,
     });
 
     const options = {
@@ -95,27 +81,35 @@ const payment = async (req, res) => {
         status: "complete",
         order_id: orderId,
         method: "MoMo",
-        userId: userId,
-        totalPeople: totalPeople, // Lưu totalPeople vào database
-        code: code,
+        userId,
+        totalPeople,
+        code,
       });
 
       await newPayment.save();
-      console.log("Payment saved successfully:", newPayment);
 
-      // Gửi thông báo khi thanh toán thành công
+      // Tạo thông báo cho user thanh toán thành công
       const notification = new Notificationv({
         userId,
         message: `Thanh toán thành công cho gói tour: ${tourPackageData.package_name}`,
-        paymentid: newPayment._id, // Gắn tham chiếu đến Payment
+        paymentid: newPayment._id,
       });
 
       await notification.save();
-      console.log("Notification sent successfully:", notification);
+
+      // Kiểm tra và chuyển thông tin nếu có tourGuideId
+      if (tourPackageData.userGuideId) {
+        const tourGuideNotification = new Notificationv({
+          userId: tourPackageData.userGuideId, // Gửi thông báo đến tourGuideId
+          message: `Bạn đã nhận được một thanh toán cho gói tour: ${tourPackageData.package_name}`,
+          paymentid: newPayment._id,
+        });
+
+        await tourGuideNotification.save();
+      }
 
       return res.status(200).json(result.data);
     } else {
-      console.error("MoMo Payment Failed:", result.data);
       return res
         .status(400)
         .json({ success: false, message: "Payment failed" });
@@ -125,6 +119,7 @@ const payment = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
 
 
 const callback = async (req, res) => {

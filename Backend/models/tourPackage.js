@@ -14,10 +14,10 @@ const tourPackageSchema = new mongoose.Schema({
   averageRating: { type: Number, default: 0 },
   reviewId: { type: Schema.Types.ObjectId, ref: 'Review' },
   destinationId: { type: Schema.Types.ObjectId, ref: 'Destination' },
-  tourGuideId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "TourGuide",  // Liên kết tới bảng TourGuide
-  },
+  // tourGuideId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "TourGuide", 
+  // },
   locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
   durations: { type: [Schema.Types.ObjectId], ref: 'Duration', required: true },
   userGuideId: { type: Schema.Types.ObjectId, ref: 'User' },

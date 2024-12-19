@@ -69,8 +69,8 @@ export const SidebarGuideData = [
   },
   {
     icon: UilClipboardAlt,
-    heading: "Destination",
-    Link: "#",
+    heading: "lịch tour du lịch",
+    Link: "/IndexShowall",
   },
 
 ];

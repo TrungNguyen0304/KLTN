@@ -14,13 +14,13 @@ const CreateTour = () => {
     const [selectedDurations, setSelectedDurations] = useState([]);
 
     const [destinations, setDestinations] = useState([]);
-    const [tourGuides, setTourGuides] = useState([]);
+    // const [tourGuides, setTourGuides] = useState([]);
     const [users, setUsers] = useState([]);
     const [locations, setLocations] = useState([]);
     const [durations, setDurations] = useState([]);
 
     const [destinationId, setDestinationId] = useState('');
-    const [tourGuideId, setTourGuideId] = useState('');
+    // const [tourGuideId, setTourGuideId] = useState('');
     const [userGuideId, setUserGuideId] = useState('');  // User selected as tour guide
     const [locationId, setLocationId] = useState('');
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ const CreateTour = () => {
 
         fetchData("http://localhost:8001/api/location", setLocations);
         fetchData("http://localhost:8001/api/destination", setDestinations);
-        fetchData("http://localhost:8001/api/tourGuide/getAll", setTourGuides);
+        // fetchData("http://localhost:8001/api/tourGuide/getAll", setTourGuides);
         fetchData("http://localhost:8001/api/user", setUsers);
         fetchData("http://localhost:8001/api/duration", setDurations);
     }, []);
@@ -81,7 +81,7 @@ const CreateTour = () => {
         formData.append("pricechildren_price", pricechildren_price);
         formData.append("durations", JSON.stringify(selectedDurations)); // Send durations as JSON string
         formData.append("destinationId", destinationId);
-        formData.append("tourGuideId", tourGuideId);
+        // formData.append("tourGuideId", tourGuideId);
         formData.append("userGuideId", userGuideId);
         formData.append("locationId", locationId);
         formData.append("image", image); // Single image
@@ -176,7 +176,7 @@ const CreateTour = () => {
 
                     {/* Tour Guide and Duration */}
                     <div className="row-two-items">
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label htmlFor="guide">Hướng Dẫn Viên</label>
                             <select
                                 id="guide"
@@ -191,9 +191,9 @@ const CreateTour = () => {
                                     </option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
                         <div className="form-group">
-                            <label htmlFor="user">Hướng Dẫn Viên (Tourguide role only)</label>
+                            <label htmlFor="user">Hướng Dẫn Viên</label>
                             <select
                                 id="userGuideId"
                                 value={userGuideId}
