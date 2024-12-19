@@ -6,7 +6,7 @@ const filterSchema = new mongoose.Schema(
         destinationId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Destination' }],
         locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location', required: true },
         tourPackageId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TourPackage' }],
-        tourGuideId: { type: Schema.Types.ObjectId, ref: 'TourGuide', required: true }
+        userGuideId: { type: Schema.Types.ObjectId, ref: 'User', required: true }
     },
     {
         timestamps: true,

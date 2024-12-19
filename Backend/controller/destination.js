@@ -145,7 +145,7 @@ const getDestinationById = async (req, res) => {
     const tourPackages = await TourPackage.find({
       destinationId: destination._id,
     })
-      .populate("tourGuideId", "first_name last_name")
+      .populate("userGuideId", "firstname lastname")
     .populate("durations")  
       .lean();
 

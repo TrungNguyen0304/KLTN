@@ -31,6 +31,40 @@ const register = async (req, res) => {
 };
 
 // API Login user
+const getUserOrderedPayments = async (userGuideId) => {
+  try {
+    const payments = await Payment.find({})
+      .populate("packageId")
+      .populate("userId")
+
+    // Filter the payments by matching userGuideId
+    const matchingPayments = payments.filter(
+      (payment) =>
+        payment.packageId &&
+        payment.packageId.userGuideId &&
+        payment.packageId.userGuideId.toString() === userGuideId.toString()
+    );
+
+    return matchingPayments;
+  } catch (error) {
+    console.error("Error in getUserOrderedPayments:", error);
+    throw new Error("Error fetching payments");
+  }
+};
+
+const getUserGuideId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const matchingPayments = await getUserOrderedPayments(id);
+
+    res.status(200).json({ payments: matchingPayments });
+  } catch (error) {
+    console.error("Error in getUserGuideId:", error);
+    res.status(500).json({ message: "Error fetching payments" });
+  }
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -51,17 +85,8 @@ const login = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    // Tìm các thanh toán liên quan
-    const payments = await Payment.find({})
-      .populate("packageId")
-      .populate("userId");
-
-    const matchingPayments = payments.filter(
-      (payment) =>
-        payment.packageId &&
-        payment.packageId.userGuideId &&
-        payment.packageId.userGuideId.toString() === user._id.toString()
-    );
+    // Lấy các thanh toán đã order của user guide
+    const matchingPayments = await getUserOrderedPayments(user._id);
 
     res.status(200).json({
       message: "Đăng nhập thành công!",
@@ -105,17 +130,15 @@ const updateUser = async (req, res) => {
   try {
     let updateData = { email, firstname, lastname, phoneNumber, role };
 
-  
     if (password) {
       const salt = await bcrypt.genSalt(10);
       updateData.password = await bcrypt.hash(password, salt);
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      updateData,
-      { new: true, runValidators: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
 
     if (!updatedUser) {
       return res.status(404).json({ message: "Người dùng không tồn tại." });
@@ -180,7 +203,7 @@ const searchUser = async (req, res) => {
     console.error("Error fetching users:", error);
     res.status(500).json({ message: "Error fetching users" });
   }
-}; 
+};
 
 module.exports = {
   register,
@@ -189,5 +212,6 @@ module.exports = {
   updateUser,
   getUserById,
   getAllUser,
-  searchUser
+  searchUser,
+  getUserGuideId,
 };

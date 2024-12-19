@@ -115,8 +115,8 @@ function App() {
         <Route element={<TourGuideLayout />}>
           <Route path="Indextourguide" element={<AdminTourGuide />} />
           <Route path="login" element={<Login />} />
-          <Route path="TourGuide" element={<TourGuide />} />
-          <Route path="IndexShowall" element={<TourGuide />} />
+          
+          <Route path="IndexShowall" element={<IndexShowall />} />
 
         </Route>
       </Routes>
