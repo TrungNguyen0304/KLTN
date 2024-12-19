@@ -1,11 +1,15 @@
-import React from 'react'
+import React from "react";
+import '../../adminApp.css';
+import MainDash from "./MainGuideDash/MainDash";
 
-const AdminTourGuide =() => {
+export default function AdminTourGuide() {
   return (
-    <>
-    trung
-    </>
-  )
-}
 
-export default AdminTourGuide
+    <>
+      <MainDash />
+      {/* <RightSide /> */}
+    </>
+
+
+  );
+}

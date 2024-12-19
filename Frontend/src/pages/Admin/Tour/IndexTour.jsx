@@ -134,13 +134,13 @@ const IndexTour = () => {
                       {type}
                     </Badge>
                   ))}
-                  {tour.tourGuideId && (
+                  {tour.userGuideId && (
                     <div className="tour-guide mt-3">
                       <FaUserAlt className="tour-guide-icon" />
                       <span className="tour-guide-name">
                         Hướng dẫn viên:{" "}
                         <span className="first_name">
-                          {`${tour.tourGuideId.first_name || ""} ${tour.tourGuideId.last_name || ""
+                          {`${tour.userGuideId.firstname || ""} ${tour.userGuideId.lastname || ""
                             }`}
                         </span>
                       </span>

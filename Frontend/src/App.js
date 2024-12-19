@@ -45,6 +45,8 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 
 /* huong dan vienn */
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
+import TourGuide from "./pages/tourGuide/TourGuide/TourGuide";
+import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
 
 // </>
 import MainLayout from "./layouts/MainLayout";
@@ -112,6 +114,10 @@ function App() {
         {/* huong dan vien*/}
         <Route element={<TourGuideLayout />}>
           <Route path="Indextourguide" element={<AdminTourGuide />} />
+          <Route path="login" element={<Login />} />
+          <Route path="TourGuide" element={<TourGuide />} />
+          <Route path="IndexShowall" element={<TourGuide />} />
+
         </Route>
       </Routes>
     </>

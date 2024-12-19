@@ -121,8 +121,9 @@ const EditUser = () => {
               onChange={handleChange}
               required
             >
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="user">Người dùng</option>
+              <option value="admin">Quản trị viên</option>
+              <option value="tourguide">Hướng dẫn viên </option>
             </select>
           </div>
           <button className="buttonCreate" type="submit">

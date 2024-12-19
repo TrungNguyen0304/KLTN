@@ -20,7 +20,9 @@ const paymentSchema = new Schema(
       enum: ["pending", "complete", "failed"],
       default: "pending",
     },
+    userGuideId: { type: Schema.Types.ObjectId, ref: 'User' },
   },
+
   {
     timestamps: true,
   }

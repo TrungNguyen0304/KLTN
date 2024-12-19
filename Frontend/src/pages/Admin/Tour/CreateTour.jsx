@@ -14,12 +14,14 @@ const CreateTour = () => {
     const [selectedDurations, setSelectedDurations] = useState([]);
 
     const [destinations, setDestinations] = useState([]);
-    const [tourGuides, setTourGuides] = useState([]);
+    // const [tourGuides, setTourGuides] = useState([]);
+    const [users, setUsers] = useState([]);
     const [locations, setLocations] = useState([]);
     const [durations, setDurations] = useState([]);
 
     const [destinationId, setDestinationId] = useState('');
-    const [tourGuideId, setTourGuideId] = useState('');
+    // const [tourGuideId, setTourGuideId] = useState('');
+    const [userGuideId, setUserGuideId] = useState('');  // User selected as tour guide
     const [locationId, setLocationId] = useState('');
     const navigate = useNavigate();
 
@@ -36,7 +38,8 @@ const CreateTour = () => {
 
         fetchData("http://localhost:8001/api/location", setLocations);
         fetchData("http://localhost:8001/api/destination", setDestinations);
-        fetchData("http://localhost:8001/api/tourGuide/getAll", setTourGuides);
+        // fetchData("http://localhost:8001/api/tourGuide/getAll", setTourGuides);
+        fetchData("http://localhost:8001/api/user", setUsers);
         fetchData("http://localhost:8001/api/duration", setDurations);
     }, []);
 
@@ -70,9 +73,6 @@ const CreateTour = () => {
             return;
         }
 
-        // Log selectedDurations to debug
-        console.log("Selected Durations: ", selectedDurations);
-
         const formData = new FormData();
         formData.append("package_name", package_name);
         formData.append("description", description);
@@ -81,7 +81,8 @@ const CreateTour = () => {
         formData.append("pricechildren_price", pricechildren_price);
         formData.append("durations", JSON.stringify(selectedDurations)); // Send durations as JSON string
         formData.append("destinationId", destinationId);
-        formData.append("tourGuideId", tourGuideId);
+        // formData.append("tourGuideId", tourGuideId);
+        formData.append("userGuideId", userGuideId);
         formData.append("locationId", locationId);
         formData.append("image", image); // Single image
 
@@ -89,11 +90,6 @@ const CreateTour = () => {
         groupImages.forEach((file) => {
             formData.append("groupImages", file);
         });
-
-        // Debug: Log the formData to check its contents
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
 
         try {
             const response = await fetch("http://localhost:8001/api/tourPackage/create", {
@@ -104,9 +100,7 @@ const CreateTour = () => {
             const result = await response.json();
             if (response.ok) {
                 alert("Gói tour đã được tạo thành công!");
-                console.log(result);
                 navigate("/tour");
-
             } else {
                 alert(result.message || "Có lỗi xảy ra.");
             }
@@ -115,6 +109,7 @@ const CreateTour = () => {
             alert("Có lỗi khi gửi yêu cầu.");
         }
     };
+
     return (
         <div className='parent-container'>
             <div className="form-container">
@@ -144,7 +139,7 @@ const CreateTour = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="price">giá trẻ em</label>
+                            <label htmlFor="price">Giá trẻ em</label>
                             <input
                                 id="pricechildren_price"
                                 type="number"
@@ -181,7 +176,7 @@ const CreateTour = () => {
 
                     {/* Tour Guide and Duration */}
                     <div className="row-two-items">
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label htmlFor="guide">Hướng Dẫn Viên</label>
                             <select
                                 id="guide"
@@ -192,10 +187,27 @@ const CreateTour = () => {
                                 <option value="" disabled>Chọn Hướng Dẫn Viên</option>
                                 {tourGuides.map(tourGuide => (
                                     <option key={tourGuide._id} value={tourGuide._id}>
-                                        {tourGuide.first_name}    {tourGuide.last_name}
-
+                                        {tourGuide.first_name} {tourGuide.last_name}
                                     </option>
                                 ))}
+                            </select>
+                        </div> */}
+                        <div className="form-group">
+                            <label htmlFor="user">Hướng Dẫn Viên</label>
+                            <select
+                                id="userGuideId"
+                                value={userGuideId}
+                                onChange={(e) => setUserGuideId(e.target.value)}
+                                required
+                            >
+                                <option value="" disabled>Chọn Hướng Dẫn Viên</option>
+                                {users
+                                    .filter(user => user.role === 'tourguide') // Filter users by role
+                                    .map(user => (
+                                        <option key={user._id} value={user._id}>
+                                            {user.firstname} {user.lastname}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
 

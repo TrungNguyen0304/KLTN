@@ -35,25 +35,29 @@ function Login() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("token", data.token);
         localStorage.setItem("userid", data.user?.id || data.user?._id);
-        // console.log("User ID trong phản hồi:", data.user?.id || data.user?._id);
         
-        // console.log(
-        //   "Id người dùng được lưu trữ trong localStorage:",
-        //   localStorage.getItem("userid")
-        // );
-
-        showCustomAlert(data.message, "success");
-        setTimeout(() => {
-          navigate("/"); 
-          window.location.reload(); 
-
-        }, 2000);
+        // Check for the role and navigate accordingly
+        if (data.user?.role === "tourguide") {
+          // Redirect to the tourguide page
+          showCustomAlert(data.message, "success");
+          setTimeout(() => {
+            navigate("/indextourguide"); // Redirect to tourguide page
+            window.location.reload();
+          }, 2000);
+        } else {
+          // Redirect to default page
+          showCustomAlert(data.message, "success");
+          setTimeout(() => {
+            navigate("/"); // Redirect to home page
+            window.location.reload();
+          }, 2000);
+        }
       } else {
         showCustomAlert(data.message, "error");
       }
@@ -142,7 +146,7 @@ function Login() {
         <button className="social-button facebook">Facebook</button>
         <button className="social-button google">Google</button>
       </div>
-    </div>
+    </div>  
   );
 }
 

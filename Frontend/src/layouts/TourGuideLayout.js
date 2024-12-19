@@ -1,15 +1,15 @@
 import React from 'react';
-import Sidebar from '../pages/Admin/siderBar/Sidebar';
+import SidebarGuide from '../pages/tourGuide/siderBarGuide/Sidebar';
 import { Outlet } from 'react-router-dom';
-import Navbar from '../pages/Admin/Navbar/Navbar';
+import NavbarGuide from '../pages/tourGuide/NavbarGuide/Navbar';
 
 const TourGuideLayout = () => {
     return (
         <>
-            <Navbar />
+            <NavbarGuide />
             <div className="App">
                 <div className="AppGlass">
-                    <Sidebar />
+                    <SidebarGuide />
 
                     <Outlet />
                 </div>

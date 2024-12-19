@@ -18,12 +18,14 @@ const EditTour = () => {
   const [groupImagePreviews, setGroupImagePreviews] = useState([]);
   const [durations, setDurations] = useState([]); // Array of durations
   const [destinations, setDestinations] = useState([]);
-  const [tourGuides, setTourGuides] = useState([]);
+  // const [tourGuides, setTourGuides] = useState([]);
+  const [userGuides, setUserGuides] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationId, setLocationId] = useState('');
   const [destinationId, setDestinationId] = useState('');
-  const [tourGuideId, setTourGuideId] = useState('');
+  // const [tourGuideId, setTourGuideId] = useState('');
+  const [userGuideId, setUserGuideId] = useState('');
   const [description, setDescription] = useState('');
   const [package_name, setPackage_name] = useState('');
   const [adult_price, setAdult_price] = useState('');
@@ -37,11 +39,13 @@ const EditTour = () => {
           `http://localhost:8001/api/tourPackage/${id}`
         );
         const data = response.data;
+        console.log(data.userGuideId);
         setPreview(response.data.image);
         setGroupImagePreviews(response.data.groupImages || []);
         setLocationId(data.locationId ? data.locationId._id : '');
         setDestinationId(data.destinationId ? data.destinationId._id : '');
-        setTourGuideId(data.tourGuideId ? data.tourGuideId._id : '');
+        // setTourGuideId(data.tourGuideId ? data.tourGuideId._id : '');
+        setUserGuideId(data.userGuideId ? data.userGuideId._id : '');  
         setDescription(data.description);
         setPackage_name(data.package_name);
         setAdult_price(data.adult_price);
@@ -49,7 +53,7 @@ const EditTour = () => {
         setIncAndExc(data.incAndExc);
         setTourData((prevState) => ({
           ...prevState,
-          durations: data.durations.map((duration) => duration._id), // Set selected durations
+          durations: data.durations.map((duration) => duration._id),
         }));
       } catch (error) {
         console.error("Error fetching tour data:", error);
@@ -65,10 +69,15 @@ const EditTour = () => {
         );
         setDestinations(destinationsRes.data);
 
-        const tourGuidesRes = await axios.get(
-          "http://localhost:8001/api/tourGuide/getAll"
+        const userGuidesRes = await axios.get(
+          "http://localhost:8001/api/user"
         );
-        setTourGuides(tourGuidesRes.data);
+        setUserGuides(userGuidesRes.data);
+
+        // const tourGuidesRes = await axios.get(
+        //   "http://localhost:8001/api/tourGuide/getAll"
+        // );
+        // setTourGuides(tourGuidesRes.data);
 
         const locationsRes = await axios.get(
           "http://localhost:8001/api/location"
@@ -87,6 +96,7 @@ const EditTour = () => {
     fetchTourData();
     fetchData();
   }, [id]);
+
 
   if (loading) {
     return <div>Loading...</div>;
@@ -122,19 +132,28 @@ const EditTour = () => {
     formData.append("description", description);
     formData.append("adult_price", adult_price);
     formData.append("pricechildren_price", pricechildren_price);
-    formData.append("durations", JSON.stringify(tourData.durations));
+    formData.append("durations", JSON.stringify(tourData.durations)); // Convert durations to string
     formData.append("destinationId", destinationId);
-    formData.append("tourGuideId", tourGuideId);
+    // formData.append("tourGuideId", tourGuideId);
+    formData.append("userGuideId", userGuideId);
     formData.append("locationId", locationId);
     formData.append("incAndExc", incAndExc);
 
+    // Handling image upload
     if (image) formData.append("image", image);
+
+    // Handling additional group images
     groupImages.forEach((img) => formData.append("groupImages", img));
 
     try {
       const response = await axios.put(
         `http://localhost:8001/api/tourPackage/update/${id}`,
-        formData
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Ensure the correct header for file uploads
+          }
+        }
       );
       if (response.status === 200) {
         alert("Tour updated successfully!");
@@ -144,7 +163,7 @@ const EditTour = () => {
       console.error("Error updating tour:", error);
       alert("Error updating tour.");
     }
-  };
+  };  
 
   return (
     <Container className="parent-container">
@@ -218,7 +237,7 @@ const EditTour = () => {
 
           {/* Tour Guide and Duration */}
           <div className="row-two-items">
-            <div className="form-group">
+            {/* <div className="form-group">
               <Form.Label htmlFor="tourGuideId">Tour Guide</Form.Label>
               <select
                 id="tourGuideId"
@@ -231,6 +250,24 @@ const EditTour = () => {
                     {guide.first_name} {guide.last_name}
                   </option>
                 ))}
+              </select>
+            </div> */}
+
+            <div className="form-group">
+              <Form.Label htmlFor="userGuideId">Hướng dẫn viên</Form.Label>
+              <select
+                id="userGuideId"
+                value={userGuideId}
+                onChange={(e) => setUserGuideId(e.target.value)}
+                required
+              >
+                {userGuides
+                  .filter((userGuide) => userGuide.role === 'tourguide')
+                  .map((userGuide) => (
+                    <option key={userGuide._id} value={userGuide._id}>
+                      {userGuide.firstname} {userGuide.lastname}
+                    </option>
+                  ))}
               </select>
             </div>
 
