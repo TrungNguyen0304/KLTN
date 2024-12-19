@@ -90,12 +90,20 @@ const deleteUser = async (req, res) => {
 // API Update user by ID
 const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { email, firstname, lastname, phoneNumber, role } = req.body;
+  const { email, firstname, lastname, password, phoneNumber, role } = req.body;
 
   try {
+    let updateData = { email, firstname, lastname, phoneNumber, role };
+
+  
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(password, salt);
+    }
+
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { email, firstname, lastname, phoneNumber, role },
+      updateData,
       { new: true, runValidators: true }
     );
 

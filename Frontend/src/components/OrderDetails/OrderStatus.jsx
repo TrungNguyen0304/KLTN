@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './OrderStatus.css';
+import React, { useState, useEffect } from "react";
+import "./OrderStatus.css";
 
 function TourCard({ imageSrc, title, guide, days, price, location }) {
   const [imageError, setImageError] = useState(false);
@@ -7,13 +7,9 @@ function TourCard({ imageSrc, title, guide, days, price, location }) {
   return (
     <div className="tour-card">
       {/* Image */}
-      <div className={`tour-image ${imageError ? 'image-error' : ''}`}>
+      <div className={`tour-image ${imageError ? "image-error" : ""}`}>
         {!imageError ? (
-          <img
-            src={imageSrc}
-            alt="Tour"
-            onError={() => setImageError(true)}
-          />
+          <img src={imageSrc} alt="Tour" onError={() => setImageError(true)} />
         ) : (
           <span>No Image Available</span>
         )}
@@ -42,7 +38,9 @@ export default function TourGrid() {
   useEffect(() => {
     const fetchPayments = async () => {
       try {
-        const response = await fetch(`http://localhost:8001/api/booking/${userId}`);
+        const response = await fetch(
+          `http://localhost:8001/api/booking/${userId}`
+        );
         const data = await response.json();
         if (data.success) {
           setPayments(data.payments);
@@ -50,7 +48,7 @@ export default function TourGrid() {
           console.log(data.message);
         }
       } catch (error) {
-        console.error('Error fetching payments:', error);
+        console.error("Error fetching payments:", error);
       }
     };
 
@@ -62,22 +60,29 @@ export default function TourGrid() {
       {/* Tour History Section */}
       <section className="tour-history">
         <h2>Lịch sử đặt</h2>
-        <p>Khám phá các chuyến du lịch đã từng tổ chức với những kỷ niệm đáng nhớ và hành trình thú vị.</p>
+        <p>
+          Khám phá các chuyến du lịch đã từng tổ chức với những kỷ niệm đáng nhớ
+          và hành trình thú vị.
+        </p>
       </section>
 
       <div className="tour-grid">
         {payments.length ? (
           payments.map((payment, index) => (
             <TourCard
-            key={index}
-            imageSrc={payment.packageId?.image || 'default-image.jpg'}  // Provide a fallback image if none exists
-            title={payment.packageId?.package_name || 'No title available'}
-            guide={payment.packageId?.tourGuideId?.first_name || 'No guide available'}
-            days={payment.packageId?.days || 0}
-            price={payment.amount || 'Not available'}
-            location={payment.packageId?.locationId?.firstname || 'No location available'}
-          />
-          
+              key={index}
+              imageSrc={payment.packageId?.image}
+              title={payment.packageId?.package_name}
+              guide={`${payment.packageId?.tourGuideId?.first_name} ${payment.packageId?.tourGuideId?.last_name}`}
+              days={payment.packageId?.durations?.map((duration) => (
+                <div key={duration._id}>
+                  <p>{duration.durationText}</p>
+                  <p>{duration.itinerary}</p>
+                </div>
+              ))}
+              price={payment.amount}
+              location={payment.packageId?.locationId?.firstname}
+            />
           ))
         ) : (
           <p>No payment history available</p>
