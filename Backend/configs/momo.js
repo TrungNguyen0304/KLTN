@@ -97,7 +97,7 @@ const payment = async (req, res) => {
 
       await notification.save();
 
-      // Kiểm tra và chuyển thông tin nếu có tourGuideId
+      // Kiểm tra và chuyển thông tin nếu có userGuideId
       if (tourPackageData.userGuideId) {
         const tourGuideNotification = new Notificationv({
           userId: tourPackageData.userGuideId, // Gửi thông báo đến tourGuideId
@@ -317,9 +317,10 @@ const getPaymentsByUser = async (req, res) => {
           ...payment.toObject(),
           packageId: packageId
             ? await tourPackage.findById(packageId)
-                .populate("locationId", "firstname")  
+                .populate("locationId")  
                 .populate("durations")
-            : null,
+                .populate("userGuideId")  
+                : null,
         };
 
         return populatedPayment;

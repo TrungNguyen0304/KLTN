@@ -121,7 +121,7 @@ const IndexDestination = () => {
                 <div className="location-container">
                   <p>Location:</p>
                   <Card.Text className="destination-location ms-2">
-                    {destination.locationId ? destination.locationId.locationName : "Unknown"}
+                    {destination.locationId ? destination.locationId.firstname : "Unknown"}
                   </Card.Text>
                 </div>
                 <div className="tour-count-container">

@@ -102,8 +102,8 @@ const DestinationDetails = () => {
                       <span className="tour-guide-name">
                         Hướng dẫn viên:{" "}
                         <span className="first_name">
-                          {`${val.tourGuideId?.first_name || ""} ${
-                            val.tourGuideId?.last_name || ""
+                          {`${val.userGuideId?.first_name || ""} ${
+                            val.userGuideId?.last_name || ""
                           }`}
                         </span>
                       </span>
