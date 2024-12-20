@@ -47,6 +47,7 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import TourGuide from "./pages/tourGuide/TourGuide/TourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
+import PaymentDetail from "./pages/tourGuide/showtour/PaymentDetail";
 
 // </>
 import MainLayout from "./layouts/MainLayout";
@@ -117,6 +118,8 @@ function App() {
           <Route path="login" element={<Login />} />
           
           <Route path="IndexShowall" element={<IndexShowall />} />
+          <Route path="/IndexShowall/:paymentId" element={<PaymentDetail />} />
+          <Route path="/IndexShowall/:paymentId" element={<PaymentDetail />} />
 
         </Route>
       </Routes>

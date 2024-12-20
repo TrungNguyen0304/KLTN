@@ -342,7 +342,20 @@ const getPaymentsByUser = async (req, res) => {
   }
 };
 
+const getPaymentDetail = async (req, res) => {
+  const { paymentId } = req.params;  
 
+  try {
+    const payment = await Payment.findById(paymentId).populate('packageId').populate('userId');
+    if (!payment) {
+      return res.status(404).json({ message: 'Thanh toán không tồn tại' });
+    }
+    res.status(200).json(payment);  
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết thanh toán:", error);
+    res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
+  }
+};
 
 module.exports = {
   payment,
@@ -351,5 +364,6 @@ module.exports = {
   getAll,
   deleteBooking ,
   getBookingByCode,
-  getPaymentsByUser
+  getPaymentsByUser,
+  getPaymentDetail
 };
