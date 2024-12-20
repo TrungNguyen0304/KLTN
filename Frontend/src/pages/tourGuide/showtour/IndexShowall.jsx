@@ -39,8 +39,6 @@ const App = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem('userid');
-  const [loading, setLoading] = useState(true);
-  const userId = localStorage.getItem('userid');
 
   useEffect(() => {
     const fetchPayments = async () => {
