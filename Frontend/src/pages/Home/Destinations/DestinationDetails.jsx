@@ -104,8 +104,6 @@ const DestinationDetails = () => {
                         <span className="first_name">
                           {`${val.userGuideId?.first_name || ""} ${
                             val.userGuideId?.last_name || ""
-                          {`${val.userGuideId?.firstname || ""} ${
-                            val.userGuideId?.lastname || ""
                           }`}
                         </span>
                       </span>

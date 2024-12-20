@@ -346,7 +346,10 @@ const getPaymentDetail = async (req, res) => {
   const { paymentId } = req.params;  
 
   try {
-    const payment = await Payment.findById(paymentId).populate('packageId').populate('userId');
+    const payment = await Payment.findById(paymentId)
+    .populate('packageId')
+    .populate('userId')
+    .populate("packageId.locationId");
     if (!payment) {
       return res.status(404).json({ message: 'Thanh toán không tồn tại' });
     }

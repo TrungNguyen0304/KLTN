@@ -36,7 +36,8 @@ const getUserOrderedPayments = async (userGuideId) => {
     const payments = await Payment.find({})
       .populate("packageId")
       .populate("userId")
-
+      .populate("packageId.locationId")
+      .populate("packageId.destinationId");
     // Filter the payments by matching userGuideId
     const matchingPayments = payments.filter(
       (payment) =>
