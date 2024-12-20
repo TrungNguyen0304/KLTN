@@ -39,6 +39,8 @@ const App = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const userId = localStorage.getItem('userid');
+  const [loading, setLoading] = useState(true);
+  const userId = localStorage.getItem('userid');
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -47,14 +49,17 @@ const App = () => {
 
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error(`Failed to fetch payments. Status: ${response.status}`);
+          throw new Error(`Failed to fetch payments. Status: ${response.status}`); // Fixed string interpolation
         }
+
 
         const data = await response.json();
         console.log('Response data:', data);
+        console.log('Response data:', data);
 
-        setPayments(data.payments || []);
+        setPayments(data.payments || []); // Ensure payments exist
       } catch (err) {
+        console.error('Error fetching payments:', err);
         console.error('Error fetching payments:', err);
         setError(err.message);
       } finally {
