@@ -50,8 +50,7 @@ const Sidebar = () => {
 
       {/* Nội dung chính */}
       <div className={`main-content ${collapsed ? "collapsed" : ""}`}>
-        <h1>Welcome to Dashboard</h1>
-        {/* Nội dung chính ở đây */}
+      
       </div>
     </div>
   );

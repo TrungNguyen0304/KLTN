@@ -1,71 +1,112 @@
-/* Đặt font chính */
-body {
-    font-family: "Roboto", Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
-    color: #333;
-  }
-  
-  /* Container chính */
-  .app-container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  /* Tiêu đề */
-  .app-title {
-    text-align: center;
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    color: #007bff;
-  }
-  
-  /* Lỗi */
-  .error-message {
-    color: red;
-    text-align: center;
-    font-size: 1.2rem;
-  }
-  
-  /* Grid layout */
-  .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
-  }
-  
-  /* Card từng thanh toán */
-  .payment-card {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .payment-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  }
-  
-  .payment-card-image {
-    width: 100%;
-    height: auto;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .payment-card-title {
-    font-size: 1.2rem;
-    margin: 15px;
-    font-weight: bold;
-    color: black;
-  }
-  
-  .payment-card-info {
-    margin: 10px 15px;
-    font-size: 1rem;
-    color: #555;
-  }
-  
+/* Tổng quan ứng dụng */
+.app-container {
+  font-family: 'Arial', sans-serif;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+.app-title {
+  text-align: center;
+  color: #222222;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.app-message {
+  text-align: center;
+  font-size: 16px;
+  color: #666666;
+}
+
+.app-error {
+  color: #D32F2F;
+}
+
+/* Danh sách thanh toán */
+.payment-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Card thanh toán */
+.payment-card {
+  background-color: #ffffff;
+  border: 1px solid #e3e4e6;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.payment-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.payment-card-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.payment-card-content {
+  padding: 15px;
+}
+
+.payment-card-title {
+  font-size: 18px;
+  color: #333333;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.payment-card-user,
+.payment-card-amount {
+  font-size: 14px;
+  color: #555555;
+  margin-bottom: 5px;
+}
+
+.payment-card-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  gap: 10px;
+}
+
+.payment-card-delete {
+  background-color: #f44336; /* Màu đỏ cho nút xóa */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  width: 45%; /* Cho nút xóa chiếm một phần không gian */
+}
+
+.payment-card-delete:hover {
+  background-color: #d32f2f;
+}
+
+.payment-card-link {
+  background-color: #4caf50; /* Màu xanh lá cho liên kết */
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  width: 45%; /* Cho liên kết chiếm một phần không gian */
+  display: inline-block;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+.payment-card-link:hover {
+  background-color: #388e3c;
+}
