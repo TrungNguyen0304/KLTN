@@ -71,20 +71,21 @@ export default function TourGrid() {
           payments.map((payment, index) => (
             <TourCard
               key={index}
-              imageSrc={payment.packageId?.image}
-              title={payment.packageId?.package_name}
-              guide={`${payment.packageId?.tourGuideId?.first_name} ${payment.packageId?.tourGuideId?.last_name}`}
-              days={payment.packageId?.durations?.map((duration) => (
-                <div key={duration._id}>
-                  <p>{duration.durationText}</p>
-                  <p>{duration.itinerary}</p>
-                </div>
-              ))}
-              price={payment.amount}
-              location={payment.packageId?.locationId?.firstname}
+              imageSrc={payment.packageId?.image || "default-image.jpg"} // Provide a fallback image if none exists
+              title={payment.packageId?.package_name || "No title available"}
+              guide={
+                `${payment.packageId?.tourGuideId?.first_name || ""} ${
+                  payment.packageId?.tourGuideId?.last_name || ""
+                }`.trim() || "No guide available"
+              }
+              days={
+                payment.packageId?.durations?.map(
+                  (duration) => `${duration.durationText || ""}`
+                ).join(", ") || "No duration available"
+              }
+              price={payment.amount || "Not available"}
+              location={payment.packageId?.locationId?.firstname || "No location available"}
             />
-           
-          
           ))
         ) : (
           <p>No payment history available</p>
