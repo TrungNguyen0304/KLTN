@@ -67,7 +67,7 @@ const IndexDuration = () => {
                         {durations.map((duration, index) => (
                             <tr key={duration._id}>
                                 <td>{index + 1}</td>
-                                <td>{duration.tourPackageId?.package_name || "N/A"}</td> {/* Display tour package name */}
+                                <td>{duration.tourPackageId?.package_name || "Chưa có chuyến du lịch nào chọn "}</td> {/* Display tour package name */}
                                 <td>{new Date(duration.start_date).toLocaleDateString()}</td>
                                 <td>{new Date(duration.end_date).toLocaleDateString()}</td>
                                 <td className="itinerary">

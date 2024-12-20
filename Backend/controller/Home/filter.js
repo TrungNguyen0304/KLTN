@@ -9,6 +9,7 @@ const getFilteredTourPackages = async (req, res) => {
     try {
         const {
             userGuideId,
+            userGuide,
             locationId,
             destinationId,
             durations,
@@ -97,6 +98,7 @@ const getFilteredTourPackages = async (req, res) => {
             .populate("destinationId", "DestinationName")
             .populate("locationId", "firstname")
             .populate("userGuideId", "firstname lastmame")
+            .populate("userGuideId", "firstname lastname")
             .sort(sortOptions);
 
         if (!filteredTourPackages.length) {

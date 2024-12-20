@@ -45,7 +45,6 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 
 /* huong dan vienn */
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
-import TourGuide from "./pages/tourGuide/TourGuide/TourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
 
 // </>
@@ -53,6 +52,9 @@ import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
 import NoFooterLayout from "./layouts/NoFooterLayout";
 import TourGuideLayout from "./layouts/TourGuideLayout";
+//
+
+import ProtectedRoute from "./components/ProtectedRoute"
 function App() {
   return (
     <>
@@ -74,32 +76,175 @@ function App() {
         </Route>
         {/* Các route cho layout admin */}
         <Route element={<AdminLayout />}>
-          <Route path="admin" element={<Dashboard />} />
-          <Route path="user" element={<IndexUser />} />
-          <Route path="user/create" element={<CreateUser />} />
-          <Route path="user/update/:id" element={<EditUser />} />
-          <Route path="destination" element={<IndexDestination />} />
-          <Route path="destination/create" element={<CreateDestination />} />
+          {/* Sử dụng ProtectedRoute để bảo vệ các tuyến admin */}
+          <Route
+            path="admin"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="user"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="user/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="user/update/:id"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <EditUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="destination"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexDestination />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="destination/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateDestination />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/destination/update/:id"
-            element={<UpdateDestination />}
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <UpdateDestination />
+              </ProtectedRoute>
+            }
           />
-          <Route path="location" element={<IndexLocation />} />
-          <Route path="location/create" element={<CreateLocation />} />
-          <Route path="/location/update/:id" element={<EditLocation />} />
-
-          <Route path="tour" element={<IndexTour />} />
-          <Route path="tour/create" element={<CreateTour />} />
-          <Route path="tour/update/:id" element={<EditTour />} />
-          <Route path="tourGuide" element={<IndexTourGuide />} />
-          <Route path="tourGuide/create" element={<CreateTourGuide />} />
-          <Route path="tourGuide/update/:id" element={<EditTourGuide />} />
-          <Route path="duration" element={<IndexDuration />} />
-          <Route path="duration/create" element={<CreateDuration />} />
-          <Route path="/duration/update/:id" element={<EditDuration />} />
-          <Route path="booking" element={<IndexBooking />} />
-          <Route path="/booking/detail/:code" element={<BookingDetail />} />
-
+          <Route
+            path="location"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexLocation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="location/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateLocation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/location/update/:id"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <EditLocation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tour"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexTour />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tour/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateTour />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tour/update/:id"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <EditTour />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tourGuide"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexTourGuide  />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tourGuide/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateTourGuide   />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="tourGuide/update/:id"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <EditTourGuide/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="duration"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexDuration />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="duration/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateDuration  />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/duration/update/:id"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <EditDuration />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="booking"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexBooking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/booking/detail/:code"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <BookingDetail />
+              </ProtectedRoute>
+            }
+          />
         </Route>
 
         {/* Routes for NoFooterLayout (for login, register, and profile) */}
@@ -111,13 +256,29 @@ function App() {
           <Route path="notifications" element={<Notifications />} />
           <Route path="/notifications/:id" element={<NotificationDetail />} />
         </Route>
+
         {/* huong dan vien*/}
         <Route element={<TourGuideLayout />}>
-          <Route path="Indextourguide" element={<AdminTourGuide />} />
+          <Route
+            path="Indextourguide"
+            element={
+              <ProtectedRoute roleRequired="tourguide">
+                <AdminTourGuide />
+              </ProtectedRoute>
+            }
+          />
           <Route path="login" element={<Login />} />
           
           <Route path="IndexShowall" element={<IndexShowall />} />
 
+          <Route
+            path="IndexShowall"
+            element={
+              <ProtectedRoute roleRequired="tourguide">
+                <IndexShowall />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </>

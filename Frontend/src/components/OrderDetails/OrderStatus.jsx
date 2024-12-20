@@ -83,6 +83,15 @@ export default function TourGrid() {
               price={payment.amount}
               location={payment.packageId?.locationId?.firstname}
             />
+            key={index}
+            imageSrc={payment.packageId?.image || 'default-image.jpg'}  // Provide a fallback image if none exists
+            title={payment.packageId?.package_name || 'No title available'}
+            guide={payment.packageId?.userGuideId?.firstname || 'No guide available'}
+            days={payment.packageId?.days || 0}
+            price={payment.amount || 'Not available'}
+            location={payment.packageId?.locationId?.firstname || 'No location available'}
+          />
+          
           ))
         ) : (
           <p>No payment history available</p>

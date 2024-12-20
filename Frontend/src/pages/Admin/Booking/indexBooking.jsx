@@ -34,11 +34,6 @@ const IndexBooking = () => {
       <div className="TableBookings">
         <div className="SpanBooking">Booking</div>
 
-        <div className="createBooking">
-          <Link className="btn btn-primary" to="create">
-            Add Booking
-          </Link>
-        </div>
       </div>
 
       <table>

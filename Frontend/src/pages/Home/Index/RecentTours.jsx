@@ -60,10 +60,18 @@ const RecentTours = () => {
                         </h5>
                       </NavLink>
                       <p className="tour_price">{tour.adult_price ? formatPrice(tour.adult_price) : "N/A"}</p>
-                      {tour.rating && (
+                      {tour.averageRating && tour.totalReviews > 0 ? (
                         <p className="tour_rating">
-                          {tour.rating} : Rất tốt ({tour.reviews} đánh giá)
+                          <i
+                            className="bi bi-star-fill me-1"
+                            style={{ color: "lch(60% 84.89 38.37)" }}
+                          ></i>
+                          {tour.averageRating} ({tour.totalReviews} đánh giá)
                         </p>
+                      ) : (
+                        <>
+                          <br className="khoangtrong" style={{ marginBottom: "10px" }} />
+                        </>
                       )}
                     </div>
                   </div>
