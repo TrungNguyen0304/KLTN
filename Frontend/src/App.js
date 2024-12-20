@@ -46,6 +46,7 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 /* huong dan vienn */
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
+import PaymentDetail from "./pages/tourGuide/showtour/PaymentDetail";
 
 
 // </>
@@ -268,12 +269,19 @@ function App() {
               </ProtectedRoute>
             }
           />
-         
           <Route
             path="IndexShowall"
             element={
               <ProtectedRoute roleRequired="tourguide">
                 <IndexShowall />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/IndexShowall/:paymentId"
+            element={
+              <ProtectedRoute roleRequired="tourguide">
+                <PaymentDetail />
               </ProtectedRoute>
             }
           />
