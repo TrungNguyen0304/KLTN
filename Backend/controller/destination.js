@@ -134,7 +134,7 @@ const getDestinationById = async (req, res) => {
   try {
     const destination = await Destination.findById(req.params.id)
       .populate("locationId")
-      .populate("tourPackages") 
+      .populate("tourPackages")
       .lean();
 
     if (!destination) {
@@ -145,8 +145,8 @@ const getDestinationById = async (req, res) => {
     const tourPackages = await TourPackage.find({
       destinationId: destination._id,
     })
-      .populate("tourGuideId", "first_name last_name")
-    .populate("durations")  
+      .populate("userGuideId", "firstname lastname")
+      .populate("durations")
       .lean();
 
     // Gắn danh sách tour vào destination
@@ -176,8 +176,8 @@ const searchDestination = async (req, res) => {
     // Áp dụng bộ lọc tìm kiếm
     const filter = searchQuery
       ? {
-          DestinationName: { $regex: searchQuery, $options: "i" }, // Tìm theo DestinationName
-        }
+        DestinationName: { $regex: searchQuery, $options: "i" }, // Tìm theo DestinationName
+      }
       : {};
 
     // Lấy danh sách các destinations đã lọc

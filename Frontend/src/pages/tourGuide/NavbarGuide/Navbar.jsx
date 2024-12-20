@@ -10,6 +10,10 @@ const Navbar = () => {
     const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
     const navigate = useNavigate();
 
+     // Lấy thông tin user từ localStorage
+     const user = JSON.parse(localStorage.getItem("user"));
+     const userName = user?.firstname || "Người dùng"; // Dùng "Người dùng" nếu không có tên
+ 
     const handleLogout = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
@@ -50,6 +54,7 @@ const Navbar = () => {
                         <NavDropdown
                             title={<FaUserCircle className="user-icon-header1" />}
                         >
+                             <span style={{ marginLeft: "8px" }}>{userName}</span>
                             <NavDropdown.Item onClick={() => navigate("/profile")}>
                                 <FaUserCircle className="user-icon" /> Hồ sơ của tôi
                             </NavDropdown.Item>

@@ -14,7 +14,7 @@ const durationRoutes = require("./routes/durationRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const filterRoute = require("./routes/filterRoute")
 const searchdestinationRoute = require("./routes/searchdestinationRoute")
-const admintourguideRoute =require("./routes/admintourguideRoute")
+
 
 const app = express();
 const PORT = process.env.PORT || 8001;
@@ -39,7 +39,7 @@ app.use("/api/duration",durationRoutes );
 app.use("/api/review",reviewRoute );
 app.use("/api/filter",filterRoute );
 app.use("/api/searchdestination",searchdestinationRoute);
-app.use("/api/admintourguide",admintourguideRoute);
+
 
 
 // Start server

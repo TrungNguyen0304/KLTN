@@ -56,9 +56,9 @@ const CustomerReviews = ({ tourPackageId }) => {
         e.preventDefault();
         setIsSubmitting(true);
         setMessage("");
-    
+
         const { totalReviews, totalRating, averageRating } = calculateRatings(reviews);
-    
+
         try {
             const response = await fetch(`http://localhost:8001/api/review/create`, {
                 method: "POST",
@@ -70,16 +70,16 @@ const CustomerReviews = ({ tourPackageId }) => {
                     rating,
                     feedback,
                     tourPackageId,
-                    totalReviews, 
-                    totalRating, 
+                    totalReviews,
+                    totalRating,
                     averageRating,
                 }),
             });
-    
-            const data = await response.json(); 
-    
+
+            const data = await response.json();
+
             if (response.status === 201 && data.review) {
-                setReviews((prevReviews) => [data.review, ...prevReviews]); 
+                setReviews((prevReviews) => [data.review, ...prevReviews]);
                 setMessage("Đánh giá đã được tạo thành công!");
                 setRating(1);
                 setFeedback("");
@@ -87,7 +87,7 @@ const CustomerReviews = ({ tourPackageId }) => {
             } else {
                 setMessage(data.message || "Đã xảy ra lỗi");
             }
-    
+
         } catch (error) {
             console.error("Error submitting review:", error);
             setMessage("Đã xảy ra lỗi khi tạo đánh giá.");
@@ -95,9 +95,9 @@ const CustomerReviews = ({ tourPackageId }) => {
             setIsSubmitting(false);
         }
     };
-    
-  
-  
+
+
+
 
     const handleDeleteReview = async (id) => {
         if (!window.confirm("Bạn có chắc chắn muốn xóa đánh giá này không?")) {
@@ -217,7 +217,17 @@ const CustomerReviews = ({ tourPackageId }) => {
                             <span className="rating-value">{averageRating}</span>
                             <span className="rating-out-of">/ 10</span>
                         </div>
-                        <span className="rating-description">{averageRating >= 8 ? "Rất tốt" : "Tốt"}</span>
+                        <span className="rating-description">
+                            {averageRating <= 3
+                                ? "Rất Tệ"
+                                : averageRating <= 5
+                                    ? "Tệ"
+                                    : averageRating <= 7
+                                        ? "Bình Thường"
+                                        : averageRating <= 8
+                                            ? "Tốt"
+                                            : "Rất Tốt"}
+                        </span>
                         <span className="total-reviews">| {totalReviews} đánh giá</span>
                     </div>
                     <ul className="review-list">

@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css'; 
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './Navbar.css';
 
-import { FaBell, FaEnvelope, FaCog, FaUser, FaSignOutAlt } from 'react-icons/fa';
-
+import { FaBell, FaEnvelope, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import { UserContext } from "../../../context/UserContext";
+import { Nav, NavDropdown } from 'react-bootstrap';
 const Navbar = () => {
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
 
-    const toggleDropdown = () => {
-        setDropdownOpen(!isDropdownOpen);
+    const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+    const navigate = useNavigate();
+
+    // Lấy thông tin user từ localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userName = user?.firstname || "Người dùng"; // Dùng "Người dùng" nếu không có tên
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        localStorage.removeItem("userid");
+
+        if ("caches" in window) {
+            caches.keys().then((cacheNames) => {
+                cacheNames.forEach((cacheName) => caches.delete(cacheName));
+            });
+        }
+
+        setIsLoggedIn(false);
+        navigate("/login", { replace: true });
+        window.location.reload();
     };
+
 
     return (
         <nav className="navbaradmin">
-    
-         
+
+
 
             {/* Search Bar */}
             <div className="search-container">
@@ -31,25 +50,22 @@ const Navbar = () => {
                     <FaEnvelope />
                     <span className="badge">3</span>
                 </Link>
-                <div className="profile" onClick={toggleDropdown}>
-                    <img src="https://via.placeholder.com/40" alt="User" className="profile-pic" />
-                    {isDropdownOpen && (
-                        <div className="dropdown-menu">
-                            <Link to="#" className="dropdown-item">
-                                <FaCog /> Settings
-                            </Link>
-                            <Link to="#" className="dropdown-item">
-                                <FaUser /> Profile
-                            </Link>
-                            <Link to="#" className="dropdown-item">
-                                <FaEnvelope /> Messages
-                            </Link>
-                            <Link to="#" className="dropdown-item">
-                                <FaSignOutAlt /> Logout
-                            </Link>
-                        </div>
+                <Nav className="align-items-center">
+                    {isLoggedIn && (
+                        <NavDropdown
+                            title={<FaUserCircle className="user-icon-header1" />}
+                        >
+                            <span className="user-name">Tên: {userName}</span>
+
+                            <NavDropdown.Item onClick={() => navigate("/profile")}>
+                                <FaUserCircle className="user-icon" /> Hồ sơ của tôi
+                            </NavDropdown.Item>
+                            <NavDropdown.Item onClick={handleLogout}>
+                                <FaSignOutAlt className="user-icon" /> Đăng xuất
+                            </NavDropdown.Item>
+                        </NavDropdown>
                     )}
-                </div>
+                </Nav>
             </div>
         </nav>
     );

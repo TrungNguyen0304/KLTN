@@ -72,7 +72,7 @@ export default function TourGrid() {
             key={index}
             imageSrc={payment.packageId?.image || 'default-image.jpg'}  // Provide a fallback image if none exists
             title={payment.packageId?.package_name || 'No title available'}
-            guide={payment.packageId?.tourGuideId?.first_name || 'No guide available'}
+            guide={payment.packageId?.userGuideId?.firstname || 'No guide available'}
             days={payment.packageId?.days || 0}
             price={payment.amount || 'Not available'}
             location={payment.packageId?.locationId?.firstname || 'No location available'}

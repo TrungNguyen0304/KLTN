@@ -1,6 +1,5 @@
 const TourPackage = require("../models/tourPackage");
 const Destination = require("../models/destination");
-const tourGuide = require("../models/tourGuide");
 const Duration = require("../models/duration");
 const user = require("../models/user");
 const mongoose = require("mongoose"); // Make sure mongoose is imported
@@ -75,7 +74,10 @@ const createTour = async (req, res) => {
     if (destinationId) {
       await Destination.findByIdAndUpdate(
         destinationId,
-        { $push: { tourPackages: newTour._id } },
+        {
+          $push: { tourPackages: newTour._id },
+          $inc: { tourCount: 1 } // Tăng tourCount thêm 1
+        },
         { new: true }
       );
     }
@@ -132,18 +134,37 @@ const createTour = async (req, res) => {
 const deleteTour = async (req, res) => {
   const { id } = req.params;
 
+  // Kiểm tra xem ID có hợp lệ không
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ message: "ID không hợp lệ" });
   }
+
   try {
+    // Tìm và xóa tour package
     const deleteTour = await TourPackage.findByIdAndDelete(id);
 
+    // Nếu không tìm thấy tour package
     if (!deleteTour) {
       console.log("Tour not found with ID:", id);
       return res.status(404).json({ message: "Gói tour không tồn tại" });
     }
+
+    // Giảm tourCount trong Destination nếu có destinationId
+    if (deleteTour.destinationId) {
+      await Destination.findByIdAndUpdate(
+        deleteTour.destinationId,
+        {
+          $pull: { tourPackages: id }, // Xóa tour khỏi danh sách tourPackages
+          $inc: { tourCount: -1 },    // Giảm tourCount
+        },
+        { new: true }
+      );
+    }
+
+    // Trả về phản hồi thành công
     res.status(200).json({ message: "Gói tour đã được xóa thành công" });
   } catch (error) {
+    // Bắt lỗi nếu có vấn đề trong quá trình xóa
     console.error("Lỗi khi xóa gói tour:", error);
     res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
   }
@@ -159,7 +180,7 @@ const editTour = async (req, res) => {
   }
 
   try {
-    // Kiểm tra và lấy dữ liệu hình ảnh nếu có
+    // Lấy dữ liệu hình ảnh nếu có
     const image =
       req.files && req.files["image"] ? req.files["image"][0].path : "";
     const groupImages =
@@ -175,7 +196,6 @@ const editTour = async (req, res) => {
       pricechildren_price,
       durations,
       destinationId,
-      // tourGuideId,
       userGuideId,
       locationId,
       incAndExc,
@@ -206,9 +226,7 @@ const editTour = async (req, res) => {
 
     if (invalidDurations.length > 0) {
       return res.status(400).json({
-        message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(
-          ", "
-        )}`,
+        message: `Các ID trong durations không hợp lệ: ${invalidDurations.join(", ")}`,
       });
     }
 
@@ -218,6 +236,25 @@ const editTour = async (req, res) => {
       return res.status(404).json({ message: "Gói tour không tồn tại" });
     }
 
+    // Kiểm tra và cập nhật tourCount khi destinationId thay đổi
+    if (destinationId && destinationId !== tour.destinationId?.toString()) {
+      // Nếu có destinationId cũ, giảm tourCount ở Destination cũ
+      if (tour.destinationId) {
+        const oldDestination = await Destination.findById(tour.destinationId);
+        if (oldDestination && oldDestination.tourCount > 0) {
+          await Destination.findByIdAndUpdate(
+            tour.destinationId,
+            { $inc: { tourCount: -1 }, $pull: { tourPackages: id } }
+          );
+        }
+      }
+      // Nếu có destinationId mới, tăng tourCount ở Destination mới
+      await Destination.findByIdAndUpdate(
+        destinationId,
+        { $inc: { tourCount: 1 }, $push: { tourPackages: id } }
+      );
+    }
+
     // Cập nhật các trường
     tour.package_name = package_name || tour.package_name;
     tour.description = description || tour.description;
@@ -225,7 +262,6 @@ const editTour = async (req, res) => {
     tour.pricechildren_price = pricechildren_price || tour.pricechildren_price;
     tour.durations = parsedDurations.length > 0 ? parsedDurations : tour.durations;
     tour.destinationId = destinationId || tour.destinationId;
-    // tour.tourGuideId = tourGuideId || tour.tourGuideId;
     tour.userGuideId = userGuideId || tour.userGuideId;
     tour.locationId = locationId || tour.locationId;
     tour.incAndExc = incAndExc || tour.incAndExc;

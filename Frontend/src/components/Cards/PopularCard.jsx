@@ -56,29 +56,35 @@ const PopularCard = ({ val }) => {
         {/* Tour Title */}
         <Card.Title
           className="text-truncate line-clamp-2"
-          style={{ maxWidth: "230px" }}
+        
         >
           <NavLink
             className="body-text text-dark text-decoration-none"
             to={`/tour-details/${val._id}`}
-            onClick={() => handleViewTour(val)}  
+            onClick={() => handleViewTour(val)}
           >
             {val.package_name || "Unnamed Package"}
           </NavLink>
         </Card.Title>
 
         {/* Rating and Reviews */}
-        <p className="reviwe">
-          <span>
-            <i className="bi bi-star-fill me-1"></i>
-          </span>
-          <span>{val.averageRating || "N/A"}</span>
-          <span>( {val.totalReviews || 0} reviews )</span>
-        </p>
+        {val.averageRating ? (
+          <p className="reviwe">
+            <span>
+              <i className="bi bi-star-fill me-1"></i>
+            </span>
+            <span>{val.averageRating || "N/A"}</span>
+            <span>( {val.totalReviews || 0} reviews )</span>
+          </p>
+        ) : (
+          <><br></br>
+            <br></br>
+          </>
+        )}
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.tourGuideId?.first_name || ""} ${val.tourGuideId?.last_name || ""}`}
+            {`${val.userGuideId?.firstname || ""} ${val.userGuideId?.lastname || ""}`}
           </span>
         </span>
 
@@ -103,7 +109,7 @@ const PopularCard = ({ val }) => {
 
           {/* Displaying Price aligned to the right */}
           <p className="text-end">
-           
+
             <b>
               {val.afterDiscount
                 ? formatPrice(val.afterDiscount)
