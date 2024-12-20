@@ -317,9 +317,10 @@ const getPaymentsByUser = async (req, res) => {
           ...payment.toObject(),
           packageId: packageId
             ? await tourPackage.findById(packageId)
-                .populate("locationId", "firstname")  
+                .populate("locationId")  
                 .populate("durations")
-            : null,
+                .populate("userGuideId")  
+                : null,
         };
 
         return populatedPayment;

@@ -8,6 +8,7 @@ const Location = require("../../models/location");
 const getFilteredTourPackages = async (req, res) => {
     try {
         const {
+            userGuideId,
             userGuide,
             locationId,
             destinationId,
@@ -96,6 +97,7 @@ const getFilteredTourPackages = async (req, res) => {
             .populate("durations", "start_date end_date")
             .populate("destinationId", "DestinationName")
             .populate("locationId", "firstname")
+            .populate("userGuideId", "firstname lastmame")
             .populate("userGuideId", "firstname lastname")
             .sort(sortOptions);
 

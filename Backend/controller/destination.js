@@ -146,6 +146,7 @@ const getDestinationById = async (req, res) => {
       destinationId: destination._id,
     })
       .populate("userGuideId", "firstname lastname")
+    .populate("durations")  
       .populate("durations")
       .lean();
 

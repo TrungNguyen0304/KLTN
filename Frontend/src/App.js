@@ -268,6 +268,9 @@ function App() {
             }
           />
           <Route path="login" element={<Login />} />
+          
+          <Route path="IndexShowall" element={<IndexShowall />} />
+
           <Route
             path="IndexShowall"
             element={
