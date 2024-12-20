@@ -1,5 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const PaymentList = ({ payments }) => {
   return (
@@ -7,9 +8,11 @@ const PaymentList = ({ payments }) => {
     {payments.map((payment, index) => (
       <div key={index} style={{ textAlign: 'center', border: '1px solid #ddd', borderRadius: '8px', padding: '10px' }}>
         {payment.packageId?.image && <img src={payment.packageId?.image} alt="Package Image" style={{ maxWidth: '100%', borderRadius: '8px' }} />}
-        <p>User: {payment.userId?.firstname|| 'N/A'} {payment.userId?.lastname || 'N/A'}</p>
-        <p>Package: {payment.packageId?.package_name || 'N/A'}</p>
-        <p>Amount: {payment.amount || 'N/A'}</p>
+        <p>Người Dùng: {payment.userId?.firstname || 'N/A'} {payment.userId?.lastname || 'N/A'}</p>
+        <p>Gói Tour: {payment.packageId?.package_name || 'N/A'}</p>
+        <p>Số Tiền: {payment.amount || 'N/A'}</p>
+        {/* Thêm liên kết tới trang chi tiết thanh toán */}
+        <Link to={`/IndexShowall/${payment._id}`} style={{ color: 'blue' }}>Xem Chi Tiết</Link>
       </div>
     ))}
   </div>
