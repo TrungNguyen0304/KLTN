@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import { SidebarData } from "../Data/Data";
-import { UilBars } from "@iconscout/react-unicons";
 import { useNavigate } from "react-router-dom";
 import Logo from '../../../assets/admin/imgs/logo.png';
 const Sidebar = () => {

@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 const DestinationDetails = () => {
   const { id } = useParams();
   const [destination, setDestination] = useState(null);
+
   const formatPrice = (price) =>
     typeof price === "number" ? price.toFixed(2) : "N/A";
 
@@ -102,8 +103,6 @@ const DestinationDetails = () => {
                       <span className="tour-guide-name">
                         Hướng dẫn viên:{" "}
                         <span className="first_name">
-                          {`${val.userGuideId?.first_name || ""} ${
-                            val.userGuideId?.last_name || ""
                           {`${val.userGuideId?.firstname || ""} ${
                             val.userGuideId?.lastname || ""
                           }`}
@@ -120,6 +119,7 @@ const DestinationDetails = () => {
                             {cat}
                           </span>
                         ))}
+
                       {/* Duration of Tour */}
                       <p className="mb-2 mt-2">
                         <i className="bi bi-clock"></i>{" "}

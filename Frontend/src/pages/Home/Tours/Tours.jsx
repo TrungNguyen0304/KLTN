@@ -99,7 +99,7 @@ const Tours = () => {
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
-                  Previous
+                  Sau
                 </button>
 
                 {Array.from({ length: totalPages }, (_, index) => (
@@ -118,7 +118,7 @@ const Tours = () => {
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
-                  Next
+                  Trước
                 </button>
               </div>
             </Col>

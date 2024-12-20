@@ -47,6 +47,7 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
 
+
 // </>
 import MainLayout from "./layouts/MainLayout";
 import AdminLayout from "./layouts/AdminLayout";
@@ -185,7 +186,7 @@ function App() {
             path="tourGuide"
             element={
               <ProtectedRoute roleRequired="admin">
-                <IndexTourGuide  />
+                <IndexTourGuide />
               </ProtectedRoute>
             }
           />
@@ -193,7 +194,7 @@ function App() {
             path="tourGuide/create"
             element={
               <ProtectedRoute roleRequired="admin">
-                <CreateTourGuide   />
+                <CreateTourGuide />
               </ProtectedRoute>
             }
           />
@@ -201,7 +202,7 @@ function App() {
             path="tourGuide/update/:id"
             element={
               <ProtectedRoute roleRequired="admin">
-                <EditTourGuide/>
+                <EditTourGuide />
               </ProtectedRoute>
             }
           />
@@ -217,7 +218,7 @@ function App() {
             path="duration/create"
             element={
               <ProtectedRoute roleRequired="admin">
-                <CreateDuration  />
+                <CreateDuration />
               </ProtectedRoute>
             }
           />
@@ -267,10 +268,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="login" element={<Login />} />
-          
-          <Route path="IndexShowall" element={<IndexShowall />} />
-
+         
           <Route
             path="IndexShowall"
             element={
@@ -279,6 +277,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+        
         </Route>
       </Routes>
     </>
