@@ -153,3 +153,11 @@
         justify-content: flex-start;
     }
 }
+
+/*user*/
+.user-name {
+    display: block; /* Đảm bảo phần tử chiếm 1 dòng riêng */
+    text-align: center; /* Căn giữa chữ */
+    margin: 10px 0; /* Tạo khoảng cách trên dưới */
+    color: #333; /* Màu chữ đẹp hơn */
+}

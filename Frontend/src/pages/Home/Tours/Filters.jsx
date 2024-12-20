@@ -9,7 +9,6 @@ const Filters = ({ onFilterChange }) => {
   const [selectedLocation, setSelectedLocation] = useState("");
   const [selectedDestinations, setSelectedDestinations] = useState([]);
   const [tourType, setTourType] = useState("");
-  const [priceRange] = useState([1000000, 3000000]);
   const [adultPriceMin, setAdultPriceMin] = useState("");
   const [adultPriceMax, setAdultPriceMax] = useState("");
   const [sortByPrice, setSortByPrice] = useState("asc"); // New state to manage sorting
@@ -90,8 +89,6 @@ const Filters = ({ onFilterChange }) => {
       locationId: selectedLocation, // Send single location ID
       destinationId: selectedDestinations.join(","), // Join selected destinations
       tourType,
-      minPrice: priceRange[0],
-      maxPrice: priceRange[1],
       adultPriceMin: adultPriceMin.replace(/[^0-9]/g, ""), // Send numeric value
       adultPriceMax: adultPriceMax.replace(/[^0-9]/g, ""), // Send numeric value
       sortByPrice, // Include sort option

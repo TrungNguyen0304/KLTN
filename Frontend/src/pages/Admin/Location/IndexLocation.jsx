@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap"; 
 import { FaSearch } from "react-icons/fa";
 
 const IndexLocation = () => {

@@ -6,7 +6,9 @@
       Images: { type: String, required: true },
       Description: { type: String, required: true },
       locationId: { type: mongoose.Schema.Types.ObjectId, ref: 'Location',required: true },
-      tourPackages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TourPackage' }]
+      tourPackages: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TourPackage' }],
+      tourCount: { type: Number, default: 0 }
+
     },
     {
       timestamps: true,
