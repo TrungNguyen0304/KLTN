@@ -120,8 +120,6 @@ const payment = async (req, res) => {
   }
 };
 
-
-
 const callback = async (req, res) => {
   try {
     if (req.body) {
@@ -351,35 +349,35 @@ const getPaymentsByUser = async (req, res) => {
   }
 };
 
-  const getPaymentDetail = async (req, res) => {
-    const { paymentId } = req.params;
+const getPaymentDetail = async (req, res) => {
+  const { paymentId } = req.params;
 
-    try {
-      const payment = await Payment.findById(paymentId)
+  try {
+    const payment = await Payment.findById(paymentId)
       .populate({
         path: 'packageId',
         select: 'package_name locationId destinationId durations groupImages image package_name', // Thêm groupImages vào select
         populate: [
-          { path: 'locationId', select: 'firstname lastname' }, 
+          { path: 'locationId', select: 'firstname lastname' },
           { path: 'destinationId', select: 'DestinationName' },
-          { 
-            path: 'durations', 
-            select: 'itinerary start_date end_date', 
+          {
+            path: 'durations',
+            select: 'itinerary start_date end_date',
             model: 'Duration' // Ensure this is the correct model name for durations
           },
         ],
       })
-        .populate('userId');
+      .populate('userId');
 
-      if (!payment) {
-        return res.status(404).json({ message: 'Thanh toán không tồn tại' });
-      }
-      res.status(200).json(payment);
-    } catch (error) {
-      console.error("Lỗi khi lấy chi tiết thanh toán:", error);
-      res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
+    if (!payment) {
+      return res.status(404).json({ message: 'Thanh toán không tồn tại' });
     }
-  };
+    res.status(200).json(payment);
+  } catch (error) {
+    console.error("Lỗi khi lấy chi tiết thanh toán:", error);
+    res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
+  }
+};
 
 
 const deletePayment = async (req, res) => {
