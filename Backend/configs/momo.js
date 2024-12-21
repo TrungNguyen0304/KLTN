@@ -422,33 +422,32 @@ const getTotalIncomeForDay = async (req, res) => {
       });
     }
 
-    // Convert the date to the start and end of the day
     const startDate = startOfDay(new Date(date));
     const endDate = endOfDay(new Date(date));
 
-    console.log("Querying payments from:", startDate, "to", endDate);
+    // console.log("Querying payments from:", startDate, "to", endDate);
 
     const payments = await Payment.find({
       createdAt: { $gte: startDate, $lt: endDate },
     });
 
-    console.log("Payments:", payments);
+    // console.log("Payments:", payments);
 
     if (payments.length === 0) {
       return res.status(200).json({
         success: true,
-        totalIncomeDay: 0, // Change this field to 'totalIncomeDay' for frontend consistency
+        totalIncomeDay: 0, 
       });
     }
 
     const totalIncome = payments.reduce((acc, payment) => {
-      console.log("Payment amount:", payment.amount);
+      // console.log("Payment amount:", payment.amount);
       return acc + payment.amount;
     }, 0);
 
     res.status(200).json({
       success: true,
-      totalIncomeDay: totalIncome, // Return the total income for the day here
+      totalIncomeDay: totalIncome, 
     });
   } catch (error) {
     console.error("Error calculating total income:", error);

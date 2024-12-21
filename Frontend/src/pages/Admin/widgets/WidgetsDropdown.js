@@ -7,8 +7,9 @@ const WidgetsDropdown = (props) => {
   const widgetChartRef1 = useRef(null);
   const widgetChartRef2 = useRef(null);
   const widgetChartRef3 = useRef(null);
-  // const widgetChartRef4 = useRef(null);
+  const widgetChartRef4 = useRef(null);
   const [userCount, setUserCount] = useState(0);
+  const [tourGuideCount, setTourGuideCount] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalIncomeday, setTotalIncomeday] = useState(0);
 
@@ -33,6 +34,24 @@ const WidgetsDropdown = (props) => {
     };
 
     fetchUserCount();
+  }, []);
+  useEffect(() => {
+    const fetchTourGuideCount = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8001/api/user/tourGuideCount"
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTourGuideCount(data.countGuide);
+      } catch (error) {
+        console.error("Error fetching tour guide count:", error);
+      }
+    };
+
+    fetchTourGuideCount();
   }, []);
   useEffect(() => {
     const fetchTotalIncome = async () => {
@@ -77,40 +96,42 @@ const WidgetsDropdown = (props) => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.addEventListener('ColorSchemeChange', () => {
+    document.documentElement.addEventListener("ColorSchemeChange", () => {
       if (widgetChartRef1.current) {
         setTimeout(() => {
-          widgetChartRef1.current.data.datasets[0].pointBackgroundColor = '#1565c0'; // Darker blue for Users
-          widgetChartRef1.current.update()
-        })
+          widgetChartRef1.current.data.datasets[0].pointBackgroundColor =
+            "#1565c0"; // Darker blue for Users
+          widgetChartRef1.current.update();
+        });
       }
 
       if (widgetChartRef2.current) {
         setTimeout(() => {
-          widgetChartRef2.current.data.datasets[0].pointBackgroundColor = '#0097a7'; // Darker teal for Income
-          widgetChartRef2.current.update()
-        })
+          widgetChartRef2.current.data.datasets[0].pointBackgroundColor =
+            "#0097a7"; // Darker teal for Income
+          widgetChartRef2.current.update();
+        });
       }
 
       if (widgetChartRef3.current) {
         setTimeout(() => {
-          widgetChartRef3.current.data.datasets[0].backgroundColor = '#f57c00'; // Darker orange for Conversion Rate
-          widgetChartRef3.current.update()
-        })
+          widgetChartRef3.current.data.datasets[0].backgroundColor = "#f57c00"; // Darker orange for Conversion Rate
+          widgetChartRef3.current.update();
+        });
       }
 
-      // if (widgetChartRef4.current) {
-      //   setTimeout(() => {
-      //     widgetChartRef4.current.data.datasets[0].borderColor = '#d32f2f'; // Darker red for Sessions
-      //     widgetChartRef4.current.update()
-      //   })
-      // }
-    })
-  }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, ])
+      if (widgetChartRef4.current) {
+        setTimeout(() => {
+          widgetChartRef4.current.data.datasets[0].borderColor = "#d32f2f"; // Darker red for Sessions
+          widgetChartRef4.current.update();
+        });
+      }
+    });
+  }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4]);
   return (
     <div className={`widgets-container ${props.className}`}>
       {/* User Widget */}
-      {/* User Widget */}
+
       <div className="widget-card users-widget">
         <div className="widget-header">
           <h4 className="widget-title">Người Sử Dụng</h4>
@@ -136,19 +157,29 @@ const WidgetsDropdown = (props) => {
           }}
         />
       </div>
-      {/* Income Widget */}
-      <div className="widget-card income-widget">
+      {/* Sessions Widget */}
+      <div className="widget-card sessions-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Tổng Thu Nhập</h4>
+          <h4 className="widget-title">Huóng dẫn viên</h4>
           <span className="widget-value">
-            {formatCurrency(totalIncome)}{" "}
-            <span className="widget-change"></span>
-          </span>
+            {tourGuideCount} <span className="widget-change"></span>
+          </span>{" "}
         </div>
         <CChartLine
-          ref={widgetChartRef2}
+          ref={widgetChartRef4}
           className="widget-chart"
           style={{ height: "70px" }}
+          data={{
+            labels: [
+              "January",
+              "February",
+              "March",
+              "April",
+              "May",
+              "June",
+              "July",
+            ],
+          }}
           options={{
             plugins: { legend: { display: false } },
             maintainAspectRatio: false,
@@ -157,7 +188,7 @@ const WidgetsDropdown = (props) => {
               y: { display: false },
             },
             elements: {
-              line: { borderWidth: 2 },
+              line: { borderWidth: 2, tension: 0.4 },
               point: { radius: 4 },
             },
           }}
@@ -191,29 +222,19 @@ const WidgetsDropdown = (props) => {
           }}
         />
       </div>
-
-      {/* Sessions Widget */}
-      {/* <div className="widget-card sessions-widget">
+      {/* Income Widget */}
+      <div className="widget-card income-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Sessions</h4>
-          <span className="widget-value">44K <span className="widget-change">(-23.6%) ↓</span></span>
+          <h4 className="widget-title">Tổng Thu Nhập</h4>
+          <span className="widget-value">
+            {formatCurrency(totalIncome)}{" "}
+            <span className="widget-change"></span>
+          </span>
         </div>
         <CChartLine
-          ref={widgetChartRef4}
+          ref={widgetChartRef2}
           className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Sessions Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#d32f2f', // Darker red for Sessions
-                pointBackgroundColor: '#d32f2f',
-                data: [65, 70, 55, 90, 34, 70, 80],
-              },
-            ],
-          }}
+          style={{ height: "70px" }}
           options={{
             plugins: { legend: { display: false } },
             maintainAspectRatio: false,
@@ -222,12 +243,12 @@ const WidgetsDropdown = (props) => {
               y: { display: false },
             },
             elements: {
-              line: { borderWidth: 2, tension: 0.4 },
+              line: { borderWidth: 2 },
               point: { radius: 4 },
             },
           }}
         />
-      </div> */}
+      </div>
     </div>
   );
 };

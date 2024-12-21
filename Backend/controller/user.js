@@ -214,6 +214,16 @@ const getUserCount = async (req, res) => {
     res.status(500).json({ message: "Error fetching user count" });
   }
 };
+const getTourGuideCount = async (req, res) => {
+  try {
+    const tourGuideCount = await User.countDocuments({ role: "tourguide" });
+    res.status(200).json({ countGuide: tourGuideCount });
+  } catch (error) {
+    console.error("Error fetching tour guide count:", error);
+    res.status(500).json({ message: "Error fetching tour guide count" });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -223,5 +233,6 @@ module.exports = {
   getAllUser,
   searchUser,
   getUserGuideId,
-  getUserCount
+  getUserCount,
+  getTourGuideCount
 };

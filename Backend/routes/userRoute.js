@@ -11,7 +11,7 @@ const {
   searchUser,
   getUserGuideId,
   getUserCount,
-  
+  getTourGuideCount,
 } = require("../controller/user");
 
 router.post("/register", register);
@@ -21,9 +21,9 @@ router.put("/update/:id", updateUser);
 // router.put("/:id", editUser);
 router.get("/", getAllUser);
 router.get("/userGuideId/:id", getUserGuideId);
-router.post("/:id",getUserById );
+router.post("/:id", getUserById);
 router.get("/search", searchUser);
 router.get("/user-count", getUserCount);
-
+router.get("/tourGuideCount", getTourGuideCount);
 
 module.exports = router;
