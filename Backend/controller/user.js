@@ -204,6 +204,63 @@ const searchUser = async (req, res) => {
     res.status(500).json({ message: "Error fetching users" });
   }
 };
+const countPaymentsByUserGuideId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const payments = await Payment.find({})
+      .populate("packageId")
+      .populate("userId");
+
+    const filteredPayments = payments.filter(
+      (payment) =>
+        payment.packageId &&
+        payment.packageId.userGuideId &&
+        payment.packageId.userGuideId.toString() === id.toString()
+    );
+
+    if (filteredPayments.length === 0) {
+      return res.status(200).json({
+        daily: {},
+        weekly: {},
+        monthly: {},
+        yearly: {},
+      });
+    }
+
+    const counts = filteredPayments.reduce(
+      (acc, payment) => {
+        const date = new Date(payment.createdAt);
+
+        const dayKey = date.toISOString().split("T")[0];
+        const startOfYear = new Date(date.getFullYear(), 0, 1);
+        const daysDifference = Math.floor(
+          (date - startOfYear + (startOfYear.getDay() === 0 ? 0 : 7 - startOfYear.getDay())) /
+          (1000 * 60 * 60 * 24)
+        );
+        const weekNumber = Math.ceil((daysDifference + 1) / 7);
+        const weekKey = `${date.getFullYear()}-W${weekNumber}`;
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+        const yearKey = `${date.getFullYear()}`;
+
+        acc.daily[dayKey] = (acc.daily[dayKey] || 0) + 1;
+        acc.weekly[weekKey] = (acc.weekly[weekKey] || 0) + 1;
+        acc.monthly[monthKey] = (acc.monthly[monthKey] || 0) + 1;
+        acc.yearly[yearKey] = (acc.yearly[yearKey] || 0) + 1;
+
+        return acc;
+      },
+      { daily: {}, weekly: {}, monthly: {}, yearly: {} }
+    );
+
+    res.status(200).json(counts);
+  } catch (error) {
+    console.error("Error counting payments by UserGuideId:", error);
+    res.status(500).json({ message: "Error counting payments" });
+  }
+};
+
+
 
 module.exports = {
   register,
@@ -214,4 +271,5 @@ module.exports = {
   getAllUser,
   searchUser,
   getUserGuideId,
+  countPaymentsByUserGuideId,
 };

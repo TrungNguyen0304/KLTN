@@ -9,7 +9,8 @@ const {
   getAllUser,
   getUserById,
   searchUser,
-  getUserGuideId
+  getUserGuideId,
+  countPaymentsByUserGuideId
 } = require("../controller/user");
 
 router.post("/register", register);
@@ -21,6 +22,6 @@ router.get("/", getAllUser);
 router.get("/userGuideId/:id", getUserGuideId);
 router.post("/:id",getUserById );
 router.get("/search", searchUser);
-
+router.get("/payments/count/:id", countPaymentsByUserGuideId);
 
 module.exports = router;
