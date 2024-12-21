@@ -205,7 +205,15 @@ const searchUser = async (req, res) => {
     res.status(500).json({ message: "Error fetching users" });
   }
 };
-
+const getUserCount = async (req, res) => {
+  try {
+    const userCount = await User.countDocuments({});
+    res.status(200).json({ count: userCount });
+  } catch (error) {
+    console.error("Error fetching user count:", error);
+    res.status(500).json({ message: "Error fetching user count" });
+  }
+};
 module.exports = {
   register,
   login,
@@ -215,4 +223,5 @@ module.exports = {
   getAllUser,
   searchUser,
   getUserGuideId,
+  getUserCount
 };

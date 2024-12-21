@@ -1,70 +1,105 @@
-import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
-import { CChartBar, CChartLine } from '@coreui/react-chartjs'
-import './widgetsDropdown.css' // Import the custom CSS
+import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import { CChartBar, CChartLine } from "@coreui/react-chartjs";
+import "./widgetsDropdown.css"; // Import the custom CSS
 
 const WidgetsDropdown = (props) => {
-  const widgetChartRef1 = useRef(null)
-  const widgetChartRef2 = useRef(null)
-  const widgetChartRef3 = useRef(null) // New ref for Conversion Rate chart
-  const widgetChartRef4 = useRef(null) // New ref for Sessions chart
+  const widgetChartRef1 = useRef(null);
+  const [userCount, setUserCount] = useState(0);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalIncomeday, setTotalIncomeday] = useState(0);
+
+  const formatCurrency = (amount) => {
+    return amount.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
 
   useEffect(() => {
-    document.documentElement.addEventListener('ColorSchemeChange', () => {
+    const fetchUserCount = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8001/api/user/user-count"
+        );
+        const data = await response.json();
+        setUserCount(data.count);
+      } catch (error) {
+        console.error("Error fetching user count:", error);
+      }
+    };
+
+    fetchUserCount();
+  }, []);
+  useEffect(() => {
+    const fetchTotalIncome = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8001/api/booking/payments"
+        );
+        const data = await response.json();
+
+        const total = data.payments.reduce((sum, payment) => {
+          if (payment.status === "complete") {
+            return sum + payment.amount;
+          }
+          return sum;
+        }, 0);
+
+        setTotalIncome(total);
+      } catch (error) {
+        console.error("Error fetching payments:", error);
+      }
+    };
+
+    fetchTotalIncome();
+  }, []);
+  useEffect(() => {
+    const fetchIncomeData = async () => {
+      try {
+        const today = new Date().toISOString().split("T")[0];
+        const response = await fetch(
+          `http://localhost:8001/api/booking/dailytotal/${today}`
+        );
+        const data = await response.json();
+        if (data.success) {
+          setTotalIncomeday(data.totalIncomeDay);
+        }
+      } catch (error) {
+        console.error("Error fetching income data:", error);
+      }
+    };
+
+    fetchIncomeData();
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.addEventListener("ColorSchemeChange", () => {
       if (widgetChartRef1.current) {
         setTimeout(() => {
-          widgetChartRef1.current.data.datasets[0].pointBackgroundColor = '#1565c0'; // Darker blue for Users
-          widgetChartRef1.current.update()
-        })
+          widgetChartRef1.current.data.datasets[0].pointBackgroundColor =
+            "#1565c0";
+          widgetChartRef1.current.update();
+        });
       }
-
-      if (widgetChartRef2.current) {
-        setTimeout(() => {
-          widgetChartRef2.current.data.datasets[0].pointBackgroundColor = '#0097a7'; // Darker teal for Income
-          widgetChartRef2.current.update()
-        })
-      }
-
-      if (widgetChartRef3.current) {
-        setTimeout(() => {
-          widgetChartRef3.current.data.datasets[0].backgroundColor = '#f57c00'; // Darker orange for Conversion Rate
-          widgetChartRef3.current.update()
-        })
-      }
-
-      if (widgetChartRef4.current) {
-        setTimeout(() => {
-          widgetChartRef4.current.data.datasets[0].borderColor = '#d32f2f'; // Darker red for Sessions
-          widgetChartRef4.current.update()
-        })
-      }
-    })
-  }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
+    });
+  }, [widgetChartRef1]);
 
   return (
     <div className={`widgets-container ${props.className}`}>
       {/* User Widget */}
+      {/* User Widget */}
       <div className="widget-card users-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Users</h4>
-          <span className="widget-value">26K <span className="widget-change">(-12.4%) ↓</span></span>
+          <h4 className="widget-title">Người Sử Dụng</h4>
+          <span className="widget-value">
+            {userCount} <span className="widget-change"></span>
+          </span>
         </div>
         <CChartLine
           ref={widgetChartRef1}
           className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Users Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#1565c0', // Darker blue for Users
-                pointBackgroundColor: '#1565c0',
-                data: [65, 59, 84, 84, 51, 55, 40],
-              },
-            ],
-          }}
+          style={{ height: "70px" }}
           options={{
             plugins: { legend: { display: false } },
             maintainAspectRatio: false,
@@ -79,29 +114,19 @@ const WidgetsDropdown = (props) => {
           }}
         />
       </div>
-
       {/* Income Widget */}
       <div className="widget-card income-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Income</h4>
-          <span className="widget-value">$6,200 <span className="widget-change">(40.9%) ↑</span></span>
+          <h4 className="widget-title">Tổng Thu Nhập</h4>
+          <span className="widget-value">
+            {formatCurrency(totalIncome)}{" "}
+            <span className="widget-change"></span>
+          </span>
         </div>
         <CChartLine
-          ref={widgetChartRef2}
+          ref={widgetChartRef1}
           className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Income Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#0097a7', // Darker teal for Income
-                pointBackgroundColor: '#0097a7',
-                data: [1, 18, 9, 17, 34, 22, 11],
-              },
-            ],
-          }}
+          style={{ height: "70px" }}
           options={{
             plugins: { legend: { display: false } },
             maintainAspectRatio: false,
@@ -118,40 +143,35 @@ const WidgetsDropdown = (props) => {
       </div>
 
       {/* Conversion Rate Widget */}
-      <div className="widget-card conversion-rate-widget">
+      <div className="widget-card income-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Conversion Rate</h4>
-          <span className="widget-value">2.49% <span className="widget-change">(84.7%) ↑</span></span>
+          <h4 className="widget-title">Tổng thu nhập trong ngày</h4>
+          <span className="widget-value">
+            {formatCurrency(totalIncomeday)}{" "}
+            <span className="widget-change"></span>
+          </span>{" "}
         </div>
-        <CChartBar
-          ref={widgetChartRef3}
+        <CChartLine
+          ref={widgetChartRef1}
           className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Conversion Rate Dataset',
-                backgroundColor: '#f57c00', // Darker orange for Conversion Rate
-                borderColor: '#f57c00',
-                data: [78, 81, 80, 45, 34, 12, 40],
-                barPercentage: 0.6,
-              },
-            ],
-          }}
+          style={{ height: "70px" }}
           options={{
-            maintainAspectRatio: false,
             plugins: { legend: { display: false } },
+            maintainAspectRatio: false,
             scales: {
               x: { display: false },
               y: { display: false },
+            },
+            elements: {
+              line: { borderWidth: 2 },
+              point: { radius: 4 },
             },
           }}
         />
       </div>
 
       {/* Sessions Widget */}
-      <div className="widget-card sessions-widget">
+      {/* <div className="widget-card sessions-widget">
         <div className="widget-header">
           <h4 className="widget-title">Sessions</h4>
           <span className="widget-value">44K <span className="widget-change">(-23.6%) ↓</span></span>
@@ -183,15 +203,3 @@ const WidgetsDropdown = (props) => {
               line: { borderWidth: 2, tension: 0.4 },
               point: { radius: 4 },
             },
-          }}
-        />
-      </div>
-    </div>
-  )
-}
-
-WidgetsDropdown.propTypes = {
-  className: PropTypes.string,
-}
-
-export default WidgetsDropdown

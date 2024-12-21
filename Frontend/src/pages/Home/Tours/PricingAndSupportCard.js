@@ -33,7 +33,7 @@ const PricingAndSupportCard = ({
       try {
         const response = await axios.post(
           `http://localhost:8001/api/user/${id}`
-        );  
+        );
         setUser(response.data);
         setFormData((prevFormData) => ({
           ...prevFormData,
@@ -67,17 +67,23 @@ const PricingAndSupportCard = ({
       return false;
     }
   };
-
-  const handlePayment = async (id, totalPrice,totalPeople) => {
+  const handleClick = () => {
+    if (!selectedDuration) {
+      alert("Vui lòng chọn lịch trình trước khi đặt!", {
+        position: "top-center",
+        autoClose: 1000, // Tự động tắt sau 3 giây
+      });
+      return;
+    }
+    setShowModal(true);
+  };
+  const handlePayment = async (id, totalPrice, totalPeople) => {
     const userId = localStorage.getItem("userid");
     try {
       const response = await axios.post(
         `http://localhost:8001/api/booking/payment/${id}`,
-        { totalPrice, 
-          userId: userId, 
-          totalPeople
-        },
-        
+        { totalPrice, userId: userId, totalPeople },
+
         {
           headers: {
             "Content-Type": "application/json",
@@ -111,7 +117,6 @@ const PricingAndSupportCard = ({
       }
     }
   };
- 
 
   useEffect(() => {
     if (showModal) {
@@ -261,7 +266,7 @@ const PricingAndSupportCard = ({
             {/* Booking Button */}
             <Button
               className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-              onClick={() => setShowModal(true)}
+              onClick={handleClick}
             >
               Đặt ngay
             </Button>
@@ -325,7 +330,9 @@ const PricingAndSupportCard = ({
               {/* Momo Payment */}
             </Form>
             <div
-              onClick={() => handlePayment(tourPackage._id, totalPrice,totalPeople)}
+              onClick={() =>
+                handlePayment(tourPackage._id, totalPrice, totalPeople)
+              }
               className="w-100 d-flex justify-content-center align-items-center mt-3 custom-button"
               style={{
                 cursor: "pointer",
