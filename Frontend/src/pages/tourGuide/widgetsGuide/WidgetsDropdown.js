@@ -47,144 +47,32 @@ const WidgetsDropdown = (props) => {
       <div className="widget-card users-widget">
         <div className="widget-header">
           <h4 className="widget-title">Users</h4>
-          <span className="widget-value">26K <span className="widget-change">(-12.4%) ↓</span></span>
+          <span className="widget-value">26K</span>
         </div>
-        <CChartLine
-          ref={widgetChartRef1}
-          className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Users Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#1565c0', // Darker blue for Users
-                pointBackgroundColor: '#1565c0',
-                data: [65, 59, 84, 84, 51, 55, 40],
-              },
-            ],
-          }}
-          options={{
-            plugins: { legend: { display: false } },
-            maintainAspectRatio: false,
-            scales: {
-              x: { display: false },
-              y: { display: false },
-            },
-            elements: {
-              line: { borderWidth: 2, tension: 0.4 },
-              point: { radius: 4 },
-            },
-          }}
-        />
       </div>
 
       {/* Income Widget */}
       <div className="widget-card income-widget">
         <div className="widget-header">
           <h4 className="widget-title">Income</h4>
-          <span className="widget-value">$6,200 <span className="widget-change">(40.9%) ↑</span></span>
+          <span className="widget-value">$6,20</span>
         </div>
-        <CChartLine
-          ref={widgetChartRef2}
-          className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Income Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#0097a7', // Darker teal for Income
-                pointBackgroundColor: '#0097a7',
-                data: [1, 18, 9, 17, 34, 22, 11],
-              },
-            ],
-          }}
-          options={{
-            plugins: { legend: { display: false } },
-            maintainAspectRatio: false,
-            scales: {
-              x: { display: false },
-              y: { display: false },
-            },
-            elements: {
-              line: { borderWidth: 2 },
-              point: { radius: 4 },
-            },
-          }}
-        />
       </div>
 
       {/* Conversion Rate Widget */}
       <div className="widget-card conversion-rate-widget">
         <div className="widget-header">
           <h4 className="widget-title">Conversion Rate</h4>
-          <span className="widget-value">2.49% <span className="widget-change">(84.7%) ↑</span></span>
+          <span className="widget-value">2.49%</span>
         </div>
-        <CChartBar
-          ref={widgetChartRef3}
-          className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Conversion Rate Dataset',
-                backgroundColor: '#f57c00', // Darker orange for Conversion Rate
-                borderColor: '#f57c00',
-                data: [78, 81, 80, 45, 34, 12, 40],
-                barPercentage: 0.6,
-              },
-            ],
-          }}
-          options={{
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              x: { display: false },
-              y: { display: false },
-            },
-          }}
-        />
       </div>
 
       {/* Sessions Widget */}
       <div className="widget-card sessions-widget">
         <div className="widget-header">
           <h4 className="widget-title">Sessions</h4>
-          <span className="widget-value">44K <span className="widget-change">(-23.6%) ↓</span></span>
+          <span className="widget-value">44K</span>
         </div>
-        <CChartLine
-          ref={widgetChartRef4}
-          className="widget-chart"
-          style={{ height: '70px' }}
-          data={{
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [
-              {
-                label: 'Sessions Dataset',
-                backgroundColor: 'transparent',
-                borderColor: '#d32f2f', // Darker red for Sessions
-                pointBackgroundColor: '#d32f2f',
-                data: [65, 70, 55, 90, 34, 70, 80],
-              },
-            ],
-          }}
-          options={{
-            plugins: { legend: { display: false } },
-            maintainAspectRatio: false,
-            scales: {
-              x: { display: false },
-              y: { display: false },
-            },
-            elements: {
-              line: { borderWidth: 2, tension: 0.4 },
-              point: { radius: 4 },
-            },
-          }}
-        />
       </div>
     </div>
   )

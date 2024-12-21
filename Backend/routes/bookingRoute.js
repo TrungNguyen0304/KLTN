@@ -10,7 +10,8 @@ const {
   getPaymentsByUser,
   getPaymentDetail,
   getAllPayments,
-  getTotalIncomeForDay
+  getTotalIncomeForDay,
+  deletePayment
 } = require("../configs/momo");
 
 router.post("/payment/:id", payment);
@@ -23,5 +24,7 @@ router.get("/code/:code", getBookingByCode);
 router.get("/:userid", getPaymentsByUser);
 router.get("/payment/:paymentId", getPaymentDetail);
 router.get('/dailytotal/:date', getTotalIncomeForDay);
+router.get('/payment/:paymentId', getPaymentDetail);
+router.delete('/payment/:paymentId', deletePayment);
 
 module.exports = router;

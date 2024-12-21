@@ -1,0 +1,170 @@
+.payment-detail-container {
+  font-family: 'Segoe UI', sans-serif;
+
+
+  padding: 25px;
+  border-radius: 15px;
+  background: linear-gradient(145deg, #ffffff, #f3f3f3);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1), -4px -4px 10px rgba(255, 255, 255, 0.7);
+}
+
+.payment-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.payment-section p,
+.location-section p {
+  font-size: 1.1rem;
+  margin: 15px 0;
+  line-height: 1.8;
+  color: #34495e;
+}
+
+.payment-section p strong,
+.location-section p strong {
+  font-weight: 600;
+  color: #e74c3c;
+  margin-right: 10px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #3498db;
+  margin: 20px 0 15px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #3498db;
+  display: inline-block;
+}
+
+.duration-section {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 2px dashed #bdc3c7;
+}
+
+.duration-item {
+  margin-bottom: 25px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #ecf0f1;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.duration-item p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.itinerary-list {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.itinerary-item {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  color: #7f8c8d;
+}
+
+.no-data {
+  font-style: italic;
+  color: #95a5a6;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.image-section {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.image-section h2 {
+  margin-bottom: 15px;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: start;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.payment-detail-image {
+  width: 250px;
+  height: 250px;
+  margin-left: 10px;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #16a085;
+  text-align: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .payment-detail-container {
+    padding: 20px;
+  }
+
+  .payment-title {
+    font-size: 2rem;
+  }
+
+  .payment-section p,
+  .location-section p {
+    font-size: 1rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .duration-item {
+    padding: 10px;
+  }
+
+  .payment-detail-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+
+.modal1 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-image1 {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal1:hover {
+  cursor: pointer;
+}

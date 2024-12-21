@@ -221,7 +221,15 @@ const getAll = async (req, res) => {
   try {
     const payments = await Payment.find({})
       .populate("userId")
-      .populate("packageId");
+      .populate({
+        path: "packageId",
+        select: "package_name locationId destinationId durations groupImages image package_name", // Thêm trường groupImages vào select
+        populate: [
+          { path: "locationId", select: "firstname" },
+          { path: "destinationId", select: "DestinationName" },
+          { path: "durations", select: "start_date end_date itinerary" },
+        ],
+      });
 
     res.status(200).json({
       message: "Đã đặt chỗ thành công!",
@@ -349,7 +357,22 @@ const getPaymentDetail = async (req, res) => {
     const payment = await Payment.findById(paymentId)
     .populate('packageId')
     .populate('userId')
-    .populate("packageId.locationId");
+    .populate("packageId.locationId")
+      .populate({
+        path: 'packageId',
+        select: 'package_name locationId destinationId durations groupImages image package_name', // Thêm groupImages vào select
+        populate: [
+          { path: 'locationId', select: 'firstname lastname' },
+          { path: 'destinationId', select: 'DestinationName' },
+          {
+            path: 'durations',
+            select: 'itinerary start_date end_date',
+            model: 'Duration' // Ensure this is the correct model name for durations
+          },
+        ],
+      })
+      .populate('userId');
+
     if (!payment) {
       return res.status(404).json({ message: 'Thanh toán không tồn tại' });
     }
@@ -439,15 +462,45 @@ const getTotalIncomeForDay = async (req, res) => {
 
 
 
+
+const deletePayment = async (req, res) => {
+  const { paymentId } = req.params;
+
+  try {
+    const payment = await Payment.findByIdAndDelete(paymentId);
+
+    if (!payment) {
+      return res.status(404).json({ message: "Không tìm thấy thanh toán" });
+    }
+
+    // Optionally, delete associated notifications if necessary
+    await Notificationv.deleteMany({ paymentid: paymentId });
+
+    res.status(200).json({
+      message: "Thanh toán đã xóa thành công!",
+      paymentId: paymentId,
+    });
+  } catch (error) {
+    console.error("Lỗi khi xóa thanh toán:", error);
+    res.status(500).json({
+      message: "Lỗi khi xóa thanh toán",
+      error: error.message,
+    });
+  }
+};
+
+
+
 module.exports = {
   payment,
   callback,
   checkPaymentStatus,
   getAll,
-  deleteBooking ,
+  deleteBooking,
   getBookingByCode,
   getPaymentsByUser,
   getPaymentDetail,
   getAllPayments,
-  getTotalIncomeForDay
+  getTotalIncomeForDay,
+  deletePayment,
 };

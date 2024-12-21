@@ -5,6 +5,9 @@ import "./widgetsDropdown.css"; // Import the custom CSS
 
 const WidgetsDropdown = (props) => {
   const widgetChartRef1 = useRef(null);
+  const widgetChartRef2 = useRef(null);
+  const widgetChartRef3 = useRef(null);
+  // const widgetChartRef4 = useRef(null);
   const [userCount, setUserCount] = useState(0);
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalIncomeday, setTotalIncomeday] = useState(0);
@@ -74,17 +77,36 @@ const WidgetsDropdown = (props) => {
   }, []);
 
   useEffect(() => {
-    document.documentElement.addEventListener("ColorSchemeChange", () => {
+    document.documentElement.addEventListener('ColorSchemeChange', () => {
       if (widgetChartRef1.current) {
         setTimeout(() => {
-          widgetChartRef1.current.data.datasets[0].pointBackgroundColor =
-            "#1565c0";
-          widgetChartRef1.current.update();
-        });
+          widgetChartRef1.current.data.datasets[0].pointBackgroundColor = '#1565c0'; // Darker blue for Users
+          widgetChartRef1.current.update()
+        })
       }
-    });
-  }, [widgetChartRef1]);
 
+      if (widgetChartRef2.current) {
+        setTimeout(() => {
+          widgetChartRef2.current.data.datasets[0].pointBackgroundColor = '#0097a7'; // Darker teal for Income
+          widgetChartRef2.current.update()
+        })
+      }
+
+      if (widgetChartRef3.current) {
+        setTimeout(() => {
+          widgetChartRef3.current.data.datasets[0].backgroundColor = '#f57c00'; // Darker orange for Conversion Rate
+          widgetChartRef3.current.update()
+        })
+      }
+
+      // if (widgetChartRef4.current) {
+      //   setTimeout(() => {
+      //     widgetChartRef4.current.data.datasets[0].borderColor = '#d32f2f'; // Darker red for Sessions
+      //     widgetChartRef4.current.update()
+      //   })
+      // }
+    })
+  }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, ])
   return (
     <div className={`widgets-container ${props.className}`}>
       {/* User Widget */}
@@ -124,7 +146,7 @@ const WidgetsDropdown = (props) => {
           </span>
         </div>
         <CChartLine
-          ref={widgetChartRef1}
+          ref={widgetChartRef2}
           className="widget-chart"
           style={{ height: "70px" }}
           options={{
@@ -152,7 +174,7 @@ const WidgetsDropdown = (props) => {
           </span>{" "}
         </div>
         <CChartLine
-          ref={widgetChartRef1}
+          ref={widgetChartRef3}
           className="widget-chart"
           style={{ height: "70px" }}
           options={{
@@ -203,3 +225,15 @@ const WidgetsDropdown = (props) => {
               line: { borderWidth: 2, tension: 0.4 },
               point: { radius: 4 },
             },
+          }}
+        />
+      </div> */}
+    </div>
+  );
+};
+
+WidgetsDropdown.propTypes = {
+  className: PropTypes.string,
+};
+
+export default WidgetsDropdown;
