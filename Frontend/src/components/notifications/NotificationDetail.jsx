@@ -14,6 +14,7 @@ const NotificationDetail = () => {
         const response = await axios.get(
           `http://localhost:8001/api/notifications/detail/${id}`
         );
+
         if (response.data.success) {
           setNotificationDetail(response.data.notification);
         } else {
@@ -32,7 +33,7 @@ const NotificationDetail = () => {
   }
 
   const {
-    bookingid: booking,
+    paymentid: booking,
     userId: user,
     packageId: tourPackage,
   } = notificationDetail;
@@ -50,7 +51,12 @@ const NotificationDetail = () => {
         Cảm ơn bạn đã đặt tour cùng với Travel. Email này xác nhận việc đặt tour
         của bạn cho chuyến phiêu lưu{" "}
         {tourPackage?.package_name || "Chuyến đi đặc biệt"}, bắt đầu vào ngày{" "}
-        {booking?.travel_date || "Ngày chưa xác định"}.
+        {tourPackage.durations?.[0]?.start_date
+          ? new Date(tourPackage.durations[0].start_date).toLocaleDateString(
+              "vi-VN"
+            )
+          : "Ngày chưa xác định"}
+        .
       </p>
       <ul>
         <li>
@@ -59,16 +65,17 @@ const NotificationDetail = () => {
         </li>
         <li>
           <strong>Ngày khởi hành:</strong>{" "}
-          {booking?.selectedDuration.start_date &&
-          booking?.selectedDuration.end_date
+          {tourPackage?.durations &&
+          tourPackage.durations[0]?.start_date &&
+          tourPackage.durations[0]?.end_date
             ? `${
-                new Date(booking.selectedDuration.start_date)
-                  .toISOString()
+                new Date(tourPackage.durations[0].start_date)
+                  .toLocaleDateString("vi-VN")
                   .split("T")[0]
               } -> ${
-                new Date(booking.selectedDuration.end_date)
-                  .toISOString()
-                  .split("T")[0]
+                new Date(tourPackage.durations[0].end_date)
+                .toLocaleDateString("vi-VN")
+                .split("T")[0]
               }`
             : "Ngày chưa xác định"}
         </li>
@@ -84,7 +91,7 @@ const NotificationDetail = () => {
 
         <li>
           <strong>Số lượng khách:</strong>{" "}
-          {booking?.quantity || "Không xác định"} người
+          {booking?.totalPeople || "Không xác định"} người
         </li>
         <li>
           <strong>Địa điểm lưu trú:</strong>{" "}
@@ -122,7 +129,7 @@ const NotificationDetail = () => {
         )}
       </div>
 
-      <p>Giá tour: {booking?.total || "Chưa xác định"} VND</p>
+      <p>Giá tour: {booking?.amount || "Chưa xác định"} VND</p>
       <button className="back-btn" onClick={() => navigate("/notifications")}>
         Quay lại
       </button>

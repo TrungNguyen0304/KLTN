@@ -15,6 +15,7 @@ const getNotificationsByUserId = async (req, res) => {
 
     const notifications = await notificationv.find({ userId })
       .populate("paymentid")
+      
       .sort({ createdAt: -1 });
     res.status(200).json({ success: true, notifications });
   } catch (err) {

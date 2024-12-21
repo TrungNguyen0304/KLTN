@@ -36,7 +36,8 @@ const getUserOrderedPayments = async (userGuideId) => {
     const payments = await Payment.find({})
       .populate("packageId")
       .populate("userId")
-
+      .populate("packageId.locationId")
+      .populate("packageId.destinationId");
     // Filter the payments by matching userGuideId
     const matchingPayments = payments.filter(
       (payment) =>
@@ -204,6 +205,24 @@ const searchUser = async (req, res) => {
     res.status(500).json({ message: "Error fetching users" });
   }
 };
+const getUserCount = async (req, res) => {
+  try {
+    const userCount = await User.countDocuments({});
+    res.status(200).json({ count: userCount });
+  } catch (error) {
+    console.error("Error fetching user count:", error);
+    res.status(500).json({ message: "Error fetching user count" });
+  }
+};
+const getTourGuideCount = async (req, res) => {
+  try {
+    const tourGuideCount = await User.countDocuments({ role: "tourguide" });
+    res.status(200).json({ countGuide: tourGuideCount });
+  } catch (error) {
+    console.error("Error fetching tour guide count:", error);
+    res.status(500).json({ message: "Error fetching tour guide count" });
+  }
+};
 
 module.exports = {
   register,
@@ -214,4 +233,6 @@ module.exports = {
   getAllUser,
   searchUser,
   getUserGuideId,
+  getUserCount,
+  getTourGuideCount
 };

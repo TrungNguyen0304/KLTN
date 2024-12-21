@@ -120,6 +120,8 @@ const payment = async (req, res) => {
   }
 };
 
+
+
 const callback = async (req, res) => {
   try {
     if (req.body) {
@@ -240,7 +242,6 @@ const getAll = async (req, res) => {
       .json({ message: "Lỗi khi tải đặt chỗ", error: error.message });
   }
 };
-
 const deleteBooking = async (req, res) => {
   try {
     const { id } = req.params;
@@ -324,10 +325,10 @@ const getPaymentsByUser = async (req, res) => {
           ...payment.toObject(),
           packageId: packageId
             ? await tourPackage.findById(packageId)
-              .populate("locationId")
-              .populate("durations")
-              .populate("userGuideId")
-            : null,
+                .populate("locationId")  
+                .populate("durations")
+                .populate("userGuideId")  
+                : null,
         };
 
         return populatedPayment;
@@ -350,10 +351,13 @@ const getPaymentsByUser = async (req, res) => {
 };
 
 const getPaymentDetail = async (req, res) => {
-  const { paymentId } = req.params;
+  const { paymentId } = req.params;  
 
   try {
     const payment = await Payment.findById(paymentId)
+    .populate('packageId')
+    .populate('userId')
+    .populate("packageId.locationId")
       .populate({
         path: 'packageId',
         select: 'package_name locationId destinationId durations groupImages image package_name', // Thêm groupImages vào select
@@ -372,12 +376,90 @@ const getPaymentDetail = async (req, res) => {
     if (!payment) {
       return res.status(404).json({ message: 'Thanh toán không tồn tại' });
     }
-    res.status(200).json(payment);
+    res.status(200).json(payment);  
   } catch (error) {
     console.error("Lỗi khi lấy chi tiết thanh toán:", error);
     res.status(500).json({ message: 'Lỗi máy chủ nội bộ.' });
   }
 };
+const getAllPayments = async (req, res) => {
+  try {
+    const payments = await Payment.find({})
+      .populate("userId")
+      .populate("packageId");
+
+    // Tính tổng thu nhập từ tất cả các thanh toán hoàn tất
+    const totalIncome = payments.reduce((sum, payment) => {
+      if (payment.status === 'complete') {
+        return sum + payment.amount; 
+      }
+      return sum;
+    }, 0);
+
+    res.status(200).json({
+      message: "Đã tải danh sách thanh toán thành công!",
+      payments: payments,
+      totalIncome, // Trả về tổng thu nhập
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Lỗi khi tải danh sách thanh toán", error: error.message });
+  }
+};
+
+const { startOfDay, endOfDay } = require('date-fns'); // Sử dụng date-fns để xử lý ngày tháng
+
+const getTotalIncomeForDay = async (req, res) => {
+  const { date } = req.params;  // Expected date parameter in 'YYYY-MM-DD' format
+
+  try {
+    if (!date) {
+      return res.status(400).json({
+        success: false,
+        message: "Tham số ngày không hợp lệ",
+      });
+    }
+
+    const startDate = startOfDay(new Date(date));
+    const endDate = endOfDay(new Date(date));
+
+    // console.log("Querying payments from:", startDate, "to", endDate);
+
+    const payments = await Payment.find({
+      createdAt: { $gte: startDate, $lt: endDate },
+    });
+
+    // console.log("Payments:", payments);
+
+    if (payments.length === 0) {
+      return res.status(200).json({
+        success: true,
+        totalIncomeDay: 0, 
+      });
+    }
+
+    const totalIncome = payments.reduce((acc, payment) => {
+      // console.log("Payment amount:", payment.amount);
+      return acc + payment.amount;
+    }, 0);
+
+    res.status(200).json({
+      success: true,
+      totalIncomeDay: totalIncome, 
+    });
+  } catch (error) {
+    console.error("Error calculating total income:", error);
+    res.status(500).json({
+      success: false,
+      message: "Có lỗi xảy ra khi tính tổng thu nhập.",
+      error: error.message,
+    });
+  }
+};
+
+
 
 
 const deletePayment = async (req, res) => {
@@ -417,5 +499,7 @@ module.exports = {
   getBookingByCode,
   getPaymentsByUser,
   getPaymentDetail,
+  getAllPayments,
+  getTotalIncomeForDay,
   deletePayment,
 };
