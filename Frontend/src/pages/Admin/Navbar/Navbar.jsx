@@ -17,6 +17,7 @@ const Navbar = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         localStorage.removeItem("userid");
+     
 
         if ("caches" in window) {
             caches.keys().then((cacheNames) => {
@@ -56,10 +57,6 @@ const Navbar = () => {
                             title={<FaUserCircle className="user-icon-header1" />}
                         >
                             <span className="user-name">Tên: {userName}</span>
-
-                            <NavDropdown.Item onClick={() => navigate("/profile")}>
-                                <FaUserCircle className="user-icon" /> Hồ sơ của tôi
-                            </NavDropdown.Item>
                             <NavDropdown.Item onClick={handleLogout}>
                                 <FaSignOutAlt className="user-icon" /> Đăng xuất
                             </NavDropdown.Item>

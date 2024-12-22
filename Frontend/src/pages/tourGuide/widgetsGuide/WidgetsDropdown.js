@@ -1,67 +1,90 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "./widgetsDropdown.css";
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { CChartBar, CChartLine } from '@coreui/react-chartjs';
+import './widgetsDropdown1.css'; // Import the custom CSS
 
-const WidgetsDropdown = ({ paymentData = {}, className }) => {
-  const { daily = {}, weekly = {}, monthly = {}, yearly = {} } = paymentData;
+const WidgetsDropdown = (props) => {
 
-  console.log("Payment data received in WidgetsDropdown:", paymentData);
+  const userId = localStorage.getItem('userid');
+  const [stats, setStats] = useState({
+    daily: {},
+    weekly: {},
+    monthly: {},
+    yearly: {}
+  });
 
-  const formatValuesToDisplay = (data) => {
-    if (!data || Object.keys(data).length === 0) {
-      return ["No data available"];
-    }
+  const { id } = props; // assuming the id is passed down as a prop
 
-    return Object.entries(data).map(([date, value]) => `${date}: ${value}`);
+  useEffect(() => {
+    const fetchPaymentStats = async () => {
+      try {
+        const response = await fetch(`http://localhost:8001/api/user/payments/count/${userId}`);
+        const data = await response.json();
+        setStats(data); // Update the state with the fetched data
+      } catch (error) {
+        console.error("Error fetching payment stats:", error);
+      }
+    };
+
+    fetchPaymentStats();
+  }, [userId]); // Update effect dependency on userId
+
+  // Get current date in 'YYYY-MM-DD' format
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  // Function to count today's payments (or the payments for any given day)
+  const getPaymentsForDay = (day) => {
+    if (!stats.daily) return 0;
+    return stats.daily[day] || 0; // Get payment count for the given day or 0 if no data for that day
+  };
+
+  // Optional: You can also add functionality to display a range of days' payments
+  const getWeeklyPayments = () => {
+    if (!stats.weekly) return 0;
+    return Object.values(stats.weekly).reduce((a, b) => a + b, 0);
+  };
+
+  const getMonthlyPayments = () => {
+    if (!stats.monthly) return 0;
+    return Object.values(stats.monthly).reduce((a, b) => a + b, 0);
+  };
+
+  const getYearlyPayments = () => {
+    if (!stats.yearly) return 0;
+    return Object.values(stats.yearly).reduce((a, b) => a + b, 0);
   };
 
   return (
-    <div className={`widgets-container ${className}`}>
-      {/* Daily Widget */}
+    <div className={`widgets-container ${props.className}`}>
+      {/* Daily Payments Widget */}
       <div className="widget-card users-widget">
         <div className="widget-header">
           <h4 className="widget-title">Ngày</h4>
-          <ul className="widget-value">
-            {formatValuesToDisplay(daily).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <span className="widget-value">{getPaymentsForDay(currentDate)} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Weekly Widget */}
+      {/* Weekly Payments Widget */}
       <div className="widget-card income-widget">
         <div className="widget-header">
           <h4 className="widget-title">Tuần</h4>
-          <ul className="widget-value">
-            {formatValuesToDisplay(weekly).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <span className="widget-value">{getWeeklyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Monthly Widget */}
+      {/* Monthly Payments Widget */}
       <div className="widget-card conversion-rate-widget">
         <div className="widget-header">
           <h4 className="widget-title">Tháng</h4>
-          <ul className="widget-value">
-            {formatValuesToDisplay(monthly).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <span className="widget-value">{getMonthlyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Yearly Widget */}
+      {/* Yearly Payments Widget */}
       <div className="widget-card sessions-widget">
         <div className="widget-header">
           <h4 className="widget-title">Năm</h4>
-          <ul className="widget-value">
-            {formatValuesToDisplay(yearly).map((item, index) => (
-              <li key={index}>{item}</li>
-            ))}
-          </ul>
+          <span className="widget-value">{getYearlyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
     </div>
@@ -69,7 +92,6 @@ const WidgetsDropdown = ({ paymentData = {}, className }) => {
 };
 
 WidgetsDropdown.propTypes = {
-  paymentData: PropTypes.object.isRequired,
   className: PropTypes.string,
 };
 

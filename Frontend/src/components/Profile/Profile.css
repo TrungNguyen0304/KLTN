@@ -133,3 +133,205 @@
 .edit-button:hover {
     background-color: #0056b3;
 }
+/*thong bao*/
+
+.notification {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Đặt thông báo ở giữa màn hình */
+    background-color: #4caf50; /* Màu nền xanh lá cho thông báo thành công */
+    color: white; /* Màu chữ trắng */
+    padding: 15px 30px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Tạo bóng đổ cho thông báo */
+    z-index: 9999; /* Đảm bảo thông báo hiển thị lên trên các thành phần khác */
+    opacity: 1;
+    animation: fadeIn 0.5s ease, fadeOut 0.5s 2.5s ease; /* Hiệu ứng fadeIn và fadeOut */
+  }
+  
+  /* Hiệu ứng fadeIn */
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+  
+  /* Hiệu ứng fadeOut */
+  @keyframes fadeOut {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  
+
+
+
+
+
+/**/
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.info-label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #333;
+    flex: 1;
+}
+
+.info-value {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-field {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.password-inputs {
+    display: flex;
+    flex-direction: column;
+}
+
+.password-inputs input {
+    margin-bottom: 10px;
+}
+
+.info-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: -10px;
+
+}
+
+.edit-button,
+.save-button,
+.cancel-button {
+    padding: 6px 10px;
+    font-size: 12px; /* Smaller font size */
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button {
+    background-color: #007bff; /* Ocean blue */
+    color: white;
+    border: none;
+}
+
+.save-button {
+    background-color: #007bff; /* Ocean blue */
+    color: white;
+    border: none;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: white;
+    border: none;
+}
+
+.edit-button:hover,
+.save-button:hover,
+.cancel-button:hover {
+    opacity: 0.8;
+}
+
+
+/*nut savaall*/
+
+.save-all-button {
+    background-color: #007bff; /* Ocean blue */
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    width: auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+    text-align: center;
+}
+
+.save-all-button:hover {
+    background-color: #0056b3; /* Darker ocean blue */
+ 
+    box-shadow: 0 6px 10px rgba(0, 123, 255, 0.4);
+}
+
+.save-all-button:active {
+    transform: translateY(2px);
+    box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+}
+
+.save-all-button:focus {
+    outline: none;
+}
+
+
+/*ul*/
+
+.sidebar1 ul {
+    list-style: none;  /* Removes bullet points from the list */
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar1 li {
+    margin: 10px 0;  /* Spacing between the list items */
+}
+
+.sidebar1 a {
+    text-decoration: none;  /* Removes the underline from links */
+    color: inherit;  /* Inherit the color from the parent element */
+    font-size: 16px;  /* Adjust font size as needed */
+    display: block;  /* Make the link take up the whole list item area */
+    padding: 5px 10px;  /* Add some padding for better clickability */
+    transition: color 0.3s ease;  /* Smooth color transition on hover */
+}
+
+.sidebar1 a:hover {
+    color: #007bff;  /* Change color when the user hovers over the link */
+}
+
+
+
+
+.breadcrumb span {
+    margin: 0 5px;  /* Space between breadcrumb items */
+}
+
+.breadcrumb a {
+    text-decoration: none;  /* Remove underline from links */
+    color: inherit;  /* Inherit color from the parent element */
+}
+
+.breadcrumb a:hover {
+    color: #007bff;  /* Change color when hovering */
+}

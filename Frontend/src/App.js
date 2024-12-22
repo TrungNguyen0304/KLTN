@@ -47,6 +47,7 @@ import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
 import PaymentDetail from "./pages/tourGuide/showtour/PaymentDetail";
+import ProfileGuide from "./pages/tourGuide/ProfileGuide/Profile";
 
 
 // </>
@@ -266,6 +267,14 @@ function App() {
             element={
               <ProtectedRoute roleRequired="tourguide">
                 <AdminTourGuide />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profiletourguide"
+            element={
+              <ProtectedRoute roleRequired="tourguide">
+                <ProfileGuide />
               </ProtectedRoute>
             }
           />

@@ -1,6 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import './showall.css'; // Import file CSS
 import { Link } from 'react-router-dom';
+import './showall.css'; // Import file CSS
+
+
+const PaymentList = ({ payments }) => {
+  return (
+    <div className="grid-container">
+      {payments.map((payment, index) => (
+        <div className="payment-card" key={index}>
+          {payment.packageId?.image && (
+            <img
+              src={payment.packageId.image}
+              alt="Package Image"
+              className="payment-card-image"
+            />
+          )}
+          <div className="payment-card-content">
+            <h3 className="payment-card-title">
+              {payment.packageId?.package_name || 'Gói Tour: N/A'}
+            </h3>
+            <p className="payment-card-info">
+              Người Dùng: <strong>{payment.userId?.firstname || 'N/A'} {payment.userId?.lastname || 'N/A'}</strong>
+            </p>
+            <p className="payment-card-info">
+              Số Tiền: <strong>{payment.amount?.toLocaleString() || 'N/A'} VND</strong>
+            </p>
+            <Link to={`/IndexShowall/${payment._id}`} className="payment-card-link">
+              Xem Chi Tiết
+            </Link>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
 
 const App = () => {
   const [payments, setPayments] = useState([]);
@@ -19,7 +55,11 @@ const App = () => {
           throw new Error(`Failed to fetch payments. Status: ${response.status}`);
         }
 
+
         const data = await response.json();
+
+        console.log('Response data:', data);
+        console.log('Response data:', data);
         setPayments(data.payments || []);
       } catch (err) {
         setError(err.message);
@@ -52,7 +92,7 @@ const App = () => {
   };
 
   return (
-    <div className="app-container">
+    <div className="app-container1">
       <h1 className="app-title">Lịch trình hướng dẫn du lịch</h1>
       {loading ? (
         <p className="app-message">Đang tải dữ liệu...</p>
