@@ -1,85 +1,98 @@
-import React, { useEffect, useRef } from 'react'
-import PropTypes from 'prop-types'
-import { CChartBar, CChartLine } from '@coreui/react-chartjs'
-import './widgetsDropdown.css' // Import the custom CSS
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { CChartBar, CChartLine } from '@coreui/react-chartjs';
+import './widgetsDropdown1.css'; // Import the custom CSS
 
 const WidgetsDropdown = (props) => {
-  const widgetChartRef1 = useRef(null)
-  const widgetChartRef2 = useRef(null)
-  const widgetChartRef3 = useRef(null) // New ref for Conversion Rate chart
-  const widgetChartRef4 = useRef(null) // New ref for Sessions chart
+
+  const userId = localStorage.getItem('userid');
+  const [stats, setStats] = useState({
+    daily: {},
+    weekly: {},
+    monthly: {},
+    yearly: {}
+  });
+
+  const { id } = props; // assuming the id is passed down as a prop
 
   useEffect(() => {
-    document.documentElement.addEventListener('ColorSchemeChange', () => {
-      if (widgetChartRef1.current) {
-        setTimeout(() => {
-          widgetChartRef1.current.data.datasets[0].pointBackgroundColor = '#1565c0'; // Darker blue for Users
-          widgetChartRef1.current.update()
-        })
+    const fetchPaymentStats = async () => {
+      try {
+        const response = await fetch(`http://localhost:8001/api/user/payments/count/${userId}`);
+        const data = await response.json();
+        setStats(data); // Update the state with the fetched data
+      } catch (error) {
+        console.error("Error fetching payment stats:", error);
       }
+    };
 
-      if (widgetChartRef2.current) {
-        setTimeout(() => {
-          widgetChartRef2.current.data.datasets[0].pointBackgroundColor = '#0097a7'; // Darker teal for Income
-          widgetChartRef2.current.update()
-        })
-      }
+    fetchPaymentStats();
+  }, [userId]); // Update effect dependency on userId
 
-      if (widgetChartRef3.current) {
-        setTimeout(() => {
-          widgetChartRef3.current.data.datasets[0].backgroundColor = '#f57c00'; // Darker orange for Conversion Rate
-          widgetChartRef3.current.update()
-        })
-      }
+  // Get current date in 'YYYY-MM-DD' format
+  const currentDate = new Date().toISOString().split('T')[0];
 
-      if (widgetChartRef4.current) {
-        setTimeout(() => {
-          widgetChartRef4.current.data.datasets[0].borderColor = '#d32f2f'; // Darker red for Sessions
-          widgetChartRef4.current.update()
-        })
-      }
-    })
-  }, [widgetChartRef1, widgetChartRef2, widgetChartRef3, widgetChartRef4])
+  // Function to count today's payments (or the payments for any given day)
+  const getPaymentsForDay = (day) => {
+    if (!stats.daily) return 0;
+    return stats.daily[day] || 0; // Get payment count for the given day or 0 if no data for that day
+  };
+
+  // Optional: You can also add functionality to display a range of days' payments
+  const getWeeklyPayments = () => {
+    if (!stats.weekly) return 0;
+    return Object.values(stats.weekly).reduce((a, b) => a + b, 0);
+  };
+
+  const getMonthlyPayments = () => {
+    if (!stats.monthly) return 0;
+    return Object.values(stats.monthly).reduce((a, b) => a + b, 0);
+  };
+
+  const getYearlyPayments = () => {
+    if (!stats.yearly) return 0;
+    return Object.values(stats.yearly).reduce((a, b) => a + b, 0);
+  };
 
   return (
     <div className={`widgets-container ${props.className}`}>
-      {/* User Widget */}
+      {/* Daily Payments Widget */}
       <div className="widget-card users-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Users</h4>
-          <span className="widget-value">26K</span>
+          <h4 className="widget-title">Ngày</h4>
+          <span className="widget-value">{getPaymentsForDay(currentDate)} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Income Widget */}
+      {/* Weekly Payments Widget */}
       <div className="widget-card income-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Income</h4>
-          <span className="widget-value">$6,20</span>
+          <h4 className="widget-title">Tuần</h4>
+          <span className="widget-value">{getWeeklyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Conversion Rate Widget */}
+      {/* Monthly Payments Widget */}
       <div className="widget-card conversion-rate-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Conversion Rate</h4>
-          <span className="widget-value">2.49%</span>
+          <h4 className="widget-title">Tháng</h4>
+          <span className="widget-value">{getMonthlyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
 
-      {/* Sessions Widget */}
+      {/* Yearly Payments Widget */}
       <div className="widget-card sessions-widget">
         <div className="widget-header">
-          <h4 className="widget-title">Sessions</h4>
-          <span className="widget-value">44K</span>
+          <h4 className="widget-title">Năm</h4>
+          <span className="widget-value">{getYearlyPayments()} <span className="widget-change">↑</span></span>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 WidgetsDropdown.propTypes = {
   className: PropTypes.string,
-}
+};
 
-export default WidgetsDropdown
+export default WidgetsDropdown;

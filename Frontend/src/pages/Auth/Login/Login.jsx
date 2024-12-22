@@ -148,11 +148,6 @@ function Login() {
           Đăng nhập
         </button>
       </form>
-      <div className="login-divider">Hoặc</div>
-      <div className="login-social-buttons">
-        <button className="social-button facebook">Facebook</button>
-        <button className="social-button google">Google</button>
-      </div>
     </div>
   );
 }

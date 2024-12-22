@@ -17,6 +17,7 @@ const Navbar = () => {
         localStorage.removeItem("user");
         localStorage.removeItem("token");
         localStorage.removeItem("userid");
+     
 
         if ("caches" in window) {
             caches.keys().then((cacheNames) => {
@@ -33,22 +34,15 @@ const Navbar = () => {
     return (
         <nav className="navbaradmin">
 
-
-
             {/* Search Bar */}
             <div className="search-container">
-                <input type="text" placeholder="Search..." className="search-input" />
             </div>
 
             {/* Notification and User Section */}
             <div className="user-icons">
-                <Link to="#" className="icon">
-                    <FaBell />
-                    <span className="badge">3</span>
-                </Link>
-                <Link to="#" className="icon">
+               
+                <Link to="/indexmessage" className="iconthu">
                     <FaEnvelope />
-                    <span className="badge">3</span>
                 </Link>
                 <Nav className="align-items-center">
                     {isLoggedIn && (
@@ -56,10 +50,6 @@ const Navbar = () => {
                             title={<FaUserCircle className="user-icon-header1" />}
                         >
                             <span className="user-name">Tên: {userName}</span>
-
-                            <NavDropdown.Item onClick={() => navigate("/profile")}>
-                                <FaUserCircle className="user-icon" /> Hồ sơ của tôi
-                            </NavDropdown.Item>
                             <NavDropdown.Item onClick={handleLogout}>
                                 <FaSignOutAlt className="user-icon" /> Đăng xuất
                             </NavDropdown.Item>

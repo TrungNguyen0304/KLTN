@@ -1,0 +1,63 @@
+/* Individual widget card styling */
+.widget-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 22%;
+  padding: 20px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers the content vertically */
+}
+
+/* Header section for each widget */
+.widget-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center contents vertically and horizontally */
+  justify-content: center; /* Centers content vertically within the header */
+  margin-bottom: 20px;
+  height: 100%; /* Ensures header takes up full height */
+}
+
+/* Widget value styling */
+.widget-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center; /* Ensures vertical centering */
+  justify-content: center; /* Center text horizontally */
+}
+
+/* Widget change styling */
+.widget-change {
+  font-size: 14px;
+  font-weight: normal;
+  color: #ff4d4f; /* Red color for negative change */
+}
+
+/* Update other widget types for consistency */
+.widget-card.users-widget {
+  background-color: #c5a8e6; /* Darker purple for Users widget */
+}
+
+.widget-card.income-widget {
+  background-color: #b2ebf2; /* Darker teal for Income widget */
+}
+
+.widget-card.conversion-rate-widget {
+  background-color: #ffb74d; /* Darker orange for Conversion Rate widget */
+}
+
+.widget-card.sessions-widget {
+  background-color: #ef9a9a; /* Darker red for Sessions widget */
+}
+.widget-title {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}

@@ -8,6 +8,7 @@ import { FaSearch } from "react-icons/fa";
 const IndexLocation = () => {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
+  
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const location = useLocation();
