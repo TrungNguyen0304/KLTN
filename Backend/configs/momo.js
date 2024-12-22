@@ -10,7 +10,7 @@ var secretKey = process.env.MOMO_SECRET_KEY;
 
 const payment = async (req, res) => {
   const { id } = req.params;
-  const { totalPrice, userId, totalPeople } = req.body;
+  const { totalPrice, userId, totalPeople ,specialRequest} = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res
@@ -84,6 +84,7 @@ const payment = async (req, res) => {
         userId,
         totalPeople,
         code,
+        specialrequest: specialRequest
       });
 
       await newPayment.save();
@@ -326,6 +327,7 @@ const getPaymentsByUser = async (req, res) => {
           packageId: packageId
             ? await tourPackage.findById(packageId)
                 .populate("locationId")  
+                .populate("destinationId")  
                 .populate("durations")
                 .populate("userGuideId")  
                 : null,
@@ -345,6 +347,40 @@ const getPaymentsByUser = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Lỗi khi tải lịch sử thanh toán",
+      error: error.message,
+    });
+  }
+};
+const deletePaymentById = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+
+    // Kiểm tra tính hợp lệ của paymentId
+    if (!mongoose.Types.ObjectId.isValid(paymentId)) {
+      return res
+        .status(400)
+        .json({ success: false, message: "paymentId không hợp lệ" });
+    }
+
+    // Tìm và xóa payment
+    const deletedPayment = await Payment.findByIdAndDelete(paymentId);
+
+    if (!deletedPayment) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy thanh toán cần xóa.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Xóa lịch sử thanh toán thành công!",
+    });
+  } catch (error) {
+    console.error("Lỗi khi xóa lịch sử thanh toán:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi khi xóa lịch sử thanh toán",
       error: error.message,
     });
   }
@@ -498,6 +534,7 @@ module.exports = {
   deleteBooking,
   getBookingByCode,
   getPaymentsByUser,
+  deletePaymentById,
   getPaymentDetail,
   getAllPayments,
   getTotalIncomeForDay,

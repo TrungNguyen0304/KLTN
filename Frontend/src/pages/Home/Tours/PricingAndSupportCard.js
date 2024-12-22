@@ -82,7 +82,12 @@ const PricingAndSupportCard = ({
     try {
       const response = await axios.post(
         `http://localhost:8001/api/booking/payment/${id}`,
-        { totalPrice, userId: userId, totalPeople },
+        {
+          totalPrice,
+          userId: userId,
+          totalPeople,
+          specialRequest: formData.specialRequest,
+        },
 
         {
           headers: {

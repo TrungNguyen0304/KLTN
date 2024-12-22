@@ -92,8 +92,7 @@ const App = () => {
   };
 
   return (
-    <div className="app-container">
-      <h1 className="app-title">Danh sách thanh toán</h1>
+    <div className="app-container1">
       <h1 className="app-title">Lịch trình hướng dẫn du lịch</h1>
       {loading ? (
         <p className="app-message">Đang tải dữ liệu...</p>
