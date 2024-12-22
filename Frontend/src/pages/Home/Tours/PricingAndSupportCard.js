@@ -68,21 +68,39 @@ const PricingAndSupportCard = ({
     }
   };
   const handleClick = () => {
-    if (!selectedDuration) {
-      alert("Vui lòng chọn lịch trình trước khi đặt!", {
+    const userId = localStorage.getItem("userid");
+
+    if (!userId) {
+      alert("Vui lòng đăng nhập trước khi đặt!", {
         position: "top-center",
-        autoClose: 1000, // Tự động tắt sau 3 giây
+        autoClose: 1000, 
       });
       return;
     }
+
+    if (!selectedDuration) {
+      alert("Vui lòng chọn lịch trình trước khi đặt!", {
+        position: "top-center",
+        autoClose: 1000, 
+      });
+      return;
+    }
+
     setShowModal(true);
   };
+
   const handlePayment = async (id, totalPrice, totalPeople) => {
     const userId = localStorage.getItem("userid");
+
     try {
       const response = await axios.post(
         `http://localhost:8001/api/booking/payment/${id}`,
-        { totalPrice, userId: userId, totalPeople },
+        {
+          totalPrice,
+          userId: userId,
+          totalPeople,
+          specialRequest: formData.specialRequest,
+        },
 
         {
           headers: {

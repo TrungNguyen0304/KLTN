@@ -3,7 +3,7 @@ import { Col, Container, Row, Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaSearch, FaTrash } from 'react-icons/fa';
 import { useLocation } from "react-router-dom";
-import axios from 'axios'; // Import axios
+import axios from 'axios'; 
 import './Destination.css';
 
 const IndexDestination = () => {

@@ -99,4 +99,46 @@
     margin: 10px 0 0;
     text-align: right;
   }
-  
+ /* Enhanced Delete Button */
+.delete-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4d4d; /* Lighter red background */
+  border: none;
+  border-radius: 50%;
+  width: 45px; /* Slightly larger button */
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Softer shadow */
+  cursor: pointer;
+  z-index: 10;
+  transition: background-color 0.3s, transform 0.3s; /* Smooth transition */
+}
+
+/* Icon styling inside the delete button */
+.delete-icon1 {
+  color: white; /* White icon for better contrast */
+  font-size: 20px; /* Larger icon for better visibility */
+  transition: transform 0.2s ease; /* Add animation on hover */
+}
+
+/* Hover effect for the delete button */
+.delete-button:hover {
+  background-color: #ff3333; /* Darker red on hover */
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+/* Hover effect for the icon */
+.delete-icon1:hover {
+  transform: rotate(45deg); /* Rotate the icon on hover */
+}
+
+/* Optional: Add an 'X' icon inside the button */
+.delete-button::before {
+  content: '✖'; /* 'X' symbol */
+  font-size: 25px; /* Icon size */
+  color: white; /* White color for contrast */
+}

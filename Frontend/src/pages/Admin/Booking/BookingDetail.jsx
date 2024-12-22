@@ -51,7 +51,7 @@ const BookingDetail = () => {
                   <td>{item.packageId.package_name}</td>
                   <td>{item.total}</td>
                   <td>{item.totalPeople}</td>
-                  <td>{item.special_requests}</td>
+                  <td>{item.specialrequest}</td>
                   <td>{new Date(item.createdAt).toLocaleString()}</td>
                 </tr>
               ))
@@ -61,7 +61,7 @@ const BookingDetail = () => {
                 <td>{payment.packageId.package_name}</td>
                 <td>{payment.amount}</td>
                 <td>{payment.totalPeople}</td>
-                <td>{payment.special_requests}</td>
+                <td>{payment.specialrequest}</td>
                 <td>{new Date(payment.createdAt).toLocaleString()}</td>
               </tr>
             )}

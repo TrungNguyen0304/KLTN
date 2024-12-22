@@ -94,6 +94,10 @@ const NotificationDetail = () => {
           {booking?.totalPeople || "Không xác định"} người
         </li>
         <li>
+          <strong>Yêu cầu đặt biệt:</strong>{" "}
+          {booking?.specialrequest || "Không xác định"} 
+        </li>
+        <li>
           <strong>Địa điểm lưu trú:</strong>{" "}
           {tourPackage?.locationId?.firstname || "Chưa có thông tin"}
         </li>

@@ -8,6 +8,12 @@ body {
   }
   
   /* Container chính */
+  .app-container1 {
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
   
   /* Tiêu đề */
   .app-title {
@@ -63,6 +69,8 @@ body {
     font-size: 1rem;
     color: #555;
   }
+  
+.app-container {
 
 .app-container1 {
   font-family: 'Arial', sans-serif;
