@@ -43,6 +43,8 @@ import EditDuration from "./pages/Admin/duration/EditDuration";
 import IndexBooking from "./pages/Admin/Booking/indexBooking";
 import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 
+import Indexmessage from "./pages/Admin/messages/Indexmessage";
+
 /* huong dan vienn */
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
@@ -85,6 +87,14 @@ function App() {
             element={
               <ProtectedRoute roleRequired="admin">
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Indexmessage"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <Indexmessage />
               </ProtectedRoute>
             }
           />

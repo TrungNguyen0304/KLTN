@@ -44,11 +44,7 @@ export const SidebarData = [
     heading: 'Tour',
     Link: "/tour",
   },
-  {
-    icon: UilPackage,
-    heading: 'TourGuide',
-    Link:'/tourGuide'
-  },
+
   {
     icon: UilPackage,
     heading: 'Duration',
@@ -64,12 +60,12 @@ export const SidebarData = [
 export const SidebarGuideData = [
   {
     icon: UilEstate,
-    heading: "Dashboard",
+    heading: "Trang chủ",
     Link:"/Indextourguide"
   },
   {
     icon: UilClipboardAlt,
-    heading: "lịch tour du lịch",
+    heading: "Lịch hướng dẫn viên",
     Link: "/IndexShowall",
   },
 

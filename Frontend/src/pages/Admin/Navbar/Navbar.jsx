@@ -34,22 +34,15 @@ const Navbar = () => {
     return (
         <nav className="navbaradmin">
 
-
-
             {/* Search Bar */}
             <div className="search-container">
-                <input type="text" placeholder="Search..." className="search-input" />
             </div>
 
             {/* Notification and User Section */}
             <div className="user-icons">
-                <Link to="#" className="icon">
-                    <FaBell />
-                    <span className="badge">3</span>
-                </Link>
-                <Link to="#" className="icon">
+               
+                <Link to="/indexmessage" className="iconthu">
                     <FaEnvelope />
-                    <span className="badge">3</span>
                 </Link>
                 <Nav className="align-items-center">
                     {isLoggedIn && (

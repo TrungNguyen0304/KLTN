@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './showall.css'; // Import file CSS
 import { Link } from 'react-router-dom';
-import './showall.css'; // Import file CSS
 
 
 const PaymentList = ({ payments }) => {

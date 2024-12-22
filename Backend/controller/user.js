@@ -83,7 +83,7 @@
       const token = jwt.sign(
         { id: user._id, firstname: user.firstname, role: user.role },
         process.env.JWT_SECRET,
-        { expiresIn: "1h" }
+        { expiresIn: "24h" }
       );
 
       // Lấy các thanh toán đã order của user guide

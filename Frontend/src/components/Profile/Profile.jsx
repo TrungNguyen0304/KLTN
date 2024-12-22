@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 
 function Profile() {
     const [userData, setUserData] = useState({
-        firstname: "",
-        lastname: "",
+        firstname:"",
+        lastname: "", 
         email: "",
         phoneNumber: "",
         password: "",

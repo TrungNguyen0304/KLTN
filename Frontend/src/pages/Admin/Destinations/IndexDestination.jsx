@@ -142,7 +142,7 @@ const IndexDestination = () => {
           disabled={currentPage === 1}
           onClick={() => setCurrentPage(currentPage - 1)}
         >
-          Previous
+          Sau
         </button>
 
         {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
@@ -160,7 +160,7 @@ const IndexDestination = () => {
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage(currentPage + 1)}
         >
-          Next
+          Trước
         </button>
       </div>
     </Container>

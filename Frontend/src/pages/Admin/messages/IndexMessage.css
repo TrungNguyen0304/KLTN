@@ -1,0 +1,157 @@
+/* General reset */
+
+  /* Main container */
+  .containermessage {
+    width: 85%;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  /* Title */
+  .title {
+    font-size: 2.4rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  /* Loading & Error States */
+  .loading, .error {
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  
+  .loading {
+    color: #ff9800;
+    background-color: #fff8e1;
+  }
+  
+  .error {
+    color: #e53935;
+    background-color: #ffebee;
+  }
+  
+  /* No messages state */
+  .noMessages {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #777;
+    font-weight: bold;
+  }
+  
+  /* Message List */
+  .messageList {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .messageItem {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .messageItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .messageContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .userName {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .userEmail, .userPhoneNumber {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  .messageText {
+    font-size: 1.2rem;
+    color: #444;
+    line-height: 1.5;
+  }
+  
+  .noUserData {
+    color: #777;
+    font-style: italic;
+    font-size: 1.1rem;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  /* Add transition effects */
+  .messageItem {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .messageItem:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .containermessage {
+      width: 95%;
+      padding: 20px;
+    }
+  
+    .title {
+      font-size: 2rem;
+    }
+  
+    .messageItem {
+      padding: 15px;
+    }
+  }
+  
+
+
+  .messageItem {
+    position: relative; /* This is necessary for positioning the delete button within this container */
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    margin-top: 20px;
+  }
+  
+  /* Style for the delete button */
+  .deleteButton {
+    position: absolute; /* Positioning it relative to the parent message item */
+    top: 10px; /* Adjust distance from the top */
+    right: 10px; /* Adjust distance from the right */
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  .deleteButton:hover {
+    background-color: #ff3333;
+  }

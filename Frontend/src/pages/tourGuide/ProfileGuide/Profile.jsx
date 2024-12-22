@@ -189,7 +189,7 @@ function Profile() {
         <div className="profile-container1">
             {notification && <div className="notification">{notification}</div>}
             <div className="breadcrumb">
-                <Link to="/indextourguide"> <span>Trang chủ</span></Link> / <span>Hồ sơ của tôi</span>
+                <Link to="/"> <span>Trang chủ</span></Link> / <span>Hồ sơ của tôi</span>
             </div>
             <div className="profile-content">
                 <div className="main-profile">
@@ -197,7 +197,7 @@ function Profile() {
                     <p>Lưu thông tin của Quý khách để đặt dịch vụ nhanh hơn</p>
                     <div className="info-list">
                         <InfoRow
-                            label="Họ"
+                            label="Tên"
                             value={userData.firstname}
                             isEditing={isEditing.firstname}
                             onChange={(value) => handleInputChange("firstname", value)}
@@ -206,7 +206,7 @@ function Profile() {
                             onEdit={() => handleEdit("firstname")}
                         />
                         <InfoRow
-                            label="Tên"
+                            label="Họ"
                             value={userData.lastname}
                             isEditing={isEditing.lastname}
                             onChange={(value) => handleInputChange("lastname", value)}
@@ -259,9 +259,9 @@ function Profile() {
 
 function InfoRow({ label, value, isEditing, onChange, onSave, onCancel, onEdit }) {
     return (
-        <div className="info-row">
-            <div className="info-label">{label}</div>
-            <div className="info-value">
+        <div className="info-row1">
+            <div className="info-label1">{label}</div>
+            <div className="info-value1">
                 {isEditing ? (
                     label === "Mật khẩu" ? (
                         <div className="password-inputs">
@@ -301,7 +301,7 @@ function InfoRow({ label, value, isEditing, onChange, onSave, onCancel, onEdit }
                         </button>
                     </>
                 ) : (
-                    <button className="edit-button" onClick={onEdit}>
+                    <button className="edit-button-Profile" onClick={onEdit}>
                         Chỉnh sửa
                     </button>
                 )}
