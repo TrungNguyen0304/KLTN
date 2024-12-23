@@ -45,7 +45,6 @@ const IndexBooking = () => {
             <th>Status</th>
             <th>Created At</th>
             <th>Edit</th>
-            <th>Delete</th>
           </tr>
         </thead>
         <tbody>

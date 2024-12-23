@@ -13,6 +13,7 @@ body {
     padding: 20px;
     min-height: 100vh;
   }
+
   
   /* Tiêu đề */
   .app-title {
@@ -69,7 +70,8 @@ body {
     color: #555;
   }
   
-.app-container {
+
+.app-container1 {
   font-family: 'Arial', sans-serif;
   padding: 20px;
   min-height: 100vh;
@@ -95,7 +97,7 @@ body {
 /* Danh sách thanh toán */
 .payment-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
   gap: 20px;
   padding: 20px;
 }
@@ -179,4 +181,5 @@ body {
 
 .payment-card-link:hover {
   background-color: #388e3c;
+ 
 }

@@ -82,7 +82,7 @@ const Home = () => {
   return (
     <>
       <Banner />
-      <AdvanceSearch />
+      {/* <AdvanceSearch /> */}
       <Features />
 
       <RecentTours />

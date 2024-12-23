@@ -172,9 +172,6 @@ const Register = () => {
           />
         </div>
         <div className="register-links">
-          <a href="/" className="register-link">
-            Quên mật khẩu?
-          </a>
           <Link to="/login" className="register-link">
             Login
           </Link>
@@ -183,11 +180,6 @@ const Register = () => {
           Đăng Ký
         </button>
       </form>
-      <div className="register-divider">Hoặc</div>
-      <div className="register-social-buttons">
-        <button className="social-button facebook">Facebook</button>
-        <button className="social-button google">Google</button>
-      </div>
     </div>
   );
 };

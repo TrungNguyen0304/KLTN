@@ -32,6 +32,9 @@ import IndexTour from "./pages/Admin/Tour/IndexTour";
 import CreateTour from "./pages/Admin/Tour/CreateTour";
 import EditTour from "./pages/Admin/Tour/EditTour";
 
+import CreateGallery from "./pages/Admin/gallery/CreateGallery";
+import IndexGallery from "./pages/Admin/gallery/IndexGallery"
+
 import CreateTourGuide from "./pages/Admin/TourGuide/CreateTourGuide";
 import IndexTourGuide from "./pages/Admin/TourGuide/IndexTourGuide";
 import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
@@ -43,10 +46,13 @@ import EditDuration from "./pages/Admin/duration/EditDuration";
 import IndexBooking from "./pages/Admin/Booking/indexBooking";
 import BookingDetail from "./pages/Admin/Booking/BookingDetail";
 
+import Indexmessage from "./pages/Admin/messages/Indexmessage";
+
 /* huong dan vienn */
 import AdminTourGuide from "./pages/tourGuide/AdminTourGuide";
 import IndexShowall from "./pages/tourGuide/showtour/IndexShowall";
 import PaymentDetail from "./pages/tourGuide/showtour/PaymentDetail";
+import ProfileGuide from "./pages/tourGuide/ProfileGuide/Profile";
 
 
 // </>
@@ -84,6 +90,14 @@ function App() {
             element={
               <ProtectedRoute roleRequired="admin">
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/Indexmessage"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <Indexmessage />
               </ProtectedRoute>
             }
           />
@@ -127,6 +141,25 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* thu vien anh */}
+          <Route
+            path="gallerys/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateGallery />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="gallerys"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexGallery />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ket thuc */}
           <Route
             path="/destination/update/:id"
             element={
@@ -266,6 +299,14 @@ function App() {
             element={
               <ProtectedRoute roleRequired="tourguide">
                 <AdminTourGuide />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="profiletourguide"
+            element={
+              <ProtectedRoute roleRequired="tourguide">
+                <ProfileGuide />
               </ProtectedRoute>
             }
           />

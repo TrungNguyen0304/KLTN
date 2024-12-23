@@ -49,7 +49,7 @@ const BookingDetail = () => {
                 <tr key={item._id}>
                   <td>{index + 1}</td>
                   <td>{item.packageId.package_name}</td>
-                  <td>{item.total}</td>
+                  <td>{item.total.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</td>
                   <td>{item.totalPeople}</td>
                   <td>{item.specialrequest}</td>
                   <td>{new Date(item.createdAt).toLocaleString()}</td>
@@ -59,7 +59,7 @@ const BookingDetail = () => {
               <tr key={payment._id}>
                 <td>1</td>
                 <td>{payment.packageId.package_name}</td>
-                <td>{payment.amount}</td>
+                <td>{payment.amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" })}</td>
                 <td>{payment.totalPeople}</td>
                 <td>{payment.specialrequest}</td>
                 <td>{new Date(payment.createdAt).toLocaleString()}</td>

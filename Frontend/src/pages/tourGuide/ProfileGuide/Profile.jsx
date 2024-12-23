@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import "./Profile.css";
+import "./ProfileGuide.css";
 import axios from "axios";
 import { Link } from 'react-router-dom';
 
 function Profile() {
     const [userData, setUserData] = useState({
-        firstname:"",
-        lastname: "", 
+        firstname: "",
+        lastname: "",
         email: "",
         phoneNumber: "",
         password: "",
@@ -186,19 +186,12 @@ function Profile() {
     };
 
     return (
-        <div className="profile-container">
+        <div className="profile-container1">
             {notification && <div className="notification">{notification}</div>}
             <div className="breadcrumb">
                 <Link to="/"> <span>Trang chủ</span></Link> / <span>Hồ sơ của tôi</span>
             </div>
             <div className="profile-content">
-                <div className="sidebar1">
-                    <ul>
-                        <Link to="/profile"><li>Hồ sơ của tôi</li></Link>
-                        <Link to="/OrderStatus"><li>Đơn hàng của tôi</li></Link>
-                       
-                    </ul>
-                </div>
                 <div className="main-profile">
                     <h2>Thông tin cá nhân</h2>
                     <p>Lưu thông tin của Quý khách để đặt dịch vụ nhanh hơn</p>
@@ -266,9 +259,9 @@ function Profile() {
 
 function InfoRow({ label, value, isEditing, onChange, onSave, onCancel, onEdit }) {
     return (
-        <div className="info-row">
-            <div className="info-label">{label}</div>
-            <div className="info-value">
+        <div className="info-row1">
+            <div className="info-label1">{label}</div>
+            <div className="info-value1">
                 {isEditing ? (
                     label === "Mật khẩu" ? (
                         <div className="password-inputs">
@@ -308,7 +301,7 @@ function InfoRow({ label, value, isEditing, onChange, onSave, onCancel, onEdit }
                         </button>
                     </>
                 ) : (
-                    <button className="edit-button" onClick={onEdit}>
+                    <button className="edit-button-Profile" onClick={onEdit}>
                         Chỉnh sửa
                     </button>
                 )}

@@ -29,9 +29,8 @@ const Sidebar = () => {
       <div className={`sidebar ${collapsed ? "collapsed" : ""}`}>
         {/* Logo */}
         <div className="logo1">
-          <img src={Logo} alt="logo" />
           <span>
-            AD<span>MIN</span>
+            <span>HƯỚNG DẪN VIÊN</span>
           </span>
         </div>
         <div className="menu">

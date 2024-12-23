@@ -55,7 +55,7 @@ const Navbar = () => {
                             title={<FaUserCircle className="user-icon-header1" />}
                         >
                             <span className="user-name">Tên: {userName}</span>
-                            <NavDropdown.Item onClick={() => navigate("/profile")}>
+                            <NavDropdown.Item onClick={() => navigate("/profiletourguide")}>
                                 <FaUserCircle className="user-icon" /> Hồ sơ của tôi
                             </NavDropdown.Item>
                             <NavDropdown.Item onClick={handleLogout}>

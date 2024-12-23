@@ -16,7 +16,6 @@ const PaymentDetail = () => {
           throw new Error('Không thể lấy chi tiết thanh toán');
         }
         const data = await response.json();
-        console.log(data); // In toàn bộ dữ liệu để kiểm tra
         setPayment(data);
       } catch (err) {
         setError(err.message);
