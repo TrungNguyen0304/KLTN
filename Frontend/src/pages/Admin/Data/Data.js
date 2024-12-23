@@ -52,6 +52,11 @@ export const SidebarData = [
   },
   {
     icon: UilPackage,
+    heading: 'Gallery',
+    Link:'/gallerys'
+  },
+  {
+    icon: UilPackage,
     heading: 'Booking',
     Link:'/booking'
   },

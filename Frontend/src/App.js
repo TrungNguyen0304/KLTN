@@ -32,6 +32,9 @@ import IndexTour from "./pages/Admin/Tour/IndexTour";
 import CreateTour from "./pages/Admin/Tour/CreateTour";
 import EditTour from "./pages/Admin/Tour/EditTour";
 
+import CreateGallery from "./pages/Admin/gallery/CreateGallery";
+import IndexGallery from "./pages/Admin/gallery/IndexGallery"
+
 import CreateTourGuide from "./pages/Admin/TourGuide/CreateTourGuide";
 import IndexTourGuide from "./pages/Admin/TourGuide/IndexTourGuide";
 import EditTourGuide from "./pages/Admin/TourGuide/EditTourGuide";
@@ -138,6 +141,25 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* thu vien anh */}
+          <Route
+            path="gallerys/create"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <CreateGallery />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="gallerys"
+            element={
+              <ProtectedRoute roleRequired="admin">
+                <IndexGallery />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* ket thuc */}
           <Route
             path="/destination/update/:id"
             element={

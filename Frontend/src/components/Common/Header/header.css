@@ -47,7 +47,6 @@ header .navbar .navbar-brand a {
 }
 
 header .navbar .offcanvas-body a {
-  font-size: 14px;
   color: var(--white) !important;
   line-height: 150%;
   font-family: var(--fontFamily);

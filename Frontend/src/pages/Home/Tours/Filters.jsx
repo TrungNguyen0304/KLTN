@@ -137,30 +137,6 @@ const Filters = ({ onFilterChange }) => {
         </Accordion>
 
         {/* Tour Type Filter */}
-        <Accordion defaultActiveKey="2">
-          <Accordion.Item eventKey="2">
-            <Accordion.Header>Loại Tua</Accordion.Header>
-            <Accordion.Body>
-              <Form.Check
-                type="checkbox"
-                id="singleDay"
-                label="Tua Trong Ngày"
-                value="single-day"
-                checked={tourType === "single-day"}
-                onChange={handleTourTypeChange}
-              />
-              <Form.Check
-                type="checkbox"
-                id="multiDay"
-                label="Tua Trọn Gói (Nhiều Ngày)"
-                value="multi-day"
-                checked={tourType === "multi-day"}
-                onChange={handleTourTypeChange}
-              />
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-
         {/* Adult Price Range Filter */}
         <Accordion defaultActiveKey="4">
           <Accordion.Item eventKey="4">

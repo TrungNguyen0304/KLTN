@@ -17,7 +17,7 @@ function TourCard({
     <div className="tour-card">
     {/* Nút Xóa */}
     <button className="delete-button" onClick={onDelete}>
-      <i className="delete-icon1"></i> {/* Sử dụng biểu tượng */}
+    <i class="bi bi-trash delete-all-icon12"></i>
     </button>
     {/* Hình ảnh */}
     <div className={`tour-image ${imageError ? "image-error" : ""}`}>
@@ -31,7 +31,7 @@ function TourCard({
     {/* Tour Information */}
     <div className="tour-info">
       <p className="tour-location">
-        📍{" "}
+      <i className="bi bi-geo-alt"></i>
         <strong>{`${location || "Unknown"}/${destination || "Unknown"}`}</strong>
       </p>
       <h3 className="tour-title">{title}</h3>
@@ -131,7 +131,7 @@ export default function TourGrid() {
             />
           ))
         ) : (
-          <p>No payment history available</p>
+          <p></p>
         )}
       </div>
     </div>
