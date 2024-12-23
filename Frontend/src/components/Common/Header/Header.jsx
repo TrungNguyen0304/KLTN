@@ -9,12 +9,18 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle, FaSignOutAlt, FaHistory, FaBell } from "react-icons/fa";
 import { UserContext } from "../../../context/UserContext";
+
 import "../Header/header.css";
+import axios from "axios";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
   const [destinations, setDestinations] = useState([]);
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const userId = localStorage.getItem("userid");
+
   const navigate = useNavigate();
 
   const toggleMenu = () => setOpen((prev) => !prev);
@@ -47,6 +53,35 @@ const Header = () => {
         : header.classList.remove("is-sticky");
     }
   };
+  useEffect(() => {
+    // Kiểm tra nếu userId có trong localStorage
+    if (!userId) {
+      console.error(
+        "Người dùng chưa đăng nhập. Không tìm thấy userId trong localStorage."
+      );
+      return;
+    }
+
+    // Hàm lấy thông báo từ API
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8001/api/notifications/${userId}`
+        );
+        const fetchedNotifications = response.data.notifications;
+        setNotifications(fetchedNotifications);
+
+        const unreadNotifications = fetchedNotifications.filter(
+          (notification) => !notification.read
+        );
+        setUnreadCount(unreadNotifications.length);
+      } catch (error) {
+        console.error("Lỗi khi lấy thông báo:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, [userId]);
 
   useEffect(() => {
     const fetchDestinations = async () => {
@@ -99,10 +134,10 @@ const Header = () => {
                   TRang chủ
                 </NavLink>
                 <NavLink className="nav-link" to="/about-us">
-                GIỚI THIỆU
+                  GIỚI THIỆU
                 </NavLink>
                 <NavLink className="nav-link" to="/tours">
-                DU LỊCH
+                  DU LỊCH
                 </NavLink>
 
                 {/* Destination Dropdown */}
@@ -122,7 +157,7 @@ const Header = () => {
                         <NavLink
                           key={destination._id}
                           className="nav-link text-dark"
-                          to={`/destination/${destination._id}`} 
+                          to={`/destination/${destination._id}`}
                         >
                           {destination.DestinationName}
                         </NavLink>
@@ -147,10 +182,10 @@ const Header = () => {
                 </NavDropdown>
 
                 <NavLink className="nav-link" to="/gallery">
-                PHÒNG TRƯNG BÀY
+                  PHÒNG TRƯNG BÀY
                 </NavLink>
                 <NavLink className="nav-link" to="/contact-us">
-                LIÊN HỆ
+                  LIÊN HỆ
                 </NavLink>
               </Nav>
             </Offcanvas.Body>
@@ -173,7 +208,11 @@ const Header = () => {
                 className="notification-icon"
                 onClick={() => navigate("/notifications")}
               />
+              {unreadCount > 0 && (
+                <span className="notification-count">{unreadCount}</span>
+              )}
             </li>
+
             {isLoggedIn ? (
               <NavDropdown
                 title={<FaUserCircle className="user-icon-header" />}
