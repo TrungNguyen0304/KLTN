@@ -150,3 +150,18 @@ header .navbar .offcanvas-body .dropdown-menu .dropdown-item {
   cursor: pointer;
   color:white;
 }
+.notification-count {
+  position: absolute;
+  top: 2px; /* Đặt số lượng thông báo ở trên cùng */
+  right: 62px; /* Đặt số lượng thông báo ở phía bên phải */
+  background: radial-gradient(circle at bottom left, rgba(255, 0, 0, 0), red); /* Gradient mờ từ góc trên trái */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 5px; /* Giảm kích thước padding để làm cho nền nhỏ lại */
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 18px; /* Giảm kích thước min-width để làm cho nền nhỏ lại */
+  text-align: center; /* Căn giữa nội dung */
+  line-height: 14px; /* Điều chỉnh line-height cho phù hợp với font-size */
+}
+

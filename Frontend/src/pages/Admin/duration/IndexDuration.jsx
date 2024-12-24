@@ -82,7 +82,7 @@ const IndexDuration = () => {
                                 </td>
                                 <td>
                                     <button
-                                        className="delete-button"
+                                        className="delete-button3"
                                         onClick={() => handleDelete(duration._id)}
                                     >
                                         Delete

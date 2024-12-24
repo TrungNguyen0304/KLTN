@@ -158,9 +158,9 @@ const IndexUser = () => {
                 </div>
               </td>
               <td>
-                <div className="delete2">
+                <div className="delete3">
                   <button
-                    className="delete-button"
+                    className="delete-button1"
                     onClick={() => deleteUser(user._id)}
                   >
                     Delete

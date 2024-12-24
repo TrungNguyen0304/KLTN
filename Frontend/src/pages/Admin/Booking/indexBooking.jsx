@@ -61,7 +61,7 @@ const IndexBooking = () => {
                 <Link to={`update/${booking._id}`} className="edit-button">Edit</Link>
               </td>
               <td>
-                <button onClick={() => deleteBooking(booking._id)} className="delete-button">
+                <button onClick={() => deleteBooking(booking._id)} className="delete-button2">
                   Delete
                 </button>
               </td>

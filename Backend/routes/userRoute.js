@@ -14,6 +14,7 @@ const {
   getUserCount,
   getTourGuideCount,
   updatePassword,
+  getPaymentsByPackageId
 } = require("../controller/user");
 
 router.post("/register", register);
@@ -22,6 +23,7 @@ router.delete("/delete/:id", deleteUser);
 router.put("/update/:id", updateUser);
 router.get("/", getAllUser);
 router.get("/userGuideId/:id", getUserGuideId);
+router.get("/userGuideId/:id/:packageId", getPaymentsByPackageId);
 router.post("/:id", getUserById);
 router.get("/search", searchUser);
 router.get("/payments/count/:id", countPaymentsByUserGuideId);

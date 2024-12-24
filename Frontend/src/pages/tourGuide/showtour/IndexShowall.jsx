@@ -1,33 +1,54 @@
-import React, { useEffect, useState } from 'react';
-import './showall.css'; // Import file CSS
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import "./showall.css"; // Import file CSS
+import { Link } from "react-router-dom";
 
-
-const PaymentList = ({ payments }) => {
+const PaymentList = ({ payments, onDelete }) => {
+  const userId = localStorage.getItem('userid'); 
   return (
     <div className="grid-container">
-      {payments.map((payment, index) => (
+      {payments.map((tour, index) => (
         <div className="payment-card" key={index}>
-          {payment.packageId?.image && (
+          {tour.packageId?.image && (
             <img
-              src={payment.packageId.image}
+              src={tour.packageId.image}
               alt="Package Image"
               className="payment-card-image"
             />
           )}
           <div className="payment-card-content">
             <h3 className="payment-card-title">
-              {payment.packageId?.package_name || 'Gói Tour: N/A'}
+              {tour.packageId?.package_name || "Gói Tour: N/A"}
             </h3>
+            {/* <p className="payment-card-info">
+              Tổng Số Tiền:{" "}
+              <strong>{tour.totalAmount?.toLocaleString()} VND</strong>
+            </p> */}
             <p className="payment-card-info">
-              Người Dùng: <strong>{payment.userId?.firstname || 'N/A'} {payment.userId?.lastname || 'N/A'}</strong>
+              Tổng Số Người: <strong>{tour.totalPeople}</strong>
             </p>
-            <p className="payment-card-info">
-              Số Tiền: <strong>{payment.amount?.toLocaleString() || 'N/A'} VND</strong>
+            <p className="payment-card-users">
+              Người Dùng:{" "}
+              {tour.users.map((user, idx) => (
+                <span key={idx}>
+                  {user.firstname} {user.lastname}
+                  {idx < tour.users.length - 1 && ", "}
+                </span>
+              ))}
             </p>
-            <Link to={`/IndexShowall/${payment._id}`} className="payment-card-link">
-              Xem Chi Tiết
-            </Link>
+            <div className="payment-card-actions">
+              <Link
+                to={`/IndexShowall/${userId}/${tour.packageId._id}`}
+                className="payment-card-link"
+              >
+                Xem Chi Tiết
+              </Link>
+              <button
+                onClick={() => onDelete(tour._id)}
+                className="payment-card-delete"
+              >
+                Xóa
+              </button>
+            </div>
           </div>
         </div>
       ))}
@@ -35,31 +56,26 @@ const PaymentList = ({ payments }) => {
   );
 };
 
-
-
 const App = () => {
-  const [payments, setPayments] = useState([]);
+  const [payments, setTours] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const userId = localStorage.getItem('userid');
+  const userId = localStorage.getItem("userid");
 
-  // Fetch payments when component loads
+  // Fetch tours when component loads
   useEffect(() => {
-    const fetchPayments = async () => {
+    const fetchTours = async () => {
       try {
         const url = `http://localhost:8001/api/user/userGuideId/${userId}`;
 
         const response = await fetch(url);
         if (!response.ok) {
-          throw new Error(`Failed to fetch payments. Status: ${response.status}`);
+          throw new Error(`Failed to fetch tours. Status: ${response.status}`);
         }
 
-
         const data = await response.json();
-
-        console.log('Response data:', data);
-        console.log('Response data:', data);
-        setPayments(data.payments || []);
+        console.log("Response data:", data);
+        setTours(data.payments || []);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -67,26 +83,29 @@ const App = () => {
       }
     };
 
-    fetchPayments();
+    fetchTours();
   }, [userId]);
 
-  // Handle delete payment
-  const handleDelete = async (paymentId) => {
+  // Handle delete tour
+  const handleDelete = async (tourId) => {
     try {
-      const response = await fetch(`http://localhost:8001/api/booking/payment/${paymentId}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(
+        `http://localhost:8001/api/booking/payment/${tourId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to delete payment');
+        throw new Error("Failed to delete payment");
       }
 
-      // Update state to remove the deleted payment
-      setPayments(payments.filter(payment => payment._id !== paymentId));
+      // Update state to remove the deleted tour
+      setTours(payments.filter((tour) => tour._id !== tourId));
 
-      alert('Thanh toán đã xóa thành công!');
+      alert("Thanh toán đã xóa thành công!");
     } catch (err) {
-      alert('Lỗi khi xóa thanh toán: ' + err.message);
+      alert("Lỗi khi xóa thanh toán: " + err.message);
     }
   };
 
@@ -98,45 +117,7 @@ const App = () => {
       ) : error ? (
         <p className="app-message app-error">{error}</p>
       ) : (
-        <div className="payment-list">
-          {payments.map((payment, index) => (
-            <div className="payment-card" key={index}>
-              {console.log(payment)}  {/* Log để kiểm tra cấu trúc dữ liệu */}
-              {payment.packageId?.image && (
-                <img
-                  src={payment.packageId.image}
-                  alt="Package Image"
-                  className="payment-card-image"
-                />
-              )}
-              <div className="payment-card-content">
-                <h3 className="payment-card-title">
-                  {payment.packageId?.package_name || 'Gói Tour: N/A'}
-                </h3>
-                <p className="payment-card-user">
-                  Khách hàng: <strong>{payment.userId?.firstname || 'N/A'} {payment.userId?.lastname || 'N/A'}</strong>
-                </p>
-                <p className="payment-card-amount">
-                  Số Tiền: <strong>{payment.amount?.toLocaleString() || 'N/A'} VND</strong>
-                </p>
-                <div className="payment-card-actions">
-                  <button
-                    onClick={() => handleDelete(payment._id)} // Delete handler
-                    className="payment-card-delete"
-                  >
-                    Xóa
-                  </button>
-                  <Link
-                    to={`/IndexShowall/${payment._id}`} // Correct template literal usage
-                    className="payment-card-link"
-                  >
-                    Xem Chi Tiết
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+        <PaymentList payments={payments} onDelete={handleDelete} />
       )}
     </div>
   );

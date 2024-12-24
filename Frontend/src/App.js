@@ -319,7 +319,7 @@ function App() {
             }
           />
           <Route
-            path="/IndexShowall/:paymentId"
+            path="/IndexShowall/:userId/:packageId"
             element={
               <ProtectedRoute roleRequired="tourguide">
                 <PaymentDetail />
