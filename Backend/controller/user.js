@@ -37,8 +37,20 @@
         .populate("packageId")
         .populate("userId")
         .populate("packageId.locationId")
-        .populate("packageId.destinationId");
-      // Filter the payments by matching userGuideId
+        .populate("packageId.destinationId")
+        .populate({
+          path: 'packageId',
+          // select: 'package_name locationId destinationId durations groupImages image package_name', // Thêm groupImages vào select
+          populate: [
+            { path: 'locationId', select: 'firstname lastname' },
+            { path: 'destinationId', select: 'DestinationName' },
+            {
+              path: 'durations',
+              select: 'itinerary start_date end_date',
+              model: 'Duration' // Ensure this is the correct model name for durations
+            },
+          ],
+        });
       const matchingPayments = payments.filter(
         (payment) =>
           payment.packageId &&
@@ -53,18 +65,165 @@
     }
   };
 
-  const getUserGuideId = async (req, res) => {
-    const { id } = req.params;
+    // const getUserGuideId = async (req, res) => {
+    //   const { id } = req.params;
 
-    try {
-      const matchingPayments = await getUserOrderedPayments(id);
+    //   try {
+    //     const matchingPayments = await getUserOrderedPayments(id);
 
-      res.status(200).json({ payments: matchingPayments });
-    } catch (error) {
-      console.error("Error in getUserGuideId:", error);
-      res.status(500).json({ message: "Error fetching payments" });
-    }
-  };
+    //     res.status(200).json({ payments: matchingPayments });
+    //   } catch (error) {
+    //     console.error("Error in getUserGuideId:", error);
+    //     res.status(500).json({ message: "Error fetching payments" });
+    //   }
+    // };
+    const getUserGuideId = async (req, res) => {
+      const { id } = req.params;
+    
+      try {
+        // Giả sử hàm này trả về danh sách tất cả các payments của người dùng
+        const matchingPayments = await getUserOrderedPayments(id);
+    
+        // Nhóm dữ liệu theo packageId
+        const groupedPayments = matchingPayments.reduce((acc, payment) => {
+          const packageId = payment.packageId._id;
+    
+          if (!acc[packageId]) {
+            acc[packageId] = {
+              _id: payment._id, // Giữ lại _id của payment đầu tiên (hoặc có thể chọn id khác nếu cần)
+              packageId: payment.packageId,
+              order_id: payment.order_id, 
+              totalAmount: 0,
+              totalPeople: 0,
+              totalspecials: 0,
+              users: [], // Giữ thông tin người dùng duy nhất
+              locationId: payment.packageId.locationId,
+              durations: payment.packageId.durations,
+              destinationId: payment.packageId.destinationId,
+            };
+          }
+    
+          // Cộng dồn tổng số tiền và số người
+          acc[packageId].totalAmount += payment.amount;
+          acc[packageId].totalPeople += payment.totalPeople;
+          acc[packageId].totalspecials += payment.specialrequest;
+    
+          // Thêm thông tin người dùng nếu chưa có
+          const userExists = acc[packageId].users.some(
+            (user) => user._id === payment.userId._id
+          );
+          if (!userExists) {
+            acc[packageId].users.push(payment.userId);
+          }
+    
+          // Giữ lại _id của thanh toán đầu tiên (hoặc thanh toán nào đó trong nhóm)
+          acc[packageId]._id = acc[packageId]._id || payment._id;
+    
+          return acc;
+        }, {});
+    
+        // Chuyển đổi kết quả từ object sang array
+        const groupedArray = Object.values(groupedPayments);
+    
+        // Chỉ giữ lại thông tin số người, tổng tiền, người đã đặt và _id
+        const result = groupedArray.map(group => ({
+          _id: group._id, // _id của thanh toán đầu tiên trong nhóm
+          packageId: group.packageId,
+          totalAmount: group.totalAmount,
+          totalPeople: group.totalPeople,
+          totalspecials: group.totalspecials,
+          users: group.users, // Danh sách người duy nhất
+        }));
+    
+        res.status(200).json({ payments: result });
+      } catch (error) {
+        console.error("Error in getUserGuideId:", error);
+        res.status(500).json({ message: "Error fetching payments" });
+      }
+    };
+    
+    const getPaymentsByPackageId = async (req, res) => {
+      const { id, packageId } = req.params; // Lấy id người dùng và packageId từ params
+    
+      try {
+        // Lấy danh sách payments của người dùng với packageId
+        const matchingPayments = await getUserOrderedPayments(id);
+        
+        // Lọc payments theo packageId
+        const filteredPayments = matchingPayments.filter(payment => {
+          return payment.packageId._id.toString() === packageId; // Đảm bảo cả hai đều là chuỗi để so sánh
+        });
+    
+        // Nếu không có payment nào với packageId đó
+        if (filteredPayments.length === 0) {
+          return res.status(404).json({ message: "Không tìm thấy thanh toán cho packageId này" });
+        }
+    
+        // Nhóm thanh toán theo packageId
+        const groupedPayments = filteredPayments.reduce((acc, payment) => {
+          const packageIdStr = payment.packageId._id.toString(); // Chuyển packageId thành chuỗi để làm key
+    
+          // Khởi tạo nhóm nếu chưa có
+          if (!acc[packageIdStr]) {
+            acc[packageIdStr] = {
+              _id: payment._id, // Lưu lại _id của thanh toán đầu tiên
+              packageId: payment.packageId,
+              order_id: payment.order_id, 
+              totalAmount: 0,
+              totalPeople: 0,
+              totalspecials: 0,
+              users: [], // Theo dõi danh sách người dùng duy nhất
+              locationId: payment.packageId.locationId,
+              durations: payment.packageId.durations,
+              destinationId: payment.packageId.destinationId,
+            };
+          }
+    
+          // Cộng dồn tổng số tiền và số người
+          acc[packageIdStr].totalAmount += payment.amount;
+          acc[packageIdStr].totalPeople += payment.totalPeople;
+          acc[packageId].totalspecials += payment.specialrequest;
+          // Thêm người dùng nếu chưa có
+          const userExists = acc[packageIdStr].users.some(
+            (user) => user._id.toString() === payment.userId._id.toString()
+          );
+          if (!userExists) {
+            acc[packageIdStr].users.push(payment.userId);
+          }
+    
+          return acc;
+        }, {});
+    
+        // Chuyển đổi groupedPayments từ object sang array
+        const groupedArray = Object.values(groupedPayments);
+    
+        // Chỉ giữ lại thông tin cần thiết
+        const result = groupedArray.map(group => ({
+          _id: group._id, // _id của thanh toán đầu tiên trong nhóm
+          packageId: group.packageId,
+          totalAmount: group.totalAmount,
+          totalPeople: group.totalPeople,
+          totalspecials: group.totalspecials,
+          users: group.users, // Danh sách người duy nhất đã đặt
+          locationId: group.locationId,
+          durations: group.durations,
+          destinationIdId: group.destinationId,
+        }));
+    
+        // Trả kết quả về client
+        res.status(200).json({ payments: result });
+      } catch (error) {
+        console.error("Lỗi trong getPaymentsByPackageId:", error);
+        res.status(500).json({ message: "Lỗi khi lấy thông tin thanh toán" });
+      }
+    };
+    
+    
+    
+    
+
+
+
 
   const login = async (req, res) => {
     const { email, password } = req.body;
@@ -328,6 +487,6 @@
     countPaymentsByUserGuideId,
     getUserCount,
     getTourGuideCount,
-    updatePassword
-
+    updatePassword,
+    getPaymentsByPackageId
   };
