@@ -34,13 +34,14 @@ header {
   padding: 12px 0px;
   width: 100%;
   background-color: #003C71;
+  font-family: 'Roboto', sans-serif;
 }
 
 header .navbar .navbar-brand a {
   font-size: 22px;
   color: var(--white);
   line-height: 150%;
-  font-family: var(--fontFamily1);
+  font-family: var(--fontFamily);
   font-weight: bold;
   text-transform: capitalize;
   text-decoration: none;

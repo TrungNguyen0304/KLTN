@@ -65,7 +65,7 @@ const Tours = () => {
 
   return (
     <>
-      <Breadcrumbs title="Tours" pagename="Tours" />
+      <Breadcrumbs title="Du lịch" pagename="Du lịch" />
       <section className="py-5 tour_list">
         <Container>
           <Row>

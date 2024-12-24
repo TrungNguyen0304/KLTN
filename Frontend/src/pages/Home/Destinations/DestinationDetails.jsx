@@ -48,7 +48,7 @@ const DestinationDetails = () => {
 
   return (
     <>
-      <Breadcrumbs title="Destinations" pagename="DestinationDetails" />
+      <Breadcrumbs title="chi tiết điểm đến" pagename="chi tiết điểm đến" />
 
       <div className="py-5">
         <Container>
@@ -93,19 +93,25 @@ const DestinationDetails = () => {
                       </Card.Title>
 
                       {/* Rating and Reviews */}
-                      <p className="reviwe">
-                        <span>
-                          <i className="bi bi-star-fill me-1"></i>
-                        </span>
-                        <span>{val.averageRating || "N/A"}</span>
-                        <span>( {val.totalReviews || 0} reviews )</span>
-                      </p>
+                      {val.averageRating && val.totalReviews ? (
+                        <p className="reviwe">
+                          <span>
+                            <i className="bi bi-star-fill me-1"></i>
+                          </span>
+                          <span>{val.averageRating}</span>
+                          <span>( {val.totalReviews} reviews )</span>
+                        </p>
+                      ) : (
+                        <>
+                          <br></br>
+                          <br></br>
+                        </>
+                      )}
                       <span className="tour-guide-name">
                         Hướng dẫn viên:{" "}
                         <span className="first_name">
-                          {`${val.userGuideId?.firstname || ""} ${
-                            val.userGuideId?.lastname || ""
-                          }`}
+                          {`${val.userGuideId?.firstname || ""} ${val.userGuideId?.lastname || ""
+                            }`}
                         </span>
                       </span>
 
@@ -125,9 +131,9 @@ const DestinationDetails = () => {
                         <i className="bi bi-clock"></i>{" "}
                         {val.durations && val.durations[0]
                           ? calculateDuration(
-                              val.durations[0].start_date,
-                              val.durations[0].end_date
-                            )
+                            val.durations[0].start_date,
+                            val.durations[0].end_date
+                          )
                           : "N/A"}
                       </p>
                     </Card.Body>

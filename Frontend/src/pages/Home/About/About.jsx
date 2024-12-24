@@ -16,7 +16,7 @@ const About = () => {
 
   return (
     <>
-      <Breadcrumbs title="About us" pagename="About us" />
+      <Breadcrumbs title="Giới thiệu" pagename="Giới thiệu" />
       <section className="py-5">
         <Container>
           <Row>

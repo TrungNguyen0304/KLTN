@@ -74,10 +74,11 @@ const PopularCard = ({ val }) => {
               <i className="bi bi-star-fill me-1"></i>
             </span>
             <span>{val.averageRating || "N/A"}</span>
-            <span>( {val.totalReviews || 0} reviews )</span>
+            <span>( {val.totalReviews || 0} đánh giá )</span>
           </p>
         ) : (
-          <><br></br>
+          <>
+          <br></br>
             <br></br>
           </>
         )}
