@@ -3,9 +3,11 @@ import {
   UilEstate,
   UilClipboardAlt,
   UilUsersAlt,
-  UilPackage,
-
-  
+  UilMapMarker,
+  UilCamera,
+  UilClock,
+  UilHistory,
+  UilSuitcase
 } from "@iconscout/react-unicons";
 
 // Analytics Cards imports
@@ -16,49 +18,47 @@ import img1 from "../../../assets/admin/imgs/img1.png";
 import img2 from "../../../assets/admin/imgs/img2.png";
 import img3 from "../../../assets/admin/imgs/img3.png";
 
-
 // Sidebar Data
 export const SidebarData = [
   {
     icon: UilEstate,
-    heading: "Dashboard",
-    Link:"/admin"
+    heading: "Trang chủ",
+    Link: "/admin"
   },
   {
-    icon: UilClipboardAlt,
-    heading: "Destination",
-    Link: "destination",
+    icon: UilMapMarker,
+    heading: "Điểm đến",
+    Link: "/destination",
   },
   {
     icon: UilUsersAlt,
-    heading: "Customers",
+    heading: "Người dùng",
     Link: "/user",
   },
   {
-    icon: UilPackage,
-    heading: 'Location',
+    icon: UilMapMarker,
+    heading: "Địa chỉ",
     Link: "/location",
   },
   {
-    icon: UilPackage,
-    heading: 'Tour',
+    icon: UilSuitcase,
+    heading: "Tour",
     Link: "/tour",
   },
-
   {
-    icon: UilPackage,
-    heading: 'Duration',
-    Link:'/duration'
+    icon: UilClock,
+    heading: "Thời gian",
+    Link: "/duration"
   },
   {
-    icon: UilPackage,
-    heading: 'Gallery',
-    Link:'/gallerys'
+    icon: UilCamera,
+    heading: "Thư viện ảnh",
+    Link: "/gallerys"
   },
   {
-    icon: UilPackage,
-    heading: 'Booking',
-    Link:'/booking'
+    icon: UilHistory,
+    heading: "Lịch sử",
+    Link: "/booking"
   },
 ];
 
@@ -66,14 +66,13 @@ export const SidebarGuideData = [
   {
     icon: UilEstate,
     heading: "Trang chủ",
-    Link:"/Indextourguide"
+    Link: "/Indextourguide"
   },
   {
     icon: UilClipboardAlt,
     heading: "Lịch hướng dẫn viên",
     Link: "/IndexShowall",
   },
-
 ];
 
 // Analytics Cards Data

@@ -127,8 +127,8 @@ const IndexLocation = () => {
                 </div>
               </td>
               <td>
-                <div className="delete2">
-                  <button className="delete-button" onClick={() => handleDelete(location._id)}>
+                <div className="delete">
+                  <button className="delete-button3" onClick={() => handleDelete(location._id)}>
                     Delete
                   </button>
                 </div>
