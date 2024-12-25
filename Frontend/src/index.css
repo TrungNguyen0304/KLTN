@@ -99,7 +99,7 @@ table {
   
   .accordion-body {
 	padding: 15px;
-	background-color: #fff;
+	/* background-color: #fff; */
   }
   
   .accordion-item:hover {

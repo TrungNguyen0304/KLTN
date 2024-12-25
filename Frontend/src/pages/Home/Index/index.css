@@ -5,7 +5,9 @@
   padding: 50px 0px;
   background: var(--secondaryClr);
 }
-
+.card-body {
+  background: var(--secondaryClr);
+}
 
 .call_us {
   background: url("../../../assets/images/slider/1.jpg") no-repeat;

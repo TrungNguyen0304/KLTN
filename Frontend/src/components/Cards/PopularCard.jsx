@@ -8,7 +8,10 @@ const PopularCard = ({ val }) => {
   const formatPrice = (price) => {
     if (typeof price === "number") {
       // Format price as VND (Vietnamese Đồng)
-      return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+      return price.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      });
     }
     return "N/A";
   };
@@ -18,7 +21,9 @@ const PopularCard = ({ val }) => {
     const recentTours = JSON.parse(localStorage.getItem("recentTours")) || [];
 
     // Kiểm tra xem tour đã tồn tại trong danh sách chưa
-    const isTourAlreadyViewed = recentTours.some((existingTour) => existingTour._id === tour._id);
+    const isTourAlreadyViewed = recentTours.some(
+      (existingTour) => existingTour._id === tour._id
+    );
 
     // Nếu chưa, thêm tour vào danh sách
     if (!isTourAlreadyViewed) {
@@ -26,7 +31,7 @@ const PopularCard = ({ val }) => {
 
       // Giới hạn số lượng tour lưu trữ (tối đa 5 tour đã xem)
       if (recentTours.length > 5) {
-        recentTours.shift();  // Xóa tour cũ nhất nếu danh sách đã đầy
+        recentTours.shift(); // Xóa tour cũ nhất nếu danh sách đã đầy
       }
 
       // Lưu lại vào localStorage
@@ -49,15 +54,19 @@ const PopularCard = ({ val }) => {
           <span className="text">
             <span>{val.locationId?.firstname || "Unknown Location"}</span>
             <span>/</span>
-            <span>{val.destinationId?.DestinationName || "Unknown Location"}</span>
+            <a
+              href={`/destination/${val.destinationId?._id}`}
+              className="text-dark text-decoration-none"
+            >
+              <span>
+                {val.destinationId?.DestinationName || "Unknown Location"}
+              </span>
+            </a>
           </span>
         </Card.Text>
 
         {/* Tour Title */}
-        <Card.Title
-          className="text-truncate line-clamp-2"
-        
-        >
+        <Card.Title className="text-truncate line-clamp-2">
           <NavLink
             className="body-text text-dark text-decoration-none"
             to={`/tour-details/${val._id}`}
@@ -78,14 +87,16 @@ const PopularCard = ({ val }) => {
           </p>
         ) : (
           <>
-          <br></br>
+            <br></br>
             <br></br>
           </>
         )}
         <span className="tour-guide-name">
           Hướng dẫn viên:{" "}
           <span className="first_name">
-            {`${val.userGuideId?.firstname || ""} ${val.userGuideId?.lastname || ""}`}
+            {`${val.userGuideId?.firstname || ""} ${
+              val.userGuideId?.lastname || ""
+            }`}
           </span>
         </span>
 
@@ -106,11 +117,8 @@ const PopularCard = ({ val }) => {
       <Card.Footer className="">
         {/* Stack to rearrange Duration and Price */}
         <Stack direction="vertical" className="mt-3">
-
-
           {/* Displaying Price aligned to the right */}
           <p className="text-end">
-
             <b>
               {val.afterDiscount
                 ? formatPrice(val.afterDiscount)
