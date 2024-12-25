@@ -11,6 +11,8 @@ import PopularCard from "../../../components/Cards/PopularCard";
 import RecentTours from "./RecentTours";
 import { Link, useNavigate } from "react-router-dom";
 import Gallery from "../../../components/Gallery/Gallery";
+import "@fontsource/roboto/900.css"; 
+
 
 const Home = () => {
   const [destinations, setDestinations] = useState([]);
@@ -101,7 +103,7 @@ const Home = () => {
             <Col md="12">
               <Slider {...sliderSettings}>
                 {destinations.map((destination, index) => (
-                  <div key={index} className="p-3">
+                  <div key={index} className="">
                     <Cards destination={destination} />
                   </div>
                 ))}
@@ -152,20 +154,15 @@ const Home = () => {
               <h2 className="heading">
                 SẴN SÀNG CHO CHUYẾN DU LỊCH KHÔNG THỂ QUÊN. HÃY NHỚ CHÚNG TÔI!
               </h2>
-              <p className="text">
-                Lorem Ipsum là văn bản giả được sử dụng trong ngành in ấn và tạo
-                kiểu chữ. Lorem Ipsum đã trở thành văn bản giả chuẩn của ngành
-                kể từ những năm 1500.
-              </p>
             </Col>
             <Col md="4" className="text-center mt-3 mt-md-0">
-              <Link
-                href="tel:0787601735"
+              <a
+                href="/contact-us"
                 className="secondary_btn bounce"
-                rel="no"
+                rel="/contact-us"
               >
                 Liên hệ với chúng tôi!
-              </Link>
+              </a>
             </Col>
           </Row>
         </Container>

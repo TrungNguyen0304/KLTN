@@ -99,7 +99,7 @@ const CreateDuration = () => {
                         {itinerary.map((item, index) => (
                             <div key={index} className="itinerary-item">
                                 <div className="form-group">
-                                    <label htmlFor={`day_${index}`}>Ngày {index + 1}</label>
+                                    <label htmlFor={`day_${index}`}> nhập Ngày</label>
                                     <input
                                         type="text"
                                         id={`day_${index}`}

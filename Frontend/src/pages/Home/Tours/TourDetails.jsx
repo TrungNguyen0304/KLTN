@@ -23,7 +23,6 @@ const TourDetails = () => {
   const [adults, setAdults] = useState(1);
   const [children, setChildren] = useState(0);
 
-
   const pricePerAdult = 5590000; // Giá cho mỗi người lớn
   const totalPrice = adults * pricePerAdult + 590000; // Tổng giá tour
   useEffect(() => {
@@ -134,14 +133,13 @@ const TourDetails = () => {
                         </h5>
                         <p className="body-text">
                           {tourPackage?.durations &&
-                            Array.isArray(tourPackage.durations) &&
-                            tourPackage.durations.length > 0 ? (
+                          Array.isArray(tourPackage.durations) &&
+                          tourPackage.durations.length > 0 ? (
                             <table className="table">
                               <thead>
                                 <tr>
                                   <th>Ngày bắt đầu</th>
                                   <th>Ngày kết thúc</th>
-                                  <th>Đặt ngày</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -169,12 +167,7 @@ const TourDetails = () => {
                                         })}
                                       </td>
                                       <td>
-                                        <NavLink
-                                          to="/booking"
-                                          className="primaryBtn w-100 d-flex justify-content-center fw-bold"
-                                        >
-                                          Đặt ngay
-                                        </NavLink>
+                                      
                                       </td>
                                     </tr>
                                   )
@@ -203,7 +196,7 @@ const TourDetails = () => {
                             >
                               <Accordion.Body className="body-text day p-4 bg-light rounded-lg">
                                 {Array.isArray(val.itinerary) &&
-                                  val.itinerary.length > 0 ? (
+                                val.itinerary.length > 0 ? (
                                   val.itinerary.map((item, itemIndex) => (
                                     <div
                                       key={itemIndex}

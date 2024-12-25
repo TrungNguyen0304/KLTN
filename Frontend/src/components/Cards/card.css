@@ -1,5 +1,5 @@
 .tours_section .img-box {
-  padding: 0px 12px;
+  padding: 0px 17px;
 }
 
 .img-box .card {
@@ -20,7 +20,7 @@
 
 .img-box .card .card-title {
   position: absolute;
-  top: 5%;
+  top: 3%;
   left: 3%;
   font-size: 16px;
   color: var(--white);

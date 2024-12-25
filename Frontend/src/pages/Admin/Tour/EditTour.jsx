@@ -156,7 +156,7 @@ const EditTour = () => {
         }
       );
       if (response.status === 200) {
-        alert("Tour updated successfully!");
+        alert("Tour đã được chỉnh sửa!");
         navigate("/tour");
       }
     } catch (error) {

@@ -11,7 +11,7 @@ const PhotoGallery = () => {
 
   return (
     <>
-      <Breadcrumbs title="Gallery" pagename="Gallery" />
+      <Breadcrumbs title="Thư viện ảnh" pagename="Thư viện ảnh" />
       <section className="py-5" style={{ overflow: "hidden" }}>
         <Container>
           <Row>
