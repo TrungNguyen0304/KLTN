@@ -44,7 +44,7 @@ const MainDash = () => {
               <h4 id="traffic" className="card-title mb-0">
                 Lưu lượng truy cập
               </h4>
-              <div className="small text-body-secondary">Tháng 1 - Tháng 7 năm 2023</div>
+              {/* <div className="small text-body-secondary">Tháng 1 - Tháng 12 năm 2024</div> */}
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">

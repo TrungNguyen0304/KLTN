@@ -59,9 +59,7 @@ const PaymentDetail = () => {
           <p>
             <strong>Tổng số người:</strong> {payment.totalPeople || "N/A"}
           </p>
-          <p>
-            <strong>Tổng số người:</strong> {payment.totalspecials || "N/A"}
-          </p>
+
           <p>
             <strong>Khách Hàng:</strong>{" "}
             {payment.users
@@ -76,7 +74,9 @@ const PaymentDetail = () => {
             <strong>Điểm đến:</strong>{" "}
             {payment.packageId?.destinationId?.DestinationName || "N/A"}
           </p>
-
+          <p>
+            <strong>Yêu cầu đặt biệt:</strong> {payment.totalspecials || "N/A"}
+          </p>
           {/* Display itinerary details */}
           {payment.packageId?.durations?.length > 0 ? (
             <div className="duration-section">

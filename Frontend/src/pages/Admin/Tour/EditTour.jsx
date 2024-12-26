@@ -126,32 +126,33 @@ const EditTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append("package_name", package_name);
     formData.append("description", description);
     formData.append("adult_price", adult_price);
     formData.append("pricechildren_price", pricechildren_price);
-    formData.append("durations", JSON.stringify(tourData.durations)); // Convert durations to string
+    formData.append("durations", JSON.stringify(tourData.durations));
     formData.append("destinationId", destinationId);
-    // formData.append("tourGuideId", tourGuideId);
     formData.append("userGuideId", userGuideId);
     formData.append("locationId", locationId);
     formData.append("incAndExc", incAndExc);
-
-    // Handling image upload
+  
     if (image) formData.append("image", image);
-
-    // Handling additional group images
     groupImages.forEach((img) => formData.append("groupImages", img));
-
+  
+    // Debugging FormData contents
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+  
     try {
       const response = await axios.put(
         `http://localhost:8001/api/tourPackage/update/${id}`,
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data', // Ensure the correct header for file uploads
+            'Content-Type': 'multipart/form-data',
           }
         }
       );
@@ -163,8 +164,8 @@ const EditTour = () => {
       console.error("Error updating tour:", error);
       alert("Error updating tour.");
     }
-  };  
-
+  };
+  
   return (
     <Container className="parent-container">
       <div className="form-container">
@@ -173,7 +174,7 @@ const EditTour = () => {
           {/* Package Name and Price */}
           <div className="form-row">
             <div className="form-group">
-              <Form.Label htmlFor="package_name">Package Name</Form.Label>
+              <Form.Label htmlFor="package_name">Tên  gói </Form.Label>
               <textarea
                 rows="2"
                 id="package_name"

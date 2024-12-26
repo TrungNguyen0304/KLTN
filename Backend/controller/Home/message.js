@@ -47,12 +47,13 @@
         // Truy vấn tất cả các tin nhắn từ cơ sở dữ liệu và populate với các trường firstname, lastname, email
         const messages = await Message.find()
             .populate('userId', 'firstname lastname email phoneNumber'); // include email here
-    
-        if (!messages || messages.length === 0) {
-            return res.status(404).json({
-            message: "Không có tin nhắn nào",
-            });
-        }
+            if (!messages || messages.length === 0) {
+                return res.status(200).json({
+                    message: "Không có tin nhắn nào",
+                    data: [], // Trả về mảng rỗng thay vì gây lỗi
+                });
+            }
+            
     
         // Trả về danh sách tin nhắn
         res.status(200).json({

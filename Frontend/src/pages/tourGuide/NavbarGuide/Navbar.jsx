@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import './Navbar.css';
 
-import { FaBell, FaEnvelope, FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
+import {  FaSignOutAlt, FaUserCircle } from 'react-icons/fa';
 import { Nav, NavDropdown } from 'react-bootstrap';
 import { UserContext } from "../../../context/UserContext";
 
@@ -34,19 +34,12 @@ const Navbar = () => {
         <nav className="navbaradmin">
             {/* Search Bar */}
             <div className="search-container">
-                <input type="text" placeholder="Search..." className="search-input" />
+                {/* <input type="text" placeholder="Search..." className="search-input" /> */}
             </div>
 
             {/* Notification and User Section */}
             <div className="user-icons">
-                <Link to="#" className="icon">
-                    <FaBell />
-                    <span className="badge">3</span>
-                </Link>
-                <Link to="#" className="icon">
-                    <FaEnvelope />
-                    <span className="badge">3</span>
-                </Link>
+               
 
                 {/* User Profile Dropdown */}
                 <Nav className="align-items-center">

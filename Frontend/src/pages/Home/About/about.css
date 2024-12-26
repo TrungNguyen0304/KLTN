@@ -16,3 +16,6 @@
 }
 
 
+body, .about-content, .about-image-content, .card-title, .body-text {
+    font-family: 'Roboto', sans-serif;
+}

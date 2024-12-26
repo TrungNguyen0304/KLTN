@@ -95,7 +95,7 @@ const NotificationDetail = () => {
         </li>
         <li>
           <strong>Yêu cầu đặt biệt:</strong>{" "}
-          {booking?.specialrequest || "Không xác định"} 
+          {booking?.specialrequest || "Không có"} 
         </li>
         <li>
           <strong>Địa điểm lưu trú:</strong>{" "}

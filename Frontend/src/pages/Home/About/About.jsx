@@ -29,31 +29,22 @@ const About = () => {
                   />
                   <div className="about-image-content position-absolute top-50 end-0 p-md-4 p-3 rounded-5 shadow-sm">
                     <h3 className="h2 fw-bold text-white">
-                      CHÚNG TÔI LÀ LỰA CHỌN TỐT NHẤT CHO DU LỊCH!
+                      KHÁM PHÁ THẾ GIỚI CÙNG CHÚNG TÔI!
                     </h3>
                   </div>
                 </div>
               </div>
               <h2 className="h2 font-bold pt-4 pb-2">
-                CHÚNG TÔI LÀ LỰA CHỌN TỐT NHẤT CHO DU LỊCH!
+                KHÁM PHÁ THẾ GIỚI CÙNG CHÚNG TÔI!
               </h2>
               <p className="body-text mb-2">
-                Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
-                Lorem Ipsum đã trở thành văn bản chuẩn của ngành từ những năm 1500s,
-                khi một thợ in ẩn danh xáo trộn một bộ sưu tập văn bản để tạo ra một
-                cuốn sách mẫu.
+                Chúng tôi là một công ty du lịch với sứ mệnh mang đến những trải nghiệm đáng nhớ nhất cho mọi khách hàng. Từ các tour tham quan địa phương cho đến hành trình vòng quanh thế giới, chúng tôi cam kết đem lại dịch vụ tốt nhất.
               </p>
               <p className="body-text mb-2">
-                Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
-                Lorem Ipsum đã trở thành văn bản chuẩn của ngành từ những năm 1500s,
-                khi một thợ in ẩn danh xáo trộn một bộ sưu tập văn bản để tạo ra một
-                cuốn sách mẫu.
+                Được thành lập bởi những người đam mê du lịch, chúng tôi hiểu rõ rằng mỗi chuyến đi không chỉ là di chuyển mà còn là hành trình khám phá văn hóa, kết nối và tận hưởng từng khoảnh khắc.
               </p>
               <p className="body-text mb-2">
-                Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
-                Lorem Ipsum đã trở thành văn bản chuẩn của ngành từ những năm 1500s,
-                khi một thợ in ẩn danh xáo trộn một bộ sưu tập văn bản để tạo ra một
-                cuốn sách mẫu.
+                Hãy để chúng tôi đồng hành cùng bạn trên hành trình tìm kiếm những trải nghiệm mới mẻ, đầy cảm hứng và trọn vẹn.
               </p>
             </Col>
             <Col md="4">
@@ -64,9 +55,9 @@ const About = () => {
                       <img src={icons1} alt="icon" className="img-fluid" />
                     </div>
                   </div>
-                  <Card.Title className="fw-bold h5">Hơn 50 điểm đến</Card.Title>
+<Card.Title className="fw-bold h5">Hơn 50 điểm đến</Card.Title>
                   <p className="mb-2 body-text">
-                    Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
+                    Từ các bãi biển nhiệt đới đến những thành phố sôi động, chúng tôi cung cấp hơn 50 điểm đến hấp dẫn trên toàn thế giới để bạn lựa chọn.
                   </p>
                 </Card.Body>
               </Card>
@@ -80,7 +71,7 @@ const About = () => {
                   </div>
                   <Card.Title className="fw-bold h5">Giá tốt nhất trong ngành</Card.Title>
                   <p className="mb-2 body-text">
-                    Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
+                    Với mối quan hệ đối tác lâu năm và mạng lưới rộng khắp, chúng tôi đảm bảo mang lại mức giá cạnh tranh nhất.
                   </p>
                 </Card.Body>
               </Card>
@@ -94,7 +85,7 @@ const About = () => {
                   </div>
                   <Card.Title className="fw-bold h5">Đặt chỗ siêu nhanh</Card.Title>
                   <p className="mb-2 body-text">
-                    Lorem Ipsum chỉ đơn giản là văn bản giả của ngành in ấn và sắp chữ.
+                    Hệ thống đặt chỗ của chúng tôi được thiết kế để tiết kiệm thời gian, giúp bạn hoàn tất chỉ trong vài bước đơn giản.
                   </p>
                 </Card.Body>
               </Card>

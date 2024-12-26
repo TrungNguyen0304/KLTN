@@ -67,12 +67,12 @@ const CreateTour = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (selectedDurations.length === 0) {
             alert("Bạn cần chọn ít nhất một khoảng thời gian.");
             return;
         }
-
+    
         const formData = new FormData();
         formData.append("package_name", package_name);
         formData.append("description", description);
@@ -81,34 +81,36 @@ const CreateTour = () => {
         formData.append("pricechildren_price", pricechildren_price);
         formData.append("durations", JSON.stringify(selectedDurations)); // Send durations as JSON string
         formData.append("destinationId", destinationId);
-        // formData.append("tourGuideId", tourGuideId);
         formData.append("userGuideId", userGuideId);
         formData.append("locationId", locationId);
         formData.append("image", image); // Single image
-
-        // Append group images to formData
+    
         groupImages.forEach((file) => {
             formData.append("groupImages", file);
         });
-
+    
         try {
             const response = await fetch("http://localhost:8001/api/tourPackage/create", {
                 method: 'POST',
                 body: formData
             });
-
-            const result = await response.json();
-            if (response.ok) {
-                alert("Gói tour đã được tạo thành công!");
-                navigate("/tour");
-            } else {
-                alert(result.message || "Có lỗi xảy ra.");
+    
+            if (!response.ok) {
+                const errorResponse = await response.text();  // Get the raw response text (HTML or error message)
+                console.error("Error response:", errorResponse);
+                alert("Có lỗi xảy ra khi gửi yêu cầu.");
+                return;
             }
+    
+            const result = await response.json();
+            alert("Gói tour đã được tạo thành công!");
+            navigate("/tour");
         } catch (error) {
             console.error("Lỗi khi gửi yêu cầu:", error);
             alert("Có lỗi khi gửi yêu cầu.");
         }
     };
+    
 
     return (
         <div className='parent-container'>
