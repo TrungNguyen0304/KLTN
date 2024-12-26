@@ -108,7 +108,7 @@ const createTour = async (req, res) => {
         _id: newTour._id,
         package_name: newTour.package_name,
         description: newTour.description,
-        adult_price: newTour.adult_price,
+adult_price: newTour.adult_price,
         pricechildren_price: newTour.pricechildren_price,
         durations: newTour.durations,
         image: newTour.image,
@@ -129,6 +129,7 @@ const createTour = async (req, res) => {
     });
   }
 };
+
 
 // Api Delete tourPacket
 const deleteTour = async (req, res) => {
